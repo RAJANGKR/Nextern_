@@ -1,0 +1,1101 @@
+/* ================================================================
+   NEXTERN — dashboard.css
+
+   TEACH: Dashboard CSS is organised in this order:
+   1. Variables & Reset
+   2. Layout (the grid that holds sidebar + main)
+   3. Sidebar styles
+   4. Topbar styles
+   5. Each widget/card (readiness, drives, roadmap)
+   6. Reusable components (pills, badges, buttons)
+   7. Responsive (mobile)
+================================================================ */
+
+/* ----------------------------------------------------------------
+   1. VARIABLES
+---------------------------------------------------------------- */
+:root {
+    --accent: #6C63FF;
+    --accent-light: #EEF2FF;
+    --accent-hover: #5A52E0;
+    --green: #22C55E;
+    --green-light: #F0FDF4;
+    --amber: #F59E0B;
+    --amber-light: #FFF7ED;
+    --red: #EF4444;
+    --red-light: #FEF2F2;
+    --blue: #3B82F6;
+    --blue-light: #EFF6FF;
+
+    --bg: #F5F6FA;
+    /* page background — slightly off-white */
+    --bg-white: #FFFFFF;
+    --sidebar-bg: #0D0D14;
+    /* dark sidebar like Naukri/LinkedIn */
+    --sidebar-text: rgba(255, 255, 255, 0.65);
+    --sidebar-hover: rgba(255, 255, 255, 0.06);
+    --sidebar-active: rgba(108, 99, 255, 0.2);
+
+    --text: #111827;
+    --text-soft: #6B7280;
+    --text-muted: #9CA3AF;
+    --border: #E5E7EB;
+
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+
+    --sidebar-width: 240px;
+    --topbar-height: 64px;
+
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-pill: 100px;
+
+    --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.07);
+}
+
+/* ----------------------------------------------------------------
+   2. RESET & BASE
+---------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+button {
+    font-family: var(--font-body);
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+
+/* ----------------------------------------------------------------
+   3. DASHBOARD LAYOUT
+   
+   TEACH: CSS Grid with named areas makes dashboard layouts
+   very readable. We define:
+   - sidebar: fixed 240px column on left
+   - main: rest of the width (1fr)
+   The sidebar uses position:sticky so it stays while main scrolls.
+---------------------------------------------------------------- */
+.dashboard-layout {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    min-height: 100vh;
+}
+
+
+/* ----------------------------------------------------------------
+   4. SIDEBAR
+---------------------------------------------------------------- */
+.sidebar {
+    background: var(--sidebar-bg);
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    /* Hide scrollbar but allow scrolling */
+    scrollbar-width: none;
+}
+
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Logo */
+.sidebar-logo {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: #fff;
+    display: block;
+    margin-bottom: 28px;
+    padding: 0 8px;
+}
+
+.sidebar-logo span {
+    color: var(--accent);
+}
+
+/* User mini card */
+.sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    margin-bottom: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #4C1D95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.user-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-meta {
+    font-size: 0.72rem;
+    color: var(--sidebar-text);
+    margin-top: 2px;
+}
+
+/* Section label inside nav */
+.nav-section-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.25);
+    padding: 0 12px;
+    margin-bottom: 6px;
+}
+
+/* Nav links */
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    color: var(--sidebar-text);
+    transition: background 0.15s, color 0.15s;
+    margin-bottom: 2px;
+    position: relative;
+}
+
+.nav-link:hover {
+    background: var(--sidebar-hover);
+    color: #fff;
+}
+
+/* Active state — accent background */
+.nav-link.active {
+    background: var(--sidebar-active);
+    color: #fff;
+}
+
+.nav-link.active .nav-icon {
+    opacity: 1;
+}
+
+.nav-icon {
+    font-size: 1rem;
+    opacity: 0.7;
+    flex-shrink: 0;
+    width: 20px;
+    text-align: center;
+}
+
+/* Notification badge on nav item */
+.nav-badge {
+    margin-left: auto;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: var(--radius-pill);
+    padding: 2px 7px;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* Logout — subtle red tint on hover */
+.nav-link-logout:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #FCA5A5;
+}
+
+/* Push logout to bottom */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.nav-link-logout {
+    margin-top: auto;
+}
+
+
+/* ----------------------------------------------------------------
+   5. MAIN CONTENT + TOPBAR
+---------------------------------------------------------------- */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* Top bar */
+.topbar {
+    height: var(--topbar-height);
+    background: var(--bg-white);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    flex-shrink: 0;
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.hamburger {
+    display: none;
+    /* hidden on desktop, shown on mobile */
+    font-size: 1.2rem;
+    color: var(--text-soft);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.topbar-greeting {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.3px;
+}
+
+.topbar-date {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 1px;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+}
+
+/* Notification bell button */
+.icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.15s;
+}
+
+.icon-btn:hover {
+    background: #EDEDF5;
+}
+
+/* Red dot on bell when there are unread notifications */
+.notif-dot {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 7px;
+    height: 7px;
+    background: var(--red);
+    border-radius: 50%;
+    border: 1.5px solid #fff;
+}
+
+/* Notification dropdown */
+.notif-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 320px;
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    z-index: 200;
+
+    /* Hidden by default — JS toggles .open class */
+    display: none;
+    animation: dropIn 0.2s ease both;
+}
+
+.notif-dropdown.open {
+    display: block;
+}
+
+@keyframes dropIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notif-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.notif-clear {
+    font-size: 0.75rem;
+    color: var(--accent);
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: var(--font-body);
+}
+
+.notif-clear:hover {
+    text-decoration: underline;
+}
+
+.notif-list {
+    padding: 8px 0;
+}
+
+.notif-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    transition: background 0.15s;
+    cursor: pointer;
+}
+
+.notif-item:hover {
+    background: var(--bg);
+}
+
+/* Unread items have a blue left border */
+.notif-item.unread {
+    background: #FAFBFF;
+    border-left: 3px solid var(--accent);
+    padding-left: 13px;
+}
+
+.notif-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.notif-item p {
+    font-size: 0.83rem;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 3px;
+}
+
+.notif-item span {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+/* Topbar avatar */
+.topbar-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #4C1D95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+
+/* ----------------------------------------------------------------
+   6. PAGE CONTENT + GRID ROWS
+   
+   TEACH: We use two rows:
+   Row 1: Readiness card (wider) + 3 stat cards stacked
+   Row 2: Drives list + Roadmap progress (equal width)
+   Each row is a CSS Grid.
+---------------------------------------------------------------- */
+.page-content {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex: 1;
+}
+
+/* Row 1: readiness (2fr) + stats (1fr) */
+.row-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+/* Row 2: drives (1fr) + roadmap (1fr) */
+.row-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+
+/* ----------------------------------------------------------------
+   7. CARD BASE STYLES
+   All widget cards share this base. Each card adds its own bits.
+---------------------------------------------------------------- */
+.card {
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-sm);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card-header h2 {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: -0.2px;
+}
+
+.card-link {
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-weight: 500;
+    transition: opacity 0.15s;
+}
+
+.card-link:hover {
+    opacity: 0.75;
+    text-decoration: underline;
+}
+
+/* Small badge in card header */
+.card-badge {
+    font-size: 0.7rem;
+    font-weight: 500;
+    border-radius: var(--radius-pill);
+    padding: 3px 10px;
+}
+
+.badge-blue {
+    background: var(--blue-light);
+    color: var(--blue);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+
+/* ----------------------------------------------------------------
+   8. READINESS CARD
+---------------------------------------------------------------- */
+.readiness-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+/* SVG ring wrapper — needed to position the score number in centre */
+.ring-wrap {
+    position: relative;
+    flex-shrink: 0;
+    width: 140px;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ring-svg {
+    position: absolute;
+    inset: 0;
+}
+
+/* Number in centre of ring */
+.ring-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.ring-score {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 2rem;
+    letter-spacing: -1px;
+    color: var(--text);
+    line-height: 1;
+}
+
+.ring-label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+/* Details section beside ring */
+.readiness-details {
+    flex: 1;
+}
+
+.readiness-status {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+}
+
+.readiness-hint {
+    font-size: 0.82rem;
+    color: var(--text-soft);
+    line-height: 1.6;
+    margin-bottom: 18px;
+}
+
+/* Sub-score bars (Resume, Roadmap, Applications) */
+.sub-scores {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sub-scores li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.78rem;
+    color: var(--text-soft);
+}
+
+.sub-scores li>span:first-child {
+    width: 80px;
+    flex-shrink: 0;
+}
+
+.mini-bar {
+    flex: 1;
+    height: 5px;
+    background: var(--bg);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.mini-fill {
+    height: 100%;
+    width: 0;
+    /* animated by JS */
+    border-radius: var(--radius-pill);
+    transition: width 1s ease;
+}
+
+.sub-score-val {
+    width: 34px;
+    text-align: right;
+    font-weight: 500;
+    color: var(--text);
+    flex-shrink: 0;
+}
+
+
+/* ----------------------------------------------------------------
+   9. QUICK STAT CARDS
+---------------------------------------------------------------- */
+.quick-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.stat-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-card-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.stat-card-number {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+    line-height: 1;
+}
+
+.stat-card-label {
+    font-size: 0.75rem;
+    color: var(--text-soft);
+    margin-top: 3px;
+    line-height: 1.4;
+}
+
+
+/* ----------------------------------------------------------------
+   10. DRIVES LIST CARD
+---------------------------------------------------------------- */
+.drives-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.drive-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+.drive-row:last-child {
+    border-bottom: none;
+}
+
+.drive-row:hover {
+    background: var(--bg);
+    padding-left: 8px;
+    padding-right: 8px;
+    margin: 0 -8px;
+}
+
+/* Company coloured initials */
+.drive-initial {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.di-google {
+    background: linear-gradient(135deg, #4285F4, #34A853);
+}
+
+.di-razorpay {
+    background: linear-gradient(135deg, #072654, #3395FF);
+}
+
+.di-tcs {
+    background: linear-gradient(135deg, #1C3C78, #3B82F6);
+}
+
+.di-ms {
+    background: linear-gradient(135deg, #00A4EF, #FFB900);
+}
+
+.di-gs {
+    background: linear-gradient(135deg, #1A1A2E, #6C63FF);
+}
+
+.drive-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.drive-company {
+    font-size: 0.88rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.drive-role {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.drive-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+/* Status pills */
+.status-pill {
+    font-size: 0.67rem;
+    font-weight: 600;
+    border-radius: var(--radius-pill);
+    padding: 2px 9px;
+    white-space: nowrap;
+}
+
+.pill-open {
+    background: var(--green-light);
+    color: #16A34A;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.pill-closing {
+    background: var(--amber-light);
+    color: #D97706;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.pill-soon {
+    background: var(--blue-light);
+    color: var(--blue);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.drive-deadline {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+
+/* ----------------------------------------------------------------
+   11. ROADMAP CARD
+---------------------------------------------------------------- */
+/* Target company row */
+.roadmap-target {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--accent-light);
+    border-radius: var(--radius-sm);
+    margin-bottom: 18px;
+    font-size: 0.83rem;
+}
+
+.target-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+}
+
+.target-company {
+    font-weight: 600;
+    color: var(--accent);
+    flex: 1;
+}
+
+.target-change {
+    font-size: 0.75rem;
+    color: var(--accent);
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.15s;
+}
+
+.target-change:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+/* Overall progress bar */
+.roadmap-overall {
+    margin-bottom: 18px;
+}
+
+.roadmap-overall-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-soft);
+    margin-bottom: 8px;
+}
+
+.roadmap-pct {
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.overall-bar {
+    height: 6px;
+    background: var(--bg);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.overall-fill {
+    height: 100%;
+    width: 0;
+    /* animated by JS */
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    border-radius: var(--radius-pill);
+    transition: width 1.1s ease;
+}
+
+/* Phase list */
+.phase-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 20px;
+}
+
+.phase-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.phase-item:last-child {
+    border-bottom: none;
+}
+
+/* Phase dot */
+.phase-dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.dot-done {
+    background: var(--green);
+    color: #fff;
+}
+
+.dot-active {
+    background: var(--accent);
+    color: #fff;
+}
+
+.dot-todo {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    color: var(--text-muted);
+}
+
+.phase-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.phase-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.phase-meta {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 1px;
+}
+
+/* Dim todo phases */
+.phase-todo .phase-name,
+.phase-todo .phase-meta {
+    opacity: 0.5;
+}
+
+.phase-pct {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-soft);
+    flex-shrink: 0;
+    min-width: 30px;
+    text-align: right;
+}
+
+.phase-done .phase-pct {
+    color: var(--green);
+}
+
+.phase-active .phase-pct {
+    color: var(--accent);
+}
+
+/* CTA button inside card */
+.btn-continue {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    background: var(--accent-light);
+    color: var(--accent);
+    border-radius: var(--radius-md);
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: background 0.15s;
+}
+
+.btn-continue:hover {
+    background: #E0DCFF;
+}
+
+
+/* ----------------------------------------------------------------
+   12. RESPONSIVE — MOBILE
+   
+   TEACH: On mobile the sidebar becomes a drawer — hidden off-screen
+   by default. The hamburger button slides it in/out using JS.
+---------------------------------------------------------------- */
+@media (max-width: 900px) {
+    .dashboard-layout {
+        grid-template-columns: 1fr;
+        /* single column on mobile */
+    }
+
+    /* Sidebar slides in from the left as an overlay */
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 200;
+        transform: translateX(-100%);
+        /* hidden off-screen */
+        transition: transform 0.25s ease;
+        width: var(--sidebar-width);
+    }
+
+    /* JS adds .open class to slide it in */
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    /* show hamburger on mobile */
+
+    .row-top {
+        grid-template-columns: 1fr;
+    }
+
+    .row-bottom {
+        grid-template-columns: 1fr;
+    }
+
+    .readiness-body {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .sub-scores li>span:first-child {
+        width: 60px;
+    }
+
+    .page-content {
+        padding: 16px;
+    }
+}

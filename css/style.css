@@ -1,0 +1,1485 @@
+/* ================================================================
+   NEXTERN — style.css
+   Organised in sections top to bottom, same order as the HTML.
+   
+   CSS TIP: Always start with variables and resets at the top.
+   Variables (--name) let you change a colour in one place and
+   have it update everywhere. This is how real projects are built.
+================================================================ */
+
+/* ----------------------------------------------------------------
+   1. VARIABLES & RESET
+   Custom properties (variables) for every colour, spacing, font.
+   Change --accent here and it updates the whole site.
+---------------------------------------------------------------- */
+:root {
+    /* Palette — simple 3-colour system */
+    --bg: #FFFFFF;
+    --bg-card: #F9FAFB;
+    --bg-hover: #F3F4F6;
+    --border: #E5E7EB;
+    --border-lit: #D1D5DB;
+
+    --accent: #4F46E5;
+    /* main purple */
+    --accent-dim: rgba(79, 70, 229, 0.1);
+    --green: #10B981;
+    --green-dim: rgba(16, 185, 129, 0.1);
+    --amber: #F59E0B;
+    --blue: #3B82F6;
+    --rose: #F43F5E;
+
+    --text: #111827;
+    --muted: #4B5563;
+    --subtle: #9CA3AF;
+
+    /* Typography */
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+
+    /* Spacing scale */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 2rem;
+    --space-lg: 4rem;
+    --space-xl: 8rem;
+
+    /* Borders */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-pill: 100px;
+}
+
+/* Box-sizing reset — makes sizing predictable.
+   Without this, padding ADDS to width which is confusing. */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    /* smooth anchor scrolling */
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    /* prevent horizontal scroll from blobs */
+    line-height: 1.6;
+}
+
+img,
+video {
+    max-width: 100%;
+    display: block;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+}
+
+/* ----------------------------------------------------------------
+   2. SCROLLBAR — small touch, makes it feel designed
+---------------------------------------------------------------- */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-lit);
+    border-radius: 10px;
+}
+
+
+/* ----------------------------------------------------------------
+   3. TYPOGRAPHY HELPERS
+   Reusable classes for labels, section titles, subtitles.
+   Define them once, use everywhere.
+---------------------------------------------------------------- */
+.section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+}
+
+.section-title {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3rem);
+    /* clamp = responsive font size */
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+}
+
+/* clamp(min, preferred, max) — font grows with viewport but stays in range */
+.section-sub {
+    color: var(--muted);
+    font-size: 1.05rem;
+    font-weight: 300;
+    max-width: 500px;
+}
+
+.title-accent {
+    /* Gradient text technique: clip gradient to text shape */
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+
+/* ----------------------------------------------------------------
+   4. BUTTONS
+   One base class + modifiers. This is how scalable CSS works.
+---------------------------------------------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 0 28px rgba(79, 70, 229, 0.3);
+}
+
+.btn-primary:hover {
+    background: #4338CA;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 32px rgba(79, 70, 229, 0.45);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-lit);
+}
+
+.btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.btn-nav {
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid rgba(79, 70, 229, 0.3);
+    padding: 9px 20px;
+    font-size: 0.85rem;
+}
+
+.btn-nav:hover {
+    background: var(--accent);
+    color: #fff;
+}
+
+
+/* ----------------------------------------------------------------
+   5. SCROLL REVEAL
+   Elements start invisible and slide up. JS adds .visible class
+   when they enter the viewport (using IntersectionObserver).
+---------------------------------------------------------------- */
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered delays — siblings animate one after another */
+.delay-1 {
+    transition-delay: 0.1s;
+}
+
+.delay-2 {
+    transition-delay: 0.2s;
+}
+
+.delay-3 {
+    transition-delay: 0.3s;
+}
+
+
+/* ----------------------------------------------------------------
+   6. NAVBAR
+   position: fixed keeps it on screen as you scroll.
+   backdrop-filter: blur() creates the frosted glass on the nav.
+---------------------------------------------------------------- */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 6%;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    animation: slideDown 0.5s ease both;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.logo {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 1.45rem;
+    letter-spacing: -0.5px;
+    color: var(--text);
+}
+
+/* The <span> inside .logo gets the accent colour */
+.logo span {
+    color: var(--accent);
+}
+
+.nav-links {
+    display: flex;
+    gap: 32px;
+}
+
+.nav-links a {
+    font-size: 0.88rem;
+    color: var(--muted);
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: var(--text);
+}
+
+
+/* ----------------------------------------------------------------
+   7. HERO SECTION
+---------------------------------------------------------------- */
+.hero {
+    position: relative;
+    min-height: 100vh;
+    display: grid;
+    /* 2 columns: text on left, previews on right */
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 40px;
+    padding: 120px 6% 80px;
+    overflow: hidden;
+}
+
+/* Background layer — sits behind content */
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Soft background blobs — filter: blur() makes them fuzzy */
+.bg-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.12;
+}
+
+.blob-1 {
+    width: 600px;
+    height: 600px;
+    background: var(--accent);
+    top: -150px;
+    left: -150px;
+    animation: blobDrift 18s ease-in-out infinite;
+}
+
+.blob-2 {
+    width: 500px;
+    height: 500px;
+    background: var(--green);
+    bottom: -100px;
+    right: -100px;
+    animation: blobDrift 22s ease-in-out infinite reverse;
+}
+
+@keyframes blobDrift {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(30px, -20px) scale(1.04);
+    }
+}
+
+/* Subtle dot-grid overlay */
+.bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 1;
+    /* For grid pattern on white */
+}
+
+/* Hero content sits above background (z-index: 1) */
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* Badge above the title */
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(79, 70, 229, 0.25);
+    border-radius: var(--radius-pill);
+    padding: 6px 16px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s 0.2s ease both;
+}
+
+/* Pulsing green dot — shows it's "live" */
+.badge-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 0 0 5px rgba(16, 185, 129, 0);
+    }
+}
+
+.hero-title {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: clamp(2.8rem, 5.5vw, 5rem);
+    line-height: 1.0;
+    letter-spacing: -2px;
+    margin-bottom: 22px;
+    animation: fadeUp 0.6s 0.35s ease both;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 480px;
+    line-height: 1.75;
+    margin-bottom: 36px;
+    animation: fadeUp 0.6s 0.5s ease both;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 56px;
+    animation: fadeUp 0.6s 0.65s ease both;
+}
+
+/* Stats row */
+.hero-stats {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.8s ease both;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 1.8rem;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.3px;
+}
+
+.stat-divider {
+    width: 1px;
+    height: 36px;
+    background: var(--border-lit);
+}
+
+/* Hero preview cards — right column */
+.hero-previews {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-items: flex-start;
+    padding-left: 40px;
+    animation: fadeUp 0.7s 0.9s ease both;
+}
+
+.preview-card {
+    height: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-lit);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    width: 100%;
+    max-width: 320px;
+}
+
+/* Drive card */
+.card-drive {
+    animation: floatA 4s ease-in-out infinite;
+}
+
+@keyframes floatA {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-0.5deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(0.5deg);
+    }
+}
+
+.preview-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.company-initial {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #4285F4, #34A853);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.company-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.company-role {
+    font-size: 0.72rem;
+    color: var(--muted);
+}
+
+.badge {
+    margin-left: auto;
+    font-size: 0.68rem;
+    border-radius: var(--radius-pill);
+    padding: 3px 10px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.badge-eligible {
+    background: var(--green-dim);
+    color: var(--green);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.drive-ctc {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+
+.drive-ctc span {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-family: var(--font-body);
+    font-weight: 400;
+}
+
+.drive-deadline {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 6px;
+}
+
+/* Roadmap card */
+.card-roadmap {
+    animation: floatB 5s ease-in-out infinite;
+}
+
+@keyframes floatB {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0.5deg);
+    }
+
+    50% {
+        transform: translateY(-8px) rotate(-0.5deg);
+    }
+}
+
+.roadmap-label {
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+.roadmap-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.roadmap-steps li {
+    font-size: 0.8rem;
+    padding-left: 18px;
+    position: relative;
+    color: var(--muted);
+}
+
+/* ::before pseudo-element adds the coloured dot without extra HTML */
+.roadmap-steps li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.step-done {
+    color: var(--muted);
+}
+
+.step-done::before {
+    background: var(--green);
+}
+
+.step-active {
+    color: var(--text);
+    font-weight: 500;
+}
+
+.step-active::before {
+    background: var(--accent);
+    animation: pulse 1.5s infinite;
+}
+
+.step-todo::before {
+    background: var(--border-lit);
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ----------------------------------------------------------------
+   8. COMPANIES STRIP
+---------------------------------------------------------------- */
+.companies-strip {
+    padding: 48px 6%;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+}
+
+.strip-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+}
+
+.company-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.company-list span {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    padding: 8px 18px;
+    font-size: 0.83rem;
+    color: var(--muted);
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.company-list span:hover {
+    border-color: var(--accent);
+    color: var(--text);
+}
+
+
+/* ----------------------------------------------------------------
+   9. FEATURES GRID
+---------------------------------------------------------------- */
+.features {
+    padding: var(--space-xl) 6%;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-header .section-sub {
+    margin: 0 auto;
+}
+
+/* CSS Grid: auto-fit + minmax makes it naturally responsive.
+   Cards fill the row, minimum 280px each. No media queries needed. */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    transition: border-color 0.25s, transform 0.25s, background 0.25s;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Top-edge highlight appears on hover */
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.feature-card:hover {
+    border-color: var(--border-lit);
+    transform: translateY(-5px);
+    background: var(--bg-hover);
+}
+
+.feature-card:hover::before {
+    opacity: 1;
+}
+
+/* Highlighted card has a subtle accent tint by default */
+.card-highlight {
+    border-color: rgba(79, 70, 229, 0.2);
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.06), var(--bg-card));
+}
+
+.feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 18px;
+}
+
+.icon-violet {
+    background: rgba(79, 70, 229, 0.15);
+    border: 1px solid rgba(79, 70, 229, 0.25);
+}
+
+.icon-green {
+    background: var(--green-dim);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.icon-blue {
+    background: rgba(59, 130, 246, 0.12);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.icon-amber {
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.icon-rose {
+    background: rgba(244, 63, 94, 0.12);
+    border: 1px solid rgba(244, 63, 94, 0.25);
+}
+
+.feature-card h3 {
+    font-family: var(--font-head);
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.2px;
+}
+
+.feature-card p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+}
+
+.feature-tag {
+    display: inline-block;
+    margin-top: 18px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid rgba(79, 70, 229, 0.2);
+    border-radius: var(--radius-pill);
+    padding: 3px 12px;
+}
+
+.tag-green {
+    background: var(--green-dim);
+    color: var(--green);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+
+/* ----------------------------------------------------------------
+   10. ROADMAP SHOWCASE
+---------------------------------------------------------------- */
+.roadmap-showcase {
+    padding: var(--space-lg) 6%;
+}
+
+.showcase-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+}
+
+.showcase-desc {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    font-weight: 300;
+    margin-bottom: 28px;
+    max-width: 460px;
+}
+
+.showcase-bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.showcase-bullets li {
+    font-size: 0.9rem;
+    color: var(--muted);
+    padding-left: 22px;
+    position: relative;
+}
+
+.showcase-bullets li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 600;
+}
+
+/* The roadmap widget box */
+.roadmap-widget {
+    background: var(--bg-card);
+    border: 1px solid var(--border-lit);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+}
+
+.rw-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+}
+
+.rw-phase {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    margin-bottom: 8px;
+    border: 1px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.phase-done {
+    background: rgba(16, 185, 129, 0.04);
+}
+
+.phase-active {
+    background: var(--accent-dim);
+    border-color: rgba(79, 70, 229, 0.3) !important;
+}
+
+.phase-todo {
+    opacity: 0.55;
+}
+
+.phase-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.phase-num.done {
+    background: var(--green);
+    color: #fff;
+}
+
+.phase-num.active {
+    background: var(--accent);
+    color: #fff;
+    animation: pulse 2s infinite;
+}
+
+.phase-num.todo {
+    background: var(--border-lit);
+    color: var(--muted);
+}
+
+.phase-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.phase-name {
+    font-size: 0.88rem;
+    font-weight: 500;
+}
+
+.phase-meta {
+    font-size: 0.72rem;
+    color: var(--muted);
+}
+
+.rw-progress {
+    margin-top: 20px;
+}
+
+.rw-progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.rw-bar {
+    height: 5px;
+    background: var(--border);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+}
+
+.rw-fill {
+    height: 100%;
+    width: 0;
+    /* starts at 0, JS animates to data-width % */
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    border-radius: var(--radius-pill);
+    transition: width 1.2s ease;
+}
+
+
+/* ----------------------------------------------------------------
+   11. DRIVE TRACKER PREVIEW
+---------------------------------------------------------------- */
+.drives-preview {
+    padding: var(--space-lg) 6%;
+}
+
+.drives-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+}
+
+/* Flip the order — cards on left, copy on right */
+.drives-copy {
+    order: 2;
+}
+
+.drive-cards {
+    order: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.drive-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    transition: border-color 0.25s, transform 0.25s;
+}
+
+.drive-card:hover {
+    border-color: var(--border-lit);
+    transform: translateX(6px);
+}
+
+.dc-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.dc-initial {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.dc-g {
+    background: linear-gradient(135deg, #4285F4, #0F9D58);
+}
+
+.dc-r {
+    background: linear-gradient(135deg, #072654, #3395FF);
+}
+
+.dc-gs {
+    background: linear-gradient(135deg, #1A1A2E, #6C63FF);
+}
+
+.dc-company {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.dc-location {
+    font-size: 0.72rem;
+    color: var(--muted);
+}
+
+.dc-status {
+    font-size: 0.68rem;
+    font-weight: 600;
+    border-radius: var(--radius-pill);
+    padding: 3px 10px;
+    float: right;
+    margin-top: -36px;
+}
+
+.status-open {
+    background: var(--green-dim);
+    color: var(--green);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-soon {
+    background: rgba(245, 158, 11, 0.1);
+    color: #D97706;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.dc-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.dc-pills span {
+    font-size: 0.7rem;
+    color: var(--muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    padding: 2px 10px;
+}
+
+
+/* ----------------------------------------------------------------
+   12. HOW IT WORKS
+---------------------------------------------------------------- */
+.how-it-works {
+    padding: var(--space-xl) 6%;
+}
+
+.steps-list {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    counter-reset: steps;
+}
+
+.step {
+    display: flex;
+    gap: 24px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+}
+
+.step:last-child {
+    border-bottom: none;
+}
+
+.step-number {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--accent);
+    opacity: 0.6;
+    min-width: 36px;
+    padding-top: 3px;
+    transition: opacity 0.2s;
+}
+
+.step:hover .step-number {
+    opacity: 1;
+}
+
+.step-body h3 {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 6px;
+}
+
+.step-body p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+}
+
+
+/* ----------------------------------------------------------------
+   13. TESTIMONIALS
+---------------------------------------------------------------- */
+.testimonials {
+    padding: var(--space-xl) 6%;
+}
+
+.testi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* <blockquote> is the correct semantic tag for quotes */
+.testi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    transition: border-color 0.25s, transform 0.25s;
+}
+
+.testi-card:hover {
+    border-color: var(--border-lit);
+    transform: translateY(-4px);
+}
+
+.stars {
+    color: var(--amber);
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+}
+
+.testi-card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.8;
+    font-style: italic;
+    font-weight: 300;
+    margin-bottom: 22px;
+}
+
+/* <footer> inside <blockquote> = author attribution */
+.testi-card footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.testi-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.av-violet {
+    background: linear-gradient(135deg, var(--accent), #4C1D95);
+}
+
+.av-green {
+    background: linear-gradient(135deg, var(--green), #065F46);
+}
+
+.av-blue {
+    background: linear-gradient(135deg, var(--blue), #1E40AF);
+}
+
+/* <cite> is the correct tag for a person's name in a quote */
+cite {
+    display: block;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 0.88rem;
+}
+
+.testi-card footer span {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+
+/* ----------------------------------------------------------------
+   14. CTA SECTION
+---------------------------------------------------------------- */
+.cta-section {
+    padding: var(--space-lg) 6%;
+}
+
+.cta-box {
+    background: var(--bg-card);
+    border: 1px solid rgba(79, 70, 229, 0.25);
+    border-radius: 28px;
+    padding: 72px 48px;
+    text-align: center;
+    /* radial-gradient creates a soft glow behind the title */
+    background-image: radial-gradient(ellipse at 50% 0%, rgba(79, 70, 229, 0.1), transparent 60%);
+}
+
+.cta-title {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 14px;
+}
+
+.cta-sub {
+    color: var(--muted);
+    font-size: 1.05rem;
+    font-weight: 300;
+    margin-bottom: 36px;
+}
+
+.cta-form {
+    display: flex;
+    gap: 0;
+    max-width: 420px;
+    margin: 0 auto 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-lit);
+    border-radius: var(--radius-pill);
+    padding: 4px 4px 4px 20px;
+}
+
+.email-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    min-width: 0;
+}
+
+.email-input::placeholder {
+    color: var(--muted);
+}
+
+.cta-note {
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+
+/* ----------------------------------------------------------------
+   15. FOOTER
+---------------------------------------------------------------- */
+.site-footer {
+    padding: 40px 6%;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.footer-logo {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--text);
+}
+
+.footer-logo::after {
+    content: '.';
+    color: var(--accent);
+}
+
+.footer-links {
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a {
+    font-size: 0.85rem;
+    color: var(--muted);
+    transition: color 0.2s;
+}
+
+.footer-links a:hover {
+    color: var(--text);
+}
+
+.footer-copy {
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+
+/* ----------------------------------------------------------------
+   16. RESPONSIVE — MOBILE
+   Put all breakpoints at the bottom. min-width = mobile-first.
+   We're using max-width (desktop-first) just for simplicity here.
+---------------------------------------------------------------- */
+@media (max-width: 900px) {
+
+    /* Stack hero vertically on tablets/phones */
+    .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding-top: 100px;
+    }
+
+    .hero-subtitle {
+        margin: 0 auto 36px;
+    }
+
+    .hero-actions {
+        justify-content: center;
+    }
+
+    .hero-stats {
+        justify-content: center;
+    }
+
+    .hero-previews {
+        display: none;
+    }
+
+    /* hide preview cards on small screens */
+
+    /* Stack all 2-column sections */
+    .showcase-inner,
+    .drives-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .drives-copy {
+        order: 1;
+    }
+
+    .drive-cards {
+        order: 2;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .cta-box {
+        padding: 48px 24px;
+    }
+
+    .cta-form {
+        flex-direction: column;
+        padding: 12px 16px;
+        border-radius: var(--radius-lg);
+    }
+
+    .site-footer {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-links {
+        justify-content: center;
+    }
+}
+
+/* FAQ SECTION */
+
+.faq-section {
+    padding: 80px 10%;
+}
+
+.faq-container {
+    max-width: 800px;
+    margin: auto;
+}
+
+.faq-item {
+    border-bottom: 1px solid #ddd;
+    padding: 18px 0;
+    cursor: pointer;
+}
+
+.faq-question {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    font-size: 15px;
+    color: #555;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 200px;
+    margin-top: 10px;
+}

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seniors — Nextern</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --accent: #6C63FF;
+            --accent-light: #EEF2FF;
+            --accent-hover: #5A52E0;
+            --green: #22C55E;
+            --green-light: #F0FDF4;
+            --red: #EF4444;
+
+            --bg: #F3F4F8;
+            --bg-white: #FFFFFF;
+            --text: #0F172A;
+            --text-soft: #64748B;
+            --text-muted: #94A3B8;
+            --border: #E2E8F0;
+
+            --font-head: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-pill: 100px;
+
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .topnav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 0 24px;
+            box-shadow: var(--shadow-sm);
+            z-index: 100;
+        }
+
+        .nav-logo {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 1.3rem;
+        }
+
+        .nav-logo span {
+            color: var(--accent);
+        }
+
+        .nav-search {
+            flex: 1;
+            max-width: 320px;
+        }
+
+        .nav-search input {
+            width: 100%;
+            padding: 8px 14px;
+            border-radius: var(--radius-pill);
+            border: 1.5px solid var(--border);
+            font-size: 0.84rem;
+            background: var(--bg);
+            outline: none;
+        }
+
+        .nav-search input:focus {
+            border-color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: auto;
+        }
+
+        .nav-link-item {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            transition: color 0.15s;
+        }
+
+        .nav-link-item:hover {
+            color: var(--text);
+        }
+
+        .nav-link-item.active {
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .nav-badge {
+            margin-left: 5px;
+            background: var(--red);
+            color: #fff;
+            padding: 1px 5px;
+            border-radius: var(--radius-pill);
+            font-size: 0.62rem;
+            font-weight: 700;
+        }
+
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #4C1D95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.78rem;
+            margin-left: 10px;
+        }
+
+        .page-layout {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 76px 16px 40px;
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .left-sidebar {
+            position: sticky;
+            top: 72px;
+        }
+
+        .sidebar-card,
+        .main-card,
+        .senior-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sidebar-card {
+            padding: 8px;
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 9px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            color: var(--text-soft);
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .sidebar-nav-link:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .sidebar-nav-link.active {
+            background: var(--accent-light);
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .snav-badge {
+            margin-left: auto;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.62rem;
+            font-weight: 700;
+            border-radius: var(--radius-pill);
+            padding: 1px 6px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .main-card {
+            padding: 20px;
+        }
+
+        .main-card h1 {
+            font-family: var(--font-head);
+            font-size: 1.45rem;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .main-card p {
+            font-size: 0.86rem;
+            color: var(--text-soft);
+            line-height: 1.5;
+        }
+
+        .senior-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .senior-card {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .senior-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .senior-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #4C1D95);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.86rem;
+            flex-shrink: 0;
+        }
+
+        .senior-name {
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .senior-role {
+            font-size: 0.75rem;
+            color: var(--text-soft);
+        }
+
+        .senior-meta {
+            font-size: 0.78rem;
+            color: var(--text-soft);
+            line-height: 1.45;
+        }
+
+        .senior-tag {
+            display: inline-flex;
+            font-size: 0.66rem;
+            font-weight: 700;
+            border-radius: var(--radius-pill);
+            padding: 3px 8px;
+            background: var(--green-light);
+            color: #16A34A;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            width: fit-content;
+        }
+
+        .senior-btn {
+            margin-top: auto;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.76rem;
+            font-weight: 600;
+            padding: 8px 10px;
+            cursor: pointer;
+        }
+
+        .senior-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        @media (max-width: 900px) {
+            .senior-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .left-sidebar {
+                display: none;
+            }
+
+            .nav-search,
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="topnav">
+        <a href="feed.html" class="nav-logo">Nex<span>tern</span></a>
+
+        <div class="nav-search">
+            <input type="text" placeholder="Search seniors or companies..." />
+        </div>
+
+        <div class="nav-links">
+            <a href="feed.html" class="nav-link-item">Home</a>
+            <a href="drives.html" class="nav-link-item">Drives <span class="nav-badge">3</span></a>
+            <a href="roadmap.html" class="nav-link-item">Roadmap</a>
+            <a href="prep-hub.html" class="nav-link-item">Prep</a>
+            <a href="seniors.html" class="nav-link-item active">Seniors</a>
+        </div>
+
+        <div class="nav-avatar" id="navAvatar">R</div>
+    </nav>
+
+    <div class="page-layout">
+        <aside class="left-sidebar">
+            <div class="sidebar-card">
+                <a href="feed.html" class="sidebar-nav-link">Feed</a>
+                <a href="drives.html" class="sidebar-nav-link">Drives <span class="snav-badge">3</span></a>
+                <a href="roadmap.html" class="sidebar-nav-link">Roadmap</a>
+                <a href="prep-hub.html" class="sidebar-nav-link">Prep Hub</a>
+                <a href="seniors.html" class="sidebar-nav-link active">Seniors</a>
+                <a href="dashboard.html" class="sidebar-nav-link">Dashboard</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <section class="main-card">
+                <h1>Senior Connect</h1>
+                <p>Simple mentor list. Connect with seniors who already cracked placements in your target companies.</p>
+            </section>
+
+            <section class="senior-grid">
+                <article class="senior-card">
+                    <div class="senior-top">
+                        <div class="senior-avatar">PB</div>
+                        <div>
+                            <div class="senior-name">Parth Bendre</div>
+                            <div class="senior-role">SDE Intern · Google</div>
+                        </div>
+                    </div>
+                    <span class="senior-tag">DSA + Resume</span>
+                    <p class="senior-meta">Final year CSE. Helps with DSA plan, resume review, and interview prep
+                        structure.</p>
+                    <button class="senior-btn" type="button">Request Connect</button>
+                </article>
+
+                <article class="senior-card">
+                    <div class="senior-top">
+                        <div class="senior-avatar">KJ</div>
+                        <div>
+                            <div class="senior-name">Kshitij Jadhav</div>
+                            <div class="senior-role">Backend Engineer · Razorpay</div>
+                        </div>
+                    </div>
+                    <span class="senior-tag">Backend + LLD</span>
+                    <p class="senior-meta">Guides on backend rounds, project storytelling, and low-level design basics.
+                    </p>
+                    <button class="senior-btn" type="button">Request Connect</button>
+                </article>
+
+                <article class="senior-card">
+                    <div class="senior-top">
+                        <div class="senior-avatar">AA</div>
+                        <div>
+                            <div class="senior-name">Akash Arakh</div>
+                            <div class="senior-role">Analyst · Goldman Sachs</div>
+                        </div>
+                    </div>
+                    <span class="senior-tag">Aptitude + HR</span>
+                    <p class="senior-meta">Supports aptitude strategy, communication rounds, and confidence-building
+                        mocks.</p>
+                    <button class="senior-btn" type="button">Request Connect</button>
+                </article>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const name = localStorage.getItem('nextern_name') || 'Riya Sharma';
+        document.getElementById('navAvatar').textContent = name.charAt(0).toUpperCase();
+    </script>
+</body>
+
+</html>

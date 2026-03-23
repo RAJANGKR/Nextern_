@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile — Nextern</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --accent: #6C63FF;
+            --accent-hover: #5A52E0;
+            --accent-light: #EEF2FF;
+            --green: #22C55E;
+            --green-light: #F0FDF4;
+            --red: #EF4444;
+            --red-light: #FEF2F2;
+
+            --bg: #F3F4F8;
+            --bg-white: #FFFFFF;
+            --text: #0F172A;
+            --text-soft: #64748B;
+            --text-muted: #94A3B8;
+            --border: #E2E8F0;
+
+            --font-head: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-pill: 100px;
+
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        input,
+        select,
+        textarea,
+        button {
+            font-family: var(--font-body);
+        }
+
+        .topnav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 0 24px;
+            box-shadow: var(--shadow-sm);
+            z-index: 100;
+        }
+
+        .nav-logo {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 1.3rem;
+        }
+
+        .nav-logo span {
+            color: var(--accent);
+        }
+
+        .nav-search {
+            flex: 1;
+            max-width: 320px;
+        }
+
+        .nav-search input {
+            width: 100%;
+            padding: 8px 14px;
+            border-radius: var(--radius-pill);
+            border: 1.5px solid var(--border);
+            font-size: 0.84rem;
+            background: var(--bg);
+            outline: none;
+        }
+
+        .nav-search input:focus {
+            border-color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: auto;
+        }
+
+        .nav-link-item {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            transition: color 0.15s;
+        }
+
+        .nav-link-item:hover {
+            color: var(--text);
+        }
+
+        .nav-badge {
+            margin-left: 5px;
+            background: var(--red);
+            color: #fff;
+            padding: 1px 5px;
+            border-radius: var(--radius-pill);
+            font-size: 0.62rem;
+            font-weight: 700;
+        }
+
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #4C1D95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.78rem;
+            margin-left: 10px;
+        }
+
+        .page-layout {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 76px 16px 40px;
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .left-sidebar {
+            position: sticky;
+            top: 72px;
+        }
+
+        .sidebar-card,
+        .profile-card,
+        .preview-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sidebar-card {
+            padding: 8px;
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 9px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            color: var(--text-soft);
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .sidebar-nav-link:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .sidebar-nav-link.active {
+            background: var(--accent-light);
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .snav-badge {
+            margin-left: auto;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.62rem;
+            font-weight: 700;
+            border-radius: var(--radius-pill);
+            padding: 1px 6px;
+        }
+
+        .content {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .profile-card {
+            padding: 18px;
+        }
+
+        .profile-card h1 {
+            font-family: var(--font-head);
+            font-size: 1.45rem;
+            letter-spacing: -0.3px;
+            margin-bottom: 5px;
+        }
+
+        .profile-card p {
+            font-size: 0.84rem;
+            color: var(--text-soft);
+            margin-bottom: 16px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .field-full {
+            grid-column: 1 / -1;
+        }
+
+        .field label {
+            font-size: 0.75rem;
+            color: var(--text-soft);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            border: 1.5px solid var(--border);
+            background: var(--bg-white);
+            border-radius: var(--radius-sm);
+            padding: 9px 10px;
+            font-size: 0.84rem;
+            color: var(--text);
+            outline: none;
+        }
+
+        .field textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.11);
+        }
+
+        .skills-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .skills-row input {
+            flex: 1;
+        }
+
+        .btn {
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 9px 12px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-add {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .btn-add:hover {
+            background: #E4E0FF;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .skill-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #F7F7FF;
+            border: 1px solid #D9D6FF;
+            color: var(--accent);
+            font-size: 0.74rem;
+            font-weight: 600;
+            border-radius: var(--radius-pill);
+            padding: 4px 10px;
+        }
+
+        .skill-chip button {
+            border: none;
+            background: none;
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 0.75rem;
+            line-height: 1;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-light {
+            background: var(--bg);
+            color: var(--text-soft);
+            border: 1px solid var(--border);
+        }
+
+        .save-msg {
+            font-size: 0.78rem;
+            color: #16A34A;
+            display: none;
+        }
+
+        .preview-card {
+            padding: 16px;
+        }
+
+        .preview-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .preview-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #4C1D95);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .preview-name {
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .preview-meta {
+            font-size: 0.77rem;
+            color: var(--text-soft);
+        }
+
+        .preview-line {
+            font-size: 0.78rem;
+            color: var(--text-soft);
+            margin-top: 8px;
+        }
+
+        @media (max-width: 900px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .left-sidebar,
+            .nav-search,
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="topnav">
+        <a href="pages/feed.html" class="nav-logo">Nex<span>tern</span></a>
+
+        <div class="nav-search">
+            <input type="text" placeholder="Search profile fields..." />
+        </div>
+
+        <div class="nav-links">
+            <a href="pages/feed.html" class="nav-link-item">Home</a>
+            <a href="pages/drives.html" class="nav-link-item">Drives <span class="nav-badge">3</span></a>
+            <a href="pages/roadmap.html" class="nav-link-item">Roadmap</a>
+            <a href="pages/prep-hub.html" class="nav-link-item">Prep</a>
+            <a href="pages/seniors.html" class="nav-link-item">Seniors</a>
+        </div>
+
+        <div class="nav-avatar" id="navAvatar">R</div>
+    </nav>
+
+    <div class="page-layout">
+        <aside class="left-sidebar">
+            <div class="sidebar-card">
+                <a href="pages/feed.html" class="sidebar-nav-link">Feed</a>
+                <a href="pages/drives.html" class="sidebar-nav-link">Drives <span class="snav-badge">3</span></a>
+                <a href="pages/roadmap.html" class="sidebar-nav-link">Roadmap</a>
+                <a href="pages/prep-hub.html" class="sidebar-nav-link">Prep Hub</a>
+                <a href="pages/seniors.html" class="sidebar-nav-link">Seniors</a>
+                <a href="profile.html" class="sidebar-nav-link active">My Profile</a>
+                <a href="pages/dashboard.html" class="sidebar-nav-link">Dashboard</a>
+            </div>
+        </aside>
+
+        <main class="content">
+            <section class="profile-card">
+                <h1>My Profile</h1>
+                <p>Edit your details, branch, year, and skills. Changes are saved locally.</p>
+
+                <form id="profileForm" class="form-grid">
+                    <div class="field">
+                        <label for="fullName">Full Name</label>
+                        <input id="fullName" type="text" placeholder="Your name" />
+                    </div>
+
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" placeholder="you@example.com" />
+                    </div>
+
+                    <div class="field">
+                        <label for="phone">Phone</label>
+                        <input id="phone" type="tel" placeholder="+91 ..." />
+                    </div>
+
+                    <div class="field">
+                        <label for="college">College</label>
+                        <input id="college" type="text" placeholder="College name" />
+                    </div>
+
+                    <div class="field">
+                        <label for="branch">Branch Name</label>
+                        <input id="branch" type="text" placeholder="CSE" />
+                    </div>
+
+                    <div class="field">
+                        <label for="year">Year</label>
+                        <select id="year">
+                            <option value="1st Year">1st Year</option>
+                            <option value="2nd Year">2nd Year</option>
+                            <option value="3rd Year">3rd Year</option>
+                            <option value="4th Year">4th Year</option>
+                            <option value="Passout">Passout</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="cgpa">CGPA</label>
+                        <input id="cgpa" type="number" min="0" max="10" step="0.1" placeholder="7.8" />
+                    </div>
+
+                    <div class="field">
+                        <label for="targetCompany">Target Company</label>
+                        <input id="targetCompany" type="text" placeholder="Google / Microsoft..." />
+                    </div>
+
+                    <div class="field field-full">
+                        <label for="bio">Short Bio</label>
+                        <textarea id="bio" placeholder="Write a short intro..."></textarea>
+                    </div>
+
+                    <div class="field field-full">
+                        <label for="skillInput">Skills</label>
+                        <div class="skills-row">
+                            <input id="skillInput" type="text" placeholder="Type a skill and click Add" />
+                            <button class="btn btn-add" id="addSkillBtn" type="button">Add Skill</button>
+                        </div>
+                        <div class="skill-list" id="skillList"></div>
+                    </div>
+                </form>
+
+                <div class="actions">
+                    <button class="btn btn-primary" id="saveBtn" type="button">Save Profile</button>
+                    <button class="btn btn-light" id="resetBtn" type="button">Reset</button>
+                    <span class="save-msg" id="saveMsg">Profile updated</span>
+                </div>
+            </section>
+
+            <section class="preview-card">
+                <div class="preview-top">
+                    <div class="preview-avatar" id="previewAvatar">R</div>
+                    <div>
+                        <div class="preview-name" id="previewName">Rajan Garudkar</div>
+                        <div class="preview-meta" id="previewMeta">CSE · 3rd Year</div>
+                    </div>
+                </div>
+                <p class="preview-line" id="previewCollege">College: Not set</p>
+                <p class="preview-line" id="previewTarget">Target: Not set</p>
+                <p class="preview-line" id="previewSkills">Skills: Not set</p>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const formIds = [
+            'fullName',
+            'email',
+            'phone',
+            'college',
+            'branch',
+            'year',
+            'cgpa',
+            'targetCompany',
+            'bio'
+        ];
+
+        let skills = [];
+
+        function getValue(id) {
+            return document.getElementById(id).value.trim();
+        }
+
+        function setValue(id, value) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.value = value || '';
+        }
+
+        function renderSkills() {
+            const list = document.getElementById('skillList');
+            list.innerHTML = '';
+
+            skills.forEach((skill, index) => {
+                const chip = document.createElement('span');
+                chip.className = 'skill-chip';
+                chip.innerHTML = `${skill} <button type="button" aria-label="Remove skill">x</button>`;
+                chip.querySelector('button').addEventListener('click', () => {
+                    skills.splice(index, 1);
+                    renderSkills();
+                    updatePreview();
+                });
+                list.appendChild(chip);
+            });
+        }
+
+        function updatePreview() {
+            const name = getValue('fullName') || 'Rajan Garudkar';
+            const branch = getValue('branch') || 'CSE';
+            const year = getValue('year') || '3rd Year';
+            const college = getValue('college') || 'Not set';
+            const target = getValue('targetCompany') || 'Not set';
+
+            document.getElementById('navAvatar').textContent = name.charAt(0).toUpperCase();
+            document.getElementById('previewAvatar').textContent = name.charAt(0).toUpperCase();
+            document.getElementById('previewName').textContent = name;
+            document.getElementById('previewMeta').textContent = `${branch} · ${year}`;
+            document.getElementById('previewCollege').textContent = `College: ${college}`;
+            document.getElementById('previewTarget').textContent = `Target: ${target}`;
+            document.getElementById('previewSkills').textContent = `Skills: ${skills.length ? skills.join(', ') : 'Not set'}`;
+        }
+
+        function loadProfile() {
+            setValue('fullName', localStorage.getItem('nextern_name') || '');
+            setValue('email', localStorage.getItem('nextern_email') || '');
+            setValue('phone', localStorage.getItem('nextern_phone') || '');
+            setValue('college', localStorage.getItem('nextern_college') || '');
+            setValue('branch', localStorage.getItem('nextern_branch') || '');
+            setValue('year', localStorage.getItem('nextern_year') || '3rd Year');
+            setValue('cgpa', localStorage.getItem('nextern_cgpa') || '');
+            setValue('targetCompany', localStorage.getItem('nextern_target_company') || '');
+            setValue('bio', localStorage.getItem('nextern_bio') || '');
+
+            try {
+                const parsed = JSON.parse(localStorage.getItem('nextern_skills') || '[]');
+                skills = Array.isArray(parsed) ? parsed : [];
+            } catch (err) {
+                skills = [];
+            }
+
+            renderSkills();
+            updatePreview();
+        }
+
+        function saveProfile() {
+            const name = getValue('fullName') || 'Rajan Garudkar';
+            const branch = getValue('branch') || 'CSE';
+            const year = getValue('year') || '3rd Year';
+
+            localStorage.setItem('nextern_name', name);
+            localStorage.setItem('nextern_email', getValue('email'));
+            localStorage.setItem('nextern_phone', getValue('phone'));
+            localStorage.setItem('nextern_college', getValue('college'));
+            localStorage.setItem('nextern_branch', branch);
+            localStorage.setItem('nextern_year', year);
+            localStorage.setItem('nextern_cgpa', getValue('cgpa'));
+            localStorage.setItem('nextern_target_company', getValue('targetCompany'));
+            localStorage.setItem('nextern_bio', getValue('bio'));
+            localStorage.setItem('nextern_skills', JSON.stringify(skills));
+
+            updatePreview();
+
+            const msg = document.getElementById('saveMsg');
+            msg.style.display = 'inline';
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 1800);
+        }
+
+        function resetForm() {
+            formIds.forEach(id => setValue(id, id === 'year' ? '3rd Year' : ''));
+            skills = [];
+            renderSkills();
+            updatePreview();
+        }
+
+        document.getElementById('addSkillBtn').addEventListener('click', () => {
+            const input = document.getElementById('skillInput');
+            const value = input.value.trim();
+            if (!value) return;
+
+            const exists = skills.some(skill => skill.toLowerCase() === value.toLowerCase());
+            if (!exists) {
+                skills.push(value);
+                renderSkills();
+                updatePreview();
+            }
+            input.value = '';
+            input.focus();
+        });
+
+        document.getElementById('skillInput').addEventListener('keydown', event => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                document.getElementById('addSkillBtn').click();
+            }
+        });
+
+        formIds.forEach(id => {
+            document.getElementById(id).addEventListener('input', updatePreview);
+            document.getElementById(id).addEventListener('change', updatePreview);
+        });
+
+        document.getElementById('saveBtn').addEventListener('click', saveProfile);
+        document.getElementById('resetBtn').addEventListener('click', resetForm);
+
+        loadProfile();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nextern — College TnP Student Portal</title>
+
+    <!-- Google Fonts: Syne for headings, DM Sans for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap"
+        rel="stylesheet" />
+
+    <!-- Our stylesheet — always link CSS in <head> so page doesn't flash unstyled -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+    <!-- ============================================================
+    NAVIGATION
+    The <nav> tag tells browsers (and screen readers) this is
+    site navigation. Keeping it semantic matters for SEO too.
+  ============================================================ -->
+    <nav class="navbar" role="navigation">
+        <a href="#" class="logo">Nex<span>tern</span></a>
+
+        <ul class="nav-links">
+            <li><a href="#features">Modules</a></li>
+            <li><a href="#how-it-works">Workflow</a></li>
+            <li><a href="#drives">Updates</a></li>
+        </ul>
+
+        <a href="register.html" class="btn btn-nav">Get Started</a>
+    </nav>
+
+    <!-- ============================================================
+    HERO SECTION
+    The first thing a visitor sees. Goal: hook them in 3 seconds.
+  ============================================================ -->
+    <section class="hero" id="home">
+
+        <!-- Background blobs — purely visual, hidden from screen readers -->
+        <div class="hero-bg" aria-hidden="true">
+            <div class="bg-blob blob-1"></div>
+            <div class="bg-blob blob-2"></div>
+            <div class="bg-grid"></div>
+        </div>
+
+        <div class="hero-content">
+
+
+
+            <h1 class="hero-title">One place for all TnP communication.</h1>
+
+            <p class="hero-subtitle">
+                Nextern helps your college TnP cell publish verified updates, and helps students track eligibility,
+                preparation progress, and application deadlines without WhatsApp confusion.
+            </p>
+
+            <div class="hero-actions">
+                <a href="/register.html" class="btn btn-primary">Create Student Account</a>
+                <a href="#drives" class="btn btn-outline">See Placement Updates</a>
+            </div>
+
+        </div>
+
+        <!-- Floating product preview cards -->
+        <div class="hero-previews" aria-hidden="true">
+
+            <div class="preview-card card-drive">
+                <div class="preview-card-header">
+                    <div>
+                        <div class="company-name">Google</div>
+                        <div class="company-role">SDE Intern · Bangalore</div>
+                    </div>
+                </div>
+                <div class="drive-ctc">₹80,000 <span>/ month</span></div>
+                <div class="drive-deadline">⏱ Closes in 3 days</div>
+            </div>
+
+            <div class="preview-card card-roadmap">
+                <div class="roadmap-label">Prep Plan · Google SDE</div>
+                <ul class="roadmap-steps">
+                    <li class="step-done">Arrays &amp; Strings</li>
+                    <li class="step-done">Trees &amp; Graphs</li>
+                    <li class="step-active">Dynamic Programming</li>
+                    <li class="step-todo">System Design</li>
+                    <li class="step-todo">Behavioural Round</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============================================================
+    COMPANIES STRIP
+  ============================================================ -->
+    <section class="companies-strip" id="drives">
+        <p class="strip-label">Recent recruiters and target companies tracked by students</p>
+        <div class="company-list">
+            <span>Google</span><span>Microsoft</span><span>Amazon</span>
+            <span>Infosys</span><span>TCS</span><span>Wipro</span>
+            <span>Flipkart</span><span>Razorpay</span><span>Zomato</span>
+            <span>PhonePe</span><span>Goldman Sachs</span><span>JP Morgan</span>
+            <span>Deloitte</span><span>Accenture</span>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    FEATURES SECTION
+  ============================================================ -->
+    <section class="features" id="features">
+        <div class="section-header reveal">
+            <p class="section-label">Core Modules</p>
+            <h2 class="section-title">Built for college<br />placements</h2>
+            <p class="section-sub">Simple tools for TnP announcements, preparation, and student progress tracking.</p>
+        </div>
+
+        <div class="features-grid">
+            <article class="feature-card reveal delay-1">
+                <h3>TnP Noticeboard</h3>
+                <p>Official drive updates published in one place with role, deadline, eligibility and application
+                    instructions.</p>
+            </article>
+
+            <article class="feature-card reveal delay-2">
+                <h3>Eligibility Filter</h3>
+                <p>Students see drives matched by branch, year and CGPA so they only act on relevant opportunities.</p>
+            </article>
+
+            <article class="feature-card reveal delay-3">
+                <h3>Application Tracker</h3>
+                <p>Track status from Applied to Test to Interview to Offer, so both students and TnP cell stay aligned.</p>
+            </article>
+
+            <article class="feature-card reveal delay-1">
+                <h3>Preparation Hub</h3>
+                <p>Daily prep plan with DSA, aptitude, core subjects and interview tasks, plus completion history.</p>
+            </article>
+
+            <article class="feature-card reveal delay-2">
+                <h3>Senior Notes</h3>
+                <p>Read past interview experiences and practical tips shared by seniors from your own college.</p>
+            </article>
+
+            <article class="feature-card reveal delay-3 card-highlight">
+                <h3>Useful Redirects</h3>
+                <p>Direct links to company career pages, coding platforms and official forms so students can act quickly.</p>
+            </article>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    ROADMAP SHOWCASE
+  ============================================================ -->
+    <section class="roadmap-showcase">
+        <div class="showcase-inner">
+
+            <div class="showcase-copy reveal">
+                <p class="section-label">Prep Planner</p>
+                <h2 class="section-title">Weekly preparation<br />you can actually follow.</h2>
+                <p class="showcase-desc">
+                    Pick a role, add your current skills, and get a practical plan with topics, tasks and checkpoints.
+                    Mark items complete and track your readiness week by week.
+                </p>
+                <ul class="showcase-bullets">
+                    <li>Simple weekly checklist for DSA, aptitude and interview prep</li>
+                    <li>Progress percentage visible to student and TnP coordinator</li>
+                    <li>Topic-wise learning links and practice links</li>
+                    <li>Re-plan quickly when schedule changes</li>
+                </ul>
+            </div>
+
+            <div class="showcase-visual reveal delay-2">
+                <div class="roadmap-widget">
+                    <div class="rw-title">Your Google SDE Prep Plan</div>
+
+                    <div class="rw-phase phase-done">
+                        <div class="phase-num done">✓</div>
+                        <div class="phase-info">
+                            <span class="phase-name">Arrays &amp; Strings</span>
+                            <span class="phase-meta">28 problems · Completed</span>
+                        </div>
+                    </div>
+
+                    <div class="rw-phase phase-done">
+                        <div class="phase-num done">✓</div>
+                        <div class="phase-info">
+                            <span class="phase-name">Trees &amp; Graphs</span>
+                            <span class="phase-meta">35 problems · Completed</span>
+                        </div>
+                    </div>
+
+                    <div class="rw-phase phase-active">
+                        <div class="phase-num active">3</div>
+                        <div class="phase-info">
+                            <span class="phase-name">Dynamic Programming</span>
+                            <span class="phase-meta">In progress · 12 / 30 done</span>
+                        </div>
+                    </div>
+
+                    <div class="rw-phase phase-todo">
+                        <div class="phase-num todo">4</div>
+                        <div class="phase-info">
+                            <span class="phase-name">System Design</span>
+                            <span class="phase-meta">Starts next week</span>
+                        </div>
+                    </div>
+
+                    <div class="rw-phase phase-todo">
+                        <div class="phase-num todo">5</div>
+                        <div class="phase-info">
+                            <span class="phase-name">Behavioural Round</span>
+                            <span class="phase-meta">Final phase</span>
+                        </div>
+                    </div>
+
+                    <div class="rw-progress">
+                        <div class="rw-progress-labels">
+                            <span>Overall Progress</span><span>42%</span>
+                        </div>
+                        <div class="rw-bar">
+                            <!-- JS reads data-width to animate this on scroll -->
+                            <div class="rw-fill" data-width="42"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============================================================
+    DRIVE TRACKER PREVIEW
+  ============================================================ -->
+    <section class="drives-preview">
+        <div class="drives-inner">
+
+            <div class="drives-copy reveal">
+                <p class="section-label">Drive Updates</p>
+                <h2 class="section-title">Every drive update<br />in one timeline.</h2>
+                <p class="showcase-desc">
+                    TnP and placement volunteers can post verified opportunities once. Students see all updates with
+                    deadlines, forms and quick actions.
+                </p>
+                <a href="/login.html" class="btn btn-primary">Open Student Dashboard</a>
+                <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+                    <a href="https://leetcode.com" target="_blank" rel="noopener" class="btn btn-outline">LeetCode</a>
+                    <a href="https://www.geeksforgeeks.org" target="_blank" rel="noopener" class="btn btn-outline">GeeksforGeeks</a>
+                    <a href="https://careers.google.com" target="_blank" rel="noopener" class="btn btn-outline">Career Portals</a>
+                </div>
+            </div>
+
+            <div class="drive-cards reveal delay-2">
+
+                <div class="drive-card">
+                    <div class="dc-left">
+                        <div class="dc-initial dc-g">G</div>
+                        <div>
+                            <div class="dc-company">Google — SDE Intern</div>
+                            <div class="dc-location">Software Engineering · Bangalore</div>
+                        </div>
+                    </div>
+                    <span class="dc-status status-open">Open</span>
+                    <div class="dc-pills">
+                        <span>₹80k/mo</span><span>CSE / IT</span><span>CGPA ≥ 7.5</span><span>3 days left</span>
+                    </div>
+                </div>
+
+                <div class="drive-card">
+                    <div class="dc-left">
+                        <div class="dc-initial dc-r">R</div>
+                        <div>
+                            <div class="dc-company">Razorpay — Backend Engineer</div>
+                            <div class="dc-location">Full Stack · Remote</div>
+                        </div>
+                    </div>
+                    <span class="dc-status status-open">Open</span>
+                    <div class="dc-pills">
+                        <span>₹18 LPA</span><span>All branches</span><span>CGPA ≥ 6.0</span>
+                    </div>
+                </div>
+
+                <div class="drive-card">
+                    <div class="dc-left">
+                        <div class="dc-initial dc-gs">GS</div>
+                        <div>
+                            <div class="dc-company">Goldman Sachs — Analyst</div>
+                            <div class="dc-location">Technology Division · Mumbai</div>
+                        </div>
+                    </div>
+                    <span class="dc-status status-soon">Opening Soon</span>
+                    <div class="dc-pills">
+                        <span>₹22 LPA</span><span>CSE / ECE</span><span>CGPA ≥ 8.0</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    HOW IT WORKS
+  ============================================================ -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-header reveal">
+            <p class="section-label">Workflow</p>
+            <h2 class="section-title">From drive notice<br />to final offer.</h2>
+        </div>
+
+        <ol class="steps-list">
+            <li class="step reveal delay-1">
+                <span class="step-number">01</span>
+                <div class="step-body">
+                    <h3>Create student profile</h3>
+                    <p>Student signs up using college email and adds branch, year, CGPA and prep goals.</p>
+                </div>
+            </li>
+            <li class="step reveal delay-2">
+                <span class="step-number">02</span>
+                <div class="step-body">
+                    <h3>Read verified TnP updates</h3>
+                    <p>Students get clear information: role, eligibility, important dates and official form links.</p>
+                </div>
+            </li>
+            <li class="step reveal delay-3">
+                <span class="step-number">03</span>
+                <div class="step-body">
+                    <h3>Start structured prep</h3>
+                    <p>Students follow a simple weekly plan and use direct resource links for each topic.</p>
+                </div>
+            </li>
+            <li class="step reveal delay-1">
+                <span class="step-number">04</span>
+                <div class="step-body">
+                    <h3>Track progress and status</h3>
+                    <p>Dashboard shows preparation progress and application stage for each drive.</p>
+                </div>
+            </li>
+            <li class="step reveal delay-2">
+                <span class="step-number">05</span>
+                <div class="step-body">
+                    <h3>Share outcomes and insights</h3>
+                    <p>Placed students can share interview experiences to help the next batch prepare better.</p>
+                </div>
+            </li>
+        </ol>
+    </section>
+
+
+
+    <!-- ============================================================
+    EARLY ACCESS CTA
+  ============================================================ -->
+    <section class="cta-section" id="early-access">
+        <div class="cta-box reveal">
+            <h2 class="cta-title">Run placements<br />with less chaos.</h2>
+            <p class="cta-sub">Built for one college, practical enough to scale across batches.</p>
+
+
+            <button onclick="window.location.href = '/register.html'" type="submit" class="btn btn-primary">Create
+                Account</button>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    FOOTER
+  ============================================================ -->
+    <footer class="site-footer">
+        <div class="footer-logo">Nextern</div>
+        <ul class="footer-links">
+            <li><a href="#features">Modules</a></li>
+            <li><a href="#drives">Updates</a></li>
+            <li><a href="/register.html">Student Signup</a></li>
+            <li><a href="/login.html">Student Login</a></li>
+        </ul>
+        <p class="footer-copy">© 2026 Nextern · TnP workflow for students and coordinators</p>
+    </footer>
+
+    <!-- Script at the BOTTOM of body — HTML loads first, then JS runs -->
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prep Hub — Nextern</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --accent: #6C63FF;
+            --accent-light: #EEF2FF;
+            --accent-hover: #5A52E0;
+            --green: #22C55E;
+            --green-light: #F0FDF4;
+            --blue: #3B82F6;
+            --blue-light: #EFF6FF;
+            --amber: #F59E0B;
+            --amber-light: #FFF7ED;
+            --red: #EF4444;
+
+            --bg: #F3F4F8;
+            --bg-white: #FFFFFF;
+            --text: #0F172A;
+            --text-soft: #64748B;
+            --text-muted: #94A3B8;
+            --border: #E2E8F0;
+
+            --font-head: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-pill: 100px;
+
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .topnav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 0 24px;
+            box-shadow: var(--shadow-sm);
+            z-index: 100;
+        }
+
+        .nav-logo {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 1.3rem;
+        }
+
+        .nav-logo span {
+            color: var(--accent);
+        }
+
+        .nav-search {
+            flex: 1;
+            max-width: 320px;
+        }
+
+        .nav-search input {
+            width: 100%;
+            padding: 8px 14px;
+            border-radius: var(--radius-pill);
+            border: 1.5px solid var(--border);
+            font-size: 0.84rem;
+            background: var(--bg);
+            outline: none;
+        }
+
+        .nav-search input:focus {
+            border-color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: auto;
+        }
+
+        .nav-link-item {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            transition: color 0.15s;
+        }
+
+        .nav-link-item:hover {
+            color: var(--text);
+        }
+
+        .nav-link-item.active {
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .nav-badge {
+            margin-left: 5px;
+            background: var(--red);
+            color: #fff;
+            padding: 1px 5px;
+            border-radius: var(--radius-pill);
+            font-size: 0.62rem;
+            font-weight: 700;
+        }
+
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #4C1D95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.78rem;
+            margin-left: 10px;
+        }
+
+        .page-layout {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 76px 16px 40px;
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .left-sidebar {
+            position: sticky;
+            top: 72px;
+        }
+
+        .sidebar-card,
+        .main-card,
+        .prep-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sidebar-card {
+            padding: 8px;
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 9px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            color: var(--text-soft);
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .sidebar-nav-link:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .sidebar-nav-link.active {
+            background: var(--accent-light);
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .snav-badge {
+            margin-left: auto;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.62rem;
+            font-weight: 700;
+            border-radius: var(--radius-pill);
+            padding: 1px 6px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .main-card {
+            padding: 20px;
+        }
+
+        .main-card h1 {
+            font-family: var(--font-head);
+            font-size: 1.45rem;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .main-card p {
+            font-size: 0.86rem;
+            color: var(--text-soft);
+            line-height: 1.5;
+        }
+
+        .prep-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .prep-card {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .prep-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .prep-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .icon-dsa {
+            background: var(--accent-light);
+        }
+
+        .icon-core {
+            background: var(--blue-light);
+        }
+
+        .icon-mock {
+            background: var(--amber-light);
+        }
+
+        .prep-pill {
+            font-size: 0.66rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--border);
+            color: var(--text-soft);
+            background: var(--bg);
+        }
+
+        .prep-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+        }
+
+        .prep-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: var(--text-soft);
+            padding-left: 16px;
+        }
+
+        .prep-btn {
+            margin-top: auto;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.76rem;
+            font-weight: 600;
+            padding: 8px 10px;
+            cursor: pointer;
+        }
+
+        .prep-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .tracker-grid {
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: 12px;
+        }
+
+        .tracker-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 14px;
+        }
+
+        .tracker-card h2 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .task-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 10px;
+            background: #fcfcff;
+        }
+
+        .task-row input {
+            margin-top: 2px;
+            accent-color: var(--accent);
+        }
+
+        .task-title {
+            font-size: 0.84rem;
+            font-weight: 600;
+        }
+
+        .task-sub {
+            font-size: 0.75rem;
+            color: var(--text-soft);
+            margin-top: 1px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: var(--bg);
+            border-radius: var(--radius-pill);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent), #3b82f6);
+            transition: width .2s ease;
+        }
+
+        .tracker-meta {
+            margin-top: 8px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            color: var(--text-soft);
+        }
+
+        .resource-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .resource-links a {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 0.82rem;
+            color: var(--text);
+            background: #fff;
+        }
+
+        .resource-links a:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .mini-plan {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .plan-item {
+            border: 1px dashed var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            background: #FCFCFF;
+        }
+
+        .plan-item h3 {
+            font-size: 0.84rem;
+            margin-bottom: 4px;
+        }
+
+        .plan-item p {
+            font-size: 0.76rem;
+            color: var(--text-soft);
+            line-height: 1.45;
+        }
+
+        @media (max-width: 900px) {
+            .prep-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tracker-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mini-plan {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .left-sidebar {
+                display: none;
+            }
+
+            .nav-search,
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="topnav">
+        <a href="feed.html" class="nav-logo">Nex<span>tern</span></a>
+
+        <div class="nav-search">
+            <input type="text" placeholder="Search sheets, questions, topics..." />
+        </div>
+
+        <div class="nav-links">
+            <a href="feed.html" class="nav-link-item">Home</a>
+            <a href="drives.html" class="nav-link-item">Drives <span class="nav-badge">3</span></a>
+            <a href="roadmap.html" class="nav-link-item">Roadmap</a>
+            <a href="prep-hub.html" class="nav-link-item active">Prep</a>
+            <a href="seniors.html" class="nav-link-item">Seniors</a>
+        </div>
+
+        <div class="nav-avatar" id="navAvatar">R</div>
+    </nav>
+
+    <div class="page-layout">
+        <aside class="left-sidebar">
+            <div class="sidebar-card">
+                <a href="feed.html" class="sidebar-nav-link">Feed</a>
+                <a href="drives.html" class="sidebar-nav-link">Drives <span class="snav-badge">3</span></a>
+                <a href="roadmap.html" class="sidebar-nav-link">Roadmap</a>
+                <a href="prep-hub.html" class="sidebar-nav-link active">Prep Hub</a>
+                <a href="seniors.html" class="sidebar-nav-link">Seniors</a>
+                <a href="dashboard.html" class="sidebar-nav-link">Dashboard</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <section class="main-card">
+                <h1>Prep Hub</h1>
+                <p>Simple prep blocks to keep your daily interview preparation structured and consistent.</p>
+            </section>
+
+            <section class="prep-grid">
+                <article class="prep-card">
+                    <div class="prep-top">
+                        <span class="prep-pill">Daily</span>
+                    </div>
+                    <h2 class="prep-title">DSA Block</h2>
+                    <ul class="prep-list">
+                        <li>2 medium problems</li>
+                        <li>1 revision problem</li>
+                        <li>15 min mistake review</li>
+                    </ul>
+                    <button onclick="window.open('https://leetcode.com/problemset/', '_blank')" class="prep-btn"
+                        type="button">Start DSA</button>
+                </article>
+
+                <article class="prep-card">
+                    <div class="prep-top">
+                        <span class="prep-pill">Core</span>
+                    </div>
+                    <h2 class="prep-title">CS Fundamentals</h2>
+                    <ul class="prep-list">
+                        <li>Pick 1 topic (OS/DBMS/CN)</li>
+                        <li>Read notes for 20 mins</li>
+                        <li>Solve 5 quick questions</li>
+                    </ul>
+                    <button onclick="window.open('https://www.geeksforgeeks.org/operating-systems/', '_blank')"
+                        class="prep-btn" type="button">Continue Core</button>
+                </article>
+
+                <article class="prep-card">
+                    <div class="prep-top">
+                        <span class="prep-pill">Practice</span>
+                    </div>
+                    <h2 class="prep-title">Mock Block</h2>
+                    <ul class="prep-list">
+                        <li>1 timed quiz or mock</li>
+                        <li>Track weak areas</li>
+                        <li>Add to roadmap backlog</li>
+                    </ul>
+                    <button onclick="window.open('https://www.interviewbit.com/courses/programming/', '_blank')"
+                        class="prep-btn" type="button">Take Mock</button>
+                </article>
+            </section>
+
+            <section class="tracker-grid">
+                <article class="tracker-card">
+                    <h2>Today's Checklist</h2>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="tracker-meta">
+                        <span id="progressText">0 / 0 done</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="task-list" id="taskList"></div>
+                </article>
+
+                <article class="tracker-card">
+                    <h2>Quick Resources</h2>
+                    <div class="resource-links">
+                        <a href="https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2/"
+                            target="_blank" rel="noopener">Striver DSA Sheet</a>
+                        <a href="https://www.geeksforgeeks.org/dbms/" target="_blank" rel="noopener">DBMS Notes +
+                            QnA</a>
+                        <a href="https://www.geeksforgeeks.org/computer-network-tutorials/" target="_blank"
+                            rel="noopener">Computer Networks Revision</a>
+                        <a href="https://nextstep.tcs.com/" target="_blank" rel="noopener">Company Portals (TCS
+                            NextStep)</a>
+                        <a href="https://careers.google.com/" target="_blank" rel="noopener">Company Portals (Google
+                            Careers)</a>
+                    </div>
+                    <div class="tracker-meta" style="margin-top:12px;">
+                        <span>Current streak</span>
+                        <strong id="streakText">0 day</strong>
+                    </div>
+                </article>
+            </section>
+
+            <section class="main-card mini-plan">
+                <div class="plan-item">
+                    <h3>Today</h3>
+                    <p>DSA + Core theory + one short mock.</p>
+                </div>
+                <div class="plan-item">
+                    <h3>This Week</h3>
+                    <p>Complete 5 DSA sessions and 2 full timed mock tests.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const name = localStorage.getItem('nextern_name') || 'Riya Sharma';
+        document.getElementById('navAvatar').textContent = name.charAt(0).toUpperCase();
+
+        const TASKS = [
+            { id: 'dsa2', title: 'Solve 2 DSA problems', sub: '1 medium + 1 revision' },
+            { id: 'core20', title: 'Study CS core for 20 mins', sub: 'OS / DBMS / CN' },
+            { id: 'aptitude', title: 'Practice 10 aptitude questions', sub: 'Speed + accuracy' },
+            { id: 'mock', title: 'Take one timed mock', sub: 'Track weak areas' },
+            { id: 'review', title: 'Review mistakes', sub: 'Write 3 key learnings' },
+        ];
+
+        const taskKey = 'nextern_prep_tasks_v1';
+        const historyKey = 'nextern_prep_history_v1';
+
+        function todayKey() {
+            return new Date().toISOString().slice(0, 10);
+        }
+
+        function loadTasksState() {
+            try {
+                return JSON.parse(localStorage.getItem(taskKey) || '{}');
+            } catch {
+                return {};
+            }
+        }
+
+        function saveTasksState(state) {
+            localStorage.setItem(taskKey, JSON.stringify(state));
+        }
+
+        function loadHistory() {
+            try {
+                return JSON.parse(localStorage.getItem(historyKey) || '{}');
+            } catch {
+                return {};
+            }
+        }
+
+        function saveHistory(history) {
+            localStorage.setItem(historyKey, JSON.stringify(history));
+        }
+
+        function calcStreak(history) {
+            let streak = 0;
+            const cursor = new Date();
+            while (true) {
+                const key = cursor.toISOString().slice(0, 10);
+                if ((history[key] || 0) > 0) {
+                    streak++;
+                    cursor.setDate(cursor.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+            return streak;
+        }
+
+        function updateProgress() {
+            const checks = Array.from(document.querySelectorAll('.task-check'));
+            const total = checks.length;
+            const done = checks.filter(c => c.checked).length;
+            const percent = total ? Math.round((done / total) * 100) : 0;
+
+            document.getElementById('progressFill').style.width = `${percent}%`;
+            document.getElementById('progressText').textContent = `${done} / ${total} done`;
+            document.getElementById('progressPercent').textContent = `${percent}%`;
+
+            const history = loadHistory();
+            history[todayKey()] = done;
+            saveHistory(history);
+            const streak = calcStreak(history);
+            document.getElementById('streakText').textContent = `${streak} day${streak === 1 ? '' : 's'}`;
+        }
+
+        function renderChecklist() {
+            const taskList = document.getElementById('taskList');
+            const state = loadTasksState();
+            const today = todayKey();
+            const todayState = state[today] || {};
+
+            taskList.innerHTML = TASKS.map(task => `
+                <label class=\"task-row\">
+                    <input class=\"task-check\" type=\"checkbox\" data-task-id=\"${task.id}\" ${todayState[task.id] ? 'checked' : ''} />
+                    <div>
+                        <div class=\"task-title\">${task.title}</div>
+                        <div class=\"task-sub\">${task.sub}</div>
+                    </div>
+                </label>
+            `).join('');
+
+            document.querySelectorAll('.task-check').forEach(input => {
+                input.addEventListener('change', () => {
+                    const freshState = loadTasksState();
+                    freshState[today] = freshState[today] || {};
+                    freshState[today][input.dataset.taskId] = input.checked;
+                    saveTasksState(freshState);
+                    updateProgress();
+                });
+            });
+
+            updateProgress();
+        }
+
+        renderChecklist();
+    </script>
+</body>
+
+</html>

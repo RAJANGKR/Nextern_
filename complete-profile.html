@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Complete Profile - Nextern</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #f5f6fb;
+            --card: #ffffff;
+            --text: #0f172a;
+            --soft: #64748b;
+            --border: #dbe1ea;
+            --accent: #5b6df7;
+            --accent-dark: #4657d8;
+            --error: #dc2626;
+            --ok: #16a34a;
+            --font-head: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --radius: 14px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: radial-gradient(circle at top right, #e8ebff, #f6f7fc 42%, #eef3ff);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .card {
+            width: min(720px, 100%);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+            padding: 28px;
+        }
+
+        h1 {
+            font-family: var(--font-head);
+            font-size: 1.7rem;
+            margin-bottom: 6px;
+        }
+
+        p.subtitle {
+            color: var(--soft);
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: grid;
+            gap: 14px;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        label {
+            font-size: 0.88rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 11px 12px;
+            font: inherit;
+            outline: none;
+            transition: border-color 0.2s ease;
+            background: #fff;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--accent);
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .hint {
+            font-size: 0.78rem;
+            color: var(--soft);
+            margin-top: 5px;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        button {
+            border: 0;
+            background: var(--accent);
+            color: #fff;
+            font-weight: 700;
+            font-family: var(--font-body);
+            border-radius: 10px;
+            padding: 11px 16px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        button:hover {
+            background: var(--accent-dark);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .status {
+            font-size: 0.86rem;
+            min-height: 20px;
+        }
+
+        .status.error {
+            color: var(--error);
+        }
+
+        .status.success {
+            color: var(--ok);
+        }
+
+        @media (max-width: 760px) {
+            .card {
+                padding: 20px;
+            }
+
+            .row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>Complete your profile</h1>
+        <p class="subtitle">Tell us your academic details so we can personalize your feed.</p>
+
+        <form id="completeProfileForm">
+            <div>
+                <label for="college">College</label>
+                <input id="college" type="text" placeholder="e.g. VJTI" required />
+            </div>
+
+            <div class="row">
+                <div>
+                    <label for="branch">Branch</label>
+                    <select id="branch" required>
+                        <option value="">Select branch</option>
+                        <option>Computer Science</option>
+                        <option>Information Technology</option>
+                        <option>Electronics</option>
+                        <option>Mechanical</option>
+                        <option>Civil</option>
+                        <option>Chemical</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="year">Year</label>
+                    <select id="year" required>
+                        <option value="">Select year</option>
+                        <option>1st</option>
+                        <option>2nd</option>
+                        <option>3rd</option>
+                        <option>4th</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label for="cgpa">CGPA</label>
+                    <input id="cgpa" type="number" min="0" max="10" step="0.1" placeholder="e.g. 8.4" required />
+                </div>
+
+                <div>
+                    <label for="graduationYear">Graduation Year</label>
+                    <input id="graduationYear" type="number" min="2020" max="2040" placeholder="e.g. 2027" />
+                </div>
+            </div>
+
+            <div>
+                <label for="skills">Skills</label>
+                <input id="skills" type="text" placeholder="Comma-separated, e.g. JavaScript, DSA, SQL" />
+            </div>
+
+            <div>
+                <label for="targetCompanies">Target Companies</label>
+                <input id="targetCompanies" type="text" placeholder="Comma-separated, e.g. Google, Atlassian" />
+                <div class="hint">Use commas between values.</div>
+            </div>
+
+            <div class="actions">
+                <button id="saveBtn" type="submit">Save and continue</button>
+                <div id="status" class="status"></div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:4000';
+
+        function parseCsv(value) {
+            return value
+                .split(',')
+                .map(item => item.trim())
+                .filter(Boolean);
+        }
+
+        function setStatus(message, type) {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type || ''}`.trim();
+        }
+
+        async function fetchMe(token) {
+            const response = await fetch(`${API_BASE_URL}/api/user/me`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (!response.ok) {
+                throw new Error('Could not fetch profile.');
+            }
+
+            const data = await response.json();
+            return data.user;
+        }
+
+        function setLocalSession(user, token) {
+            const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
+            localStorage.setItem('nextern_token', token);
+            localStorage.setItem('nextern_name', fullName);
+            localStorage.setItem('nextern_branch', user.branch || '');
+            localStorage.setItem('nextern_year', user.year || '');
+            localStorage.setItem('nextern_user', JSON.stringify(user));
+        }
+
+        async function bootstrap() {
+            const url = new URL(window.location.href);
+            const tokenFromUrl = url.searchParams.get('token');
+            const nameFromUrl = url.searchParams.get('name');
+
+            if (tokenFromUrl) {
+                localStorage.setItem('nextern_token', tokenFromUrl);
+                if (nameFromUrl) {
+                    localStorage.setItem('nextern_name', decodeURIComponent(nameFromUrl));
+                }
+                window.history.replaceState({}, '', window.location.pathname);
+            }
+
+            const token = localStorage.getItem('nextern_token');
+            if (!token) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            try {
+                const user = await fetchMe(token);
+
+                if (user.college && String(user.college).trim()) {
+                    setLocalSession(user, token);
+                    window.location.href = '/pages/feed.html';
+                    return;
+                }
+
+                document.getElementById('college').value = user.college || '';
+                document.getElementById('branch').value = user.branch || '';
+                document.getElementById('year').value = user.year || '';
+                document.getElementById('cgpa').value = user.cgpa ?? '';
+                document.getElementById('graduationYear').value = user.graduationYear ?? '';
+                document.getElementById('skills').value = (user.skills || []).join(', ');
+                document.getElementById('targetCompanies').value = (user.targetCompanies || []).join(', ');
+            } catch (error) {
+                localStorage.removeItem('nextern_token');
+                setStatus('Session expired. Please sign in again.', 'error');
+                setTimeout(() => {
+                    window.location.href = '/login.html';
+                }, 900);
+            }
+        }
+
+        document.getElementById('completeProfileForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const token = localStorage.getItem('nextern_token');
+            if (!token) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const college = document.getElementById('college').value.trim();
+            const branch = document.getElementById('branch').value;
+            const year = document.getElementById('year').value;
+            const cgpa = parseFloat(document.getElementById('cgpa').value);
+            const graduationYearRaw = document.getElementById('graduationYear').value;
+
+            if (!college || !branch || !year || Number.isNaN(cgpa) || cgpa < 0 || cgpa > 10) {
+                setStatus('Please fill college, branch, year, and a valid CGPA (0-10).', 'error');
+                return;
+            }
+
+            const payload = {
+                college,
+                branch,
+                year,
+                cgpa,
+                graduationYear: graduationYearRaw ? parseInt(graduationYearRaw, 10) : undefined,
+                skills: parseCsv(document.getElementById('skills').value),
+                targetCompanies: parseCsv(document.getElementById('targetCompanies').value),
+            };
+
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+            setStatus('');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/user/me`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Could not save profile.');
+                }
+
+                setLocalSession(data.user, token);
+                setStatus('Profile updated. Redirecting to feed...', 'success');
+                setTimeout(() => {
+                    window.location.href = '/pages/feed.html';
+                }, 500);
+            } catch (error) {
+                setStatus(error.message || 'Something went wrong. Please try again.', 'error');
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save and continue';
+            }
+        });
+
+        bootstrap();
+    </script>
+</body>
+
+</html>

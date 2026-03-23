@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Manual Drive Entry</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #f4f6fb;
+            --card: #fff;
+            --border: #dbe1ea;
+            --text: #0f172a;
+            --soft: #64748b;
+            --accent: #4f46e5;
+            --accent-dark: #3730a3;
+            --error: #dc2626;
+            --ok: #16a34a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(180deg, #eef2ff, #f8fafc 45%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 26px 14px 50px;
+        }
+
+        .wrap {
+            max-width: 980px;
+            margin: 0 auto;
+            display: grid;
+            gap: 14px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+        }
+
+        .link-btn {
+            text-decoration: none;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.07);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 11px;
+            font: inherit;
+            background: #fff;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 75px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--accent);
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        button {
+            background: var(--accent);
+            color: #fff;
+            border: 0;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: var(--accent-dark);
+        }
+
+        .status {
+            font-size: 0.86rem;
+            min-height: 20px;
+        }
+
+        .ok {
+            color: var(--ok);
+        }
+
+        .error {
+            color: var(--error);
+        }
+
+        .list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .drive-item {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            background: #fff;
+        }
+
+        .drive-item strong {
+            font-size: 0.95rem;
+        }
+
+        .meta {
+            color: var(--soft);
+            font-size: 0.8rem;
+            margin-top: 2px;
+        }
+
+        @media (max-width: 760px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="top">
+            <h1>Manual Drive Entry (Admin)</h1>
+            <a class="link-btn" href="drives.html">Back to Drives</a>
+        </div>
+
+        <div class="card">
+            <form id="driveForm" class="grid">
+                <div>
+                    <label for="company">Company *</label>
+                    <input id="company" required />
+                </div>
+                <div>
+                    <label for="role">Role *</label>
+                    <input id="role" required />
+                </div>
+                <div>
+                    <label for="location">Location</label>
+                    <input id="location" />
+                </div>
+                <div>
+                    <label for="ctc">CTC</label>
+                    <input id="ctc" placeholder="e.g. INR 12 LPA" />
+                </div>
+                <div>
+                    <label for="deadline">Deadline</label>
+                    <input id="deadline" type="date" />
+                </div>
+                <div>
+                    <label for="statusField">Status</label>
+                    <select id="statusField">
+                        <option value="published">Published</option>
+                        <option value="draft">Draft</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                </div>
+                <div class="full">
+                    <label for="eligibility">Eligibility</label>
+                    <input id="eligibility" placeholder="e.g. CGPA >= 7.0, CSE/IT" />
+                </div>
+                <div class="full">
+                    <label for="applyUrl">Apply URL</label>
+                    <input id="applyUrl" type="url" placeholder="https://..." />
+                </div>
+                <div class="full">
+                    <label for="sourceUrl">Source URL</label>
+                    <input id="sourceUrl" type="url" placeholder="https://..." />
+                </div>
+                <div class="full">
+                    <label for="rawSource">Raw Source Notes (optional JSON/text)</label>
+                    <textarea id="rawSource"></textarea>
+                </div>
+
+                <div class="full actions">
+                    <button type="submit" id="submitBtn">Publish Drive</button>
+                    <span id="status" class="status"></span>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2 style="font-family:'Syne',sans-serif;font-size:1.15rem;margin-bottom:8px;">Recent Manual Drives</h2>
+            <div id="manualList" class="list"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:4000';
+
+        function setStatus(message, type) {
+            const el = document.getElementById('status');
+            el.textContent = message;
+            el.className = `status ${type || ''}`;
+        }
+
+        function getToken() {
+            return localStorage.getItem('nextern_token');
+        }
+
+        async function requireAdmin() {
+            const token = getToken();
+            if (!token) {
+                window.location.href = '../login.html';
+                return null;
+            }
+
+            const meRes = await fetch(`${API_BASE_URL}/api/user/me`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            const meData = await meRes.json();
+            if (!meRes.ok || !meData.success) {
+                window.location.href = '../login.html';
+                return null;
+            }
+
+            return token;
+        }
+
+        async function loadManualDrives() {
+            const listEl = document.getElementById('manualList');
+            listEl.innerHTML = 'Loading...';
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/drives?sourceType=manual&limit=20`);
+                const data = await res.json();
+
+                if (!res.ok || !data.success) throw new Error('Failed to load manual drives.');
+
+                const drives = data.drives || [];
+                if (!drives.length) {
+                    listEl.innerHTML = '<div class="meta">No manual drives yet.</div>';
+                    return;
+                }
+
+                listEl.innerHTML = drives.map((drive) => {
+                    const deadline = drive.deadline ? new Date(drive.deadline).toLocaleDateString() : 'No deadline';
+                    return `
+                        <div class="drive-item">
+                            <div>
+                                <strong>${drive.company} - ${drive.role}</strong>
+                                <div class="meta">${drive.location || 'Location N/A'} | ${drive.ctc || 'CTC N/A'}</div>
+                                <div class="meta">Deadline: ${deadline}</div>
+                            </div>
+                            <div class="meta">${drive.status}</div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                listEl.innerHTML = `<div class="error">${error.message}</div>`;
+            }
+        }
+
+        document.getElementById('driveForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const token = getToken();
+            if (!token) {
+                window.location.href = '../login.html';
+                return;
+            }
+
+            const payload = {
+                company: document.getElementById('company').value.trim(),
+                role: document.getElementById('role').value.trim(),
+                location: document.getElementById('location').value.trim(),
+                ctc: document.getElementById('ctc').value.trim(),
+                deadline: document.getElementById('deadline').value || undefined,
+                eligibility: document.getElementById('eligibility').value.trim(),
+                applyUrl: document.getElementById('applyUrl').value.trim(),
+                sourceUrl: document.getElementById('sourceUrl').value.trim(),
+                status: document.getElementById('statusField').value,
+                rawSource: document.getElementById('rawSource').value.trim() || undefined,
+            };
+
+            if (!payload.company || !payload.role) {
+                setStatus('Company and role are required.', 'error');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Saving...';
+            setStatus('');
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/drives`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                const data = await res.json();
+
+                if (!res.ok || !data.success) {
+                    throw new Error(data.message || 'Could not create drive.');
+                }
+
+                setStatus('Drive saved successfully.', 'ok');
+                document.getElementById('driveForm').reset();
+                document.getElementById('statusField').value = 'published';
+                loadManualDrives();
+            } catch (error) {
+                setStatus(error.message || 'Something went wrong.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Publish Drive';
+            }
+        });
+
+        (async function init() {
+            const token = await requireAdmin();
+            if (!token) return;
+            loadManualDrives();
+        })();
+    </script>
+</body>
+
+</html>

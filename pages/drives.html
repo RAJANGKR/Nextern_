@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Placement Drives — Nextern</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --accent: #6C63FF;
+            --accent-light: #EEF2FF;
+            --accent-hover: #5A52E0;
+            --green: #22C55E;
+            --green-light: #F0FDF4;
+            --amber: #F59E0B;
+            --amber-light: #FFF7ED;
+            --blue: #3B82F6;
+            --blue-light: #EFF6FF;
+            --red: #EF4444;
+            --red-light: #FEF2F2;
+
+            --bg: #F3F4F8;
+            --bg-white: #FFFFFF;
+            --text: #0F172A;
+            --text-soft: #64748B;
+            --text-muted: #94A3B8;
+            --border: #E2E8F0;
+
+            --font-head: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-pill: 100px;
+
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        button {
+            font-family: var(--font-body);
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        /* ── TOP NAVBAR (same as feed) ── */
+        .topnav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            gap: 16px;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-logo {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: var(--text);
+            flex-shrink: 0;
+        }
+
+        .nav-logo span {
+            color: var(--accent);
+        }
+
+        .nav-search {
+            flex: 1;
+            max-width: 320px;
+            position: relative;
+        }
+
+        .nav-search input {
+            width: 100%;
+            padding: 8px 14px 8px 36px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-pill);
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            background: var(--bg);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .nav-search input:focus {
+            border-color: var(--accent);
+        }
+
+        .nav-search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.85rem;
+            opacity: 0.4;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: auto;
+        }
+
+        .nav-link-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.15s;
+            position: relative;
+        }
+
+        .nav-link-item:hover {
+            color: var(--text);
+        }
+
+        .nav-link-item.active {
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .nav-link-icon {
+            font-size: 1.1rem;
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: 2px;
+            right: 8px;
+            background: var(--red);
+            color: #fff;
+            font-size: 0.6rem;
+            font-weight: 700;
+            border-radius: var(--radius-pill);
+            padding: 1px 5px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-left: 8px;
+        }
+
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #4C1D95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.78rem;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* ================================================================
+       PAGE LAYOUT — sidebar + main
+    ================================================================ */
+        .page-layout {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 76px 16px 40px;
+            align-items: start;
+        }
+
+        /* ── LEFT SIDEBAR ── */
+        .left-sidebar {
+            position: sticky;
+            top: 72px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sidebar-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            color: var(--text-soft);
+            transition: background 0.15s, color 0.15s;
+            cursor: pointer;
+        }
+
+        .sidebar-nav-link:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .sidebar-nav-link.active {
+            background: var(--accent-light);
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .snav-icon {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .snav-badge {
+            margin-left: auto;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.62rem;
+            font-weight: 700;
+            border-radius: var(--radius-pill);
+            padding: 1px 6px;
+        }
+
+        /* ── FILTER CARD ── */
+        .filter-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-title {
+            font-family: var(--font-head);
+            font-weight: 700;
+            font-size: 0.88rem;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-reset {
+            font-size: 0.72rem;
+            color: var(--accent);
+            cursor: pointer;
+            font-weight: 400;
+            background: none;
+            border: none;
+            font-family: var(--font-body);
+        }
+
+        .filter-reset:hover {
+            text-decoration: underline;
+        }
+
+        .filter-section {
+            margin-bottom: 16px;
+        }
+
+        .filter-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-soft);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* Filter checkbox items */
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 0;
+            cursor: pointer;
+            font-size: 0.82rem;
+            color: var(--text-soft);
+            transition: color 0.15s;
+        }
+
+        .filter-option:hover {
+            color: var(--text);
+        }
+
+        .filter-option input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+            accent-color: var(--accent);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .filter-option-count {
+            margin-left: auto;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-pill);
+            padding: 1px 6px;
+        }
+
+        /* CGPA slider */
+        .cgpa-slider {
+            width: 100%;
+            accent-color: var(--accent);
+            margin: 6px 0 4px;
+        }
+
+        .cgpa-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .cgpa-value {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        /* ================================================================
+       MAIN CONTENT — search bar + drive cards grid
+    ================================================================ */
+        .main-content {
+            min-width: 0;
+        }
+
+        /* Page header */
+        .page-header {
+            margin-bottom: 18px;
+        }
+
+        .page-header h1 {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -0.4px;
+            margin-bottom: 4px;
+        }
+
+        .page-header p {
+            font-size: 0.85rem;
+            color: var(--text-soft);
+        }
+
+        /* Search + sort bar */
+        .search-sort-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .drives-search {
+            flex: 1;
+            position: relative;
+        }
+
+        .drives-search input {
+            width: 100%;
+            padding: 10px 14px 10px 38px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            background: var(--bg-white);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .drives-search input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
+
+        .drives-search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.4;
+            font-size: 0.9rem;
+        }
+
+        /* Sort select */
+        .sort-select {
+            padding: 10px 32px 10px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            background: var(--bg-white);
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394A3B8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            color: var(--text-soft);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .sort-select:focus {
+            border-color: var(--accent);
+        }
+
+        /* Results count */
+        .results-meta {
+            font-size: 0.82rem;
+            color: var(--text-soft);
+            margin-bottom: 14px;
+        }
+
+        .results-meta strong {
+            color: var(--text);
+        }
+
+        /* ================================================================
+       DRIVES CARD GRID
+       TEACH: auto-fill with minmax — cards resize themselves.
+       No media queries needed for the grid itself.
+    ================================================================ */
+        .drives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        /* ── DRIVE CARD ── */
+        .drive-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+            animation: cardIn 0.3s ease both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .drive-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: #D1CDFF;
+        }
+
+        /* Top accent line — colour coded by company */
+        .drive-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .card-accent-green::before {
+            background: linear-gradient(90deg, #22C55E, #16A34A);
+        }
+
+        .card-accent-blue::before {
+            background: linear-gradient(90deg, #3B82F6, #1D4ED8);
+        }
+
+        .card-accent-purple::before {
+            background: linear-gradient(90deg, #6C63FF, #4C1D95);
+        }
+
+        .card-accent-amber::before {
+            background: linear-gradient(90deg, #F59E0B, #B45309);
+        }
+
+        .card-accent-teal::before {
+            background: linear-gradient(90deg, #14B8A6, #0D9488);
+        }
+
+        .card-accent-pink::before {
+            background: linear-gradient(90deg, #EC4899, #BE185D);
+        }
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .drive-card:nth-child(1) {
+            animation-delay: 0.04s;
+        }
+
+        .drive-card:nth-child(2) {
+            animation-delay: 0.08s;
+        }
+
+        .drive-card:nth-child(3) {
+            animation-delay: 0.12s;
+        }
+
+        .drive-card:nth-child(4) {
+            animation-delay: 0.16s;
+        }
+
+        .drive-card:nth-child(5) {
+            animation-delay: 0.20s;
+        }
+
+        .drive-card:nth-child(6) {
+            animation-delay: 0.24s;
+        }
+
+        /* Card top row: logo + bookmark */
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .company-logo {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .bookmark-btn {
+            font-size: 1rem;
+            opacity: 0.35;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            padding: 4px;
+        }
+
+        .bookmark-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .bookmark-btn.saved {
+            opacity: 1;
+        }
+
+        /* Company name + role */
+        .card-company {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 3px;
+        }
+
+        .card-role {
+            font-family: var(--font-head);
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: -0.2px;
+            margin-bottom: 6px;
+        }
+
+        .card-location {
+            font-size: 0.78rem;
+            color: var(--text-soft);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 14px;
+        }
+
+        /* Tags row — role type, package, etc */
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .card-tag {
+            font-size: 0.7rem;
+            font-weight: 500;
+            border-radius: var(--radius-pill);
+            padding: 3px 10px;
+            background: var(--bg);
+            color: var(--text-soft);
+            border: 1px solid var(--border);
+        }
+
+        .tag-type {
+            background: var(--blue-light);
+            color: var(--blue);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .tag-package {
+            background: var(--green-light);
+            color: #16A34A;
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .tag-cgpa {
+            background: var(--amber-light);
+            color: #D97706;
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        /* Deadline + eligibility row */
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 14px;
+            font-size: 0.75rem;
+        }
+
+        .meta-deadline {
+            color: var(--text-soft);
+        }
+
+        .meta-deadline strong {
+            color: var(--text);
+        }
+
+        .meta-dot {
+            color: var(--border);
+            font-size: 1rem;
+        }
+
+        .meta-eligible {
+            margin-left: auto;
+            font-weight: 600;
+            font-size: 0.72rem;
+            padding: 2px 8px;
+            border-radius: var(--radius-pill);
+        }
+
+        .eligible-yes {
+            background: var(--green-light);
+            color: #16A34A;
+        }
+
+        .eligible-no {
+            background: var(--red-light);
+            color: var(--red);
+        }
+
+        /* Card footer — apply button + status pill */
+        .card-footer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-apply {
+            flex: 1;
+            padding: 9px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.1s;
+            border: none;
+            font-family: var(--font-body);
+        }
+
+        .btn-apply:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-apply:active {
+            transform: scale(0.98);
+        }
+
+        .btn-apply.applied {
+            background: var(--green-light);
+            color: #16A34A;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-apply.applied:hover {
+            background: #DCFCE7;
+        }
+
+        /* Status pill in card footer */
+        .card-status {
+            font-size: 0.68rem;
+            font-weight: 600;
+            border-radius: var(--radius-pill);
+            padding: 4px 10px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .status-open {
+            background: var(--green-light);
+            color: #16A34A;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-closing {
+            background: var(--amber-light);
+            color: #D97706;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-soon {
+            background: var(--blue-light);
+            color: var(--blue);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .status-closed {
+            background: var(--bg);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        /* Empty state when no drives match filter */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            display: none;
+        }
+
+        .empty-state.show {
+            display: block;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .empty-title {
+            font-family: var(--font-head);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+        }
+
+        .empty-sub {
+            font-size: 0.85rem;
+            color: var(--text-soft);
+        }
+
+        /* ================================================================
+       RESPONSIVE
+    ================================================================ */
+        @media (max-width: 768px) {
+            .page-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .left-sidebar {
+                display: none;
+            }
+
+            .nav-search {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP NAVBAR -->
+    <nav class="topnav">
+        <a href="feed.html" class="nav-logo">Nex<span>tern</span></a>
+        <div class="nav-search">
+            <span class="nav-search-icon">🔍</span>
+            <input type="text" placeholder="Search drives, companies..." />
+        </div>
+        <div class="nav-links">
+            <a href="feed.html" class="nav-link-item">
+                Home
+            </a>
+            <a href="drives.html" class="nav-link-item active">
+                Drives
+                <span class="nav-badge">3</span>
+            </a>
+            <a href="roadmap.html" class="nav-link-item">
+                Roadmap
+            </a>
+            <a href="prep-hub.html" class="nav-link-item">
+                Prep
+            </a>
+            <a href="seniors.html" class="nav-link-item">
+                Seniors
+            </a>
+        </div>
+        <div class="nav-right">
+            <div class="nav-avatar" id="navAvatar">R</div>
+        </div>
+    </nav>
+
+    <!-- PAGE LAYOUT -->
+    <div class="page-layout">
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="left-sidebar">
+
+            <!-- Nav links -->
+            <div class="sidebar-card">
+                <a href="feed.html" class="sidebar-nav-link">Feed</a>
+                <a href="drives.html" class="sidebar-nav-link active">Drives <span class="snav-badge">3</span></a>
+                <a href="roadmap.html" class="sidebar-nav-link">Roadmap</a>
+                <a href="prep-hub.html" class="sidebar-nav-link">Prep Hub</a>
+                <a href="seniors.html" class="sidebar-nav-link">Seniors</a>
+                <a href="dashboard.html" class="sidebar-nav-link">Dashboard</a>
+                <a href="admin-drives.html" class="sidebar-nav-link">Admin Panel</a>
+            </div>
+
+            <!-- FILTERS CARD -->
+            <!--
+        TEACH: Filters work by reading checkbox state + slider value,
+        then calling filterDrives() which loops through all drive cards
+        and shows/hides them based on their data-* attributes.
+        This is a pure JS filter — no backend needed for static data.
+      -->
+            <div class="filter-card">
+                <div class="filter-title">
+                    Filters
+                    <button class="filter-reset" onclick="resetFilters()">Reset all</button>
+                </div>
+
+                <!-- Role type filter -->
+                <div class="filter-section">
+                    <span class="filter-label">Role Type</span>
+                    <label class="filter-option">
+                        <input type="checkbox" value="SDE" onchange="filterDrives()" checked />
+                        Software Engineer
+                        <span class="filter-option-count">8</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="Analyst" onchange="filterDrives()" checked />
+                        Analyst
+                        <span class="filter-option-count">4</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="Intern" onchange="filterDrives()" checked />
+                        Internship
+                        <span class="filter-option-count">5</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="Data" onchange="filterDrives()" checked />
+                        Data / ML
+                        <span class="filter-option-count">3</span>
+                    </label>
+                </div>
+
+                <!-- CGPA cutoff filter -->
+                <div class="filter-section">
+                    <span class="filter-label">Min CGPA Cutoff</span>
+                    <span class="cgpa-value" id="cgpaDisplay">Show all (≥ 0.0)</span>
+                    <input type="range" class="cgpa-slider" id="cgpaSlider" min="0" max="9" step="0.5" value="0"
+                        oninput="updateCGPA(this.value)" />
+                    <div class="cgpa-labels"><span>0.0</span><span>9.0</span></div>
+                </div>
+
+                <!-- Company filter -->
+                <div class="filter-section">
+                    <span class="filter-label">Company</span>
+                    <label class="filter-option">
+                        <input type="checkbox" value="product" onchange="filterDrives()" checked />
+                        Product Companies
+                        <span class="filter-option-count">6</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="service" onchange="filterDrives()" checked />
+                        Service Companies
+                        <span class="filter-option-count">4</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="startup" onchange="filterDrives()" checked />
+                        Startups
+                        <span class="filter-option-count">3</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="finance" onchange="filterDrives()" checked />
+                        Finance / BFSI
+                        <span class="filter-option-count">3</span>
+                    </label>
+                </div>
+
+            </div>
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <div class="page-header">
+                <h1>Placement Drives</h1>
+                <p>Drives you're eligible for, auto-scraped daily from LinkedIn, Naukri & company portals.</p>
+            </div>
+
+            <!-- Search + sort -->
+            <div class="search-sort-bar">
+                <div class="drives-search">
+                    <span class="drives-search-icon">🔍</span>
+                    <input type="text" id="driveSearch" placeholder="Search by company or role..."
+                        oninput="filterDrives()" />
+                </div>
+                <select class="sort-select" id="sortSelect" onchange="filterDrives()">
+                    <option value="deadline">Sort: Deadline</option>
+                    <option value="package">Sort: Package</option>
+                    <option value="company">Sort: Company A-Z</option>
+                </select>
+            </div>
+
+            <p class="results-meta" id="resultsMeta">Loading drives...</p>
+
+            <!-- DRIVES GRID
+           TEACH: Each card has data-* attributes:
+           data-role="SDE" — for role type filter
+           data-cgpa="7.5" — minimum CGPA cutoff
+           data-company-type="product" — for company filter
+           data-company="Google" — for text search
+           JS reads these to show/hide cards.
+      -->
+            <div class="drives-grid" id="drivesGrid">
+
+                <!-- Card 1: Google -->
+                <div class="drive-card card-accent-blue" data-role="SDE" data-cgpa="7.5" data-company-type="product"
+                    data-company="Google" data-deadline="3">
+                    <div class="card-top">
+                        <div class="company-logo" style="background:linear-gradient(135deg,#4285F4,#34A853)">G</div>
+                        <span class="bookmark-btn" onclick="toggleBookmark(this)" title="Save">🔖</span>
+                    </div>
+                    <div class="card-company">Google</div>
+                    <div class="card-role">SDE Intern</div>
+                    <div class="card-location">📍 Bangalore, Karnataka</div>
+                    <div class="card-tags">
+                        <span class="card-tag tag-type">Internship</span>
+                        <span class="card-tag tag-package">₹80K/month</span>
+                        <span class="card-tag tag-cgpa">CGPA ≥ 7.5</span>
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-deadline">Deadline: <strong>12 Mar 2026</strong></span>
+                        <span class="meta-dot">·</span>
+                        <span class="meta-eligible eligible-yes">✓ Eligible</span>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-apply" onclick="applyDrive(this, 'https://careers.google.com')">Apply
+                            Now</button>
+                        <span class="card-status status-closing">⚡ 3 days left</span>
+                    </div>
+                </div>
+
+                <!-- Card 2: Microsoft -->
+                <div class="drive-card card-accent-teal" data-role="SDE" data-cgpa="7.0" data-company-type="product"
+                    data-company="Microsoft" data-deadline="14">
+                    <div class="card-top">
+                        <div class="company-logo" style="background:linear-gradient(135deg,#00A4EF,#FFB900)">M</div>
+                        <span class="bookmark-btn" onclick="toggleBookmark(this)" title="Save">🔖</span>
+                    </div>
+                    <div class="card-company">Microsoft</div>
+                    <div class="card-role">SDE Intern</div>
+                    <div class="card-location">📍 Hyderabad, Telangana</div>
+                    <div class="card-tags">
+                        <span class="card-tag tag-type">Internship</span>
+                        <span class="card-tag tag-package">₹75K/month</span>
+                        <span class="card-tag tag-cgpa">CGPA ≥ 7.0</span>
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-deadline">Deadline: <strong>23 Mar 2026</strong></span>
+                        <span class="meta-dot">·</span>
+                        <span class="meta-eligible eligible-yes">✓ Eligible</span>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-apply" onclick="applyDrive(this, 'https://careers.microsoft.com')">Apply
+                            Now</button>
+                        <span class="card-status status-open">Open</span>
+                    </div>
+                </div>
+
+                <!-- Card 3: Razorpay -->
+                <div class="drive-card card-accent-purple" data-role="SDE" data-cgpa="6.5" data-company-type="startup"
+                    data-company="Razorpay" data-deadline="6">
+                    <div class="card-top">
+                        <div class="company-logo" style="background:linear-gradient(135deg,#072654,#3395FF)">R</div>
+                        <span class="bookmark-btn" onclick="toggleBookmark(this)" title="Save">🔖</span>
+                    </div>
+                    <div class="card-company">Razorpay</div>
+                    <div class="card-role">Backend Engineer</div>
+                    <div class="card-location">📍 Bangalore / Remote</div>
+                    <div class="card-tags">
+                        <span class="card-tag tag-type">Full Time</span>
+                        <span class="card-tag tag-package">₹18–22 LPA</span>
+                        <span class="card-tag tag-cgpa">CGPA ≥ 6.5</span>
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-deadline">Deadline: <strong>15 Mar 2026</strong></span>
+                        <span class="meta-dot">·</span>
+                        <span class="meta-eligible eligible-yes">✓ Eligible</span>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-apply" onclick="applyDrive(this, 'https://razorpay.com/jobs')">Apply
+                            Now</button>
+                        <span class="card-status status-open">Open</span>
+                    </div>
+                </div>
+
+                <!-- Card 4: TCS -->
+                <div class="drive-card card-accent-amber" data-role="SDE" data-cgpa="6.0" data-company-type="service"
+                    data-company="TCS" data-deadline="1">
+                    <div class="card-top">
+                        <div class="company-logo" style="background:linear-gradient(135deg,#1C3C78,#3B82F6)">T</div>
+                        <span class="bookmark-btn" onclick="toggleBookmark(this)" title="Save">🔖</span>
+                    </div>
+                    <div class="card-company">TCS</div>
+                    <div class="card-role">System Engineer</div>
+                    <div class="card-location">📍 Pan India</div>
+                    <div class="card-tags">
+                        <span class="card-tag tag-type">Full Time</span>
+                        <span class="card-tag tag-package">₹3.36 LPA</span>
+                        <span class="card-tag tag-cgpa">CGPA ≥ 6.0</span>
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-deadline">Deadline: <strong>Tomorrow</strong></span>
+                        <span class="meta-dot">·</span>
+                        <span class="meta-eligible eligible-yes">✓ Eligible</span>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-apply" onclick="applyDrive(this, 'https://nextstep.tcs.com')">Apply
+                            Now</button>
+                        <span class="card-status status-closing">⚡ Last day!</span>
+                    </div>
+                </div>
+
+                <!-- Card 5: Goldman Sachs -->
+                <div class="drive-card card-accent-green" data-role="Analyst" data-cgpa="8.0"
+                    data-company-type="finance" data-company="Goldman Sachs" data-deadline="21">
+                    <div class="card-top">
+                        <div class="company-logo" style="background:linear-gradient(135deg,#1A1A2E,#6C63FF)">GS</div>
+                        <span class="bookmark-btn" onclick="toggleBookmark(this)" title="Save">🔖</span>
+                    </div>
+                    <div class="card-company">Goldman Sachs</div>
+                    <div class="card-role">Technology Analyst</div>
+                    <div class="card-location">📍 Bangalore / Mumbai</div>
+                    <div class="card-tags">
+                        <span class="card-tag tag-type">Full Time</span>
+                        <span class="card-tag tag-package">₹12–18 LPA</span>
+                        <span class="card-tag tag-cgpa">CGPA ≥ 8.0</span>
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-deadline">Deadline: <strong>30 Mar 2026</strong></span>
+                        <span class="meta-dot">·</span>
+                        <span class="meta-eligible eligible-no">✗ CGPA low</span>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-apply"
+                            onclick="applyDrive(this, 'https://goldmansachs.com/careers')">Apply</button>
+                        <span class="card-status status-open">Open</span>
+                    </div>
+                </div>
+
+                <!-- Card 6: Flipkart -->
+                <div class="drive-card card-accent-amber" data-role="SDE" data-cgpa="7.0" data-company-type="product"
+                    data-company="Flipkart" data-deadline="10">
+                    <div class="card-top">
+                        <div class="company-logo" style="background:linear-gradient(135deg,#F7931E,#FF6B00)">F</div>
+                        <span class="bookmark-btn" onclick="toggleBookmark(this)" title="Save">🔖</span>
+                    </div>
+                    <div class="card-company">Flipkart</div>
+                    <div class="card-role">SDE — 1</div>
+                    <div class="card-location">📍 Bangalore, Karnataka</div>
+                    <div class="card-tags">
+                        <span class="card-tag tag-type">Full Time</span>
+                        <span class="card-tag tag-package">₹28–32 LPA</span>
+                        <span class="card-tag tag-cgpa">CGPA ≥ 7.0</span>
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-deadline">Deadline: <strong>19 Mar 2026</strong></span>
+                        <span class="meta-dot">·</span>
+                        <span class="meta-eligible eligible-yes">✓ Eligible</span>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-apply" onclick="applyDrive(this, 'https://flipkartcareers.com')">Apply
+                            Now</button>
+                        <span class="card-status status-open">Open</span>
+                    </div>
+                </div>
+
+                <!-- Card 7: Infosys -->
+                <div class="drive-card card-accent-teal" data-role="SDE" data-cgpa="6.0" data-company-type="service"
+                    data-company="Infosys" data-deadline="18">
+                    <div class="card-top">
+                        <div class="company-logo" style="background:linear-gradient(135deg,#007CC3,#004B7C)">I</div>
+                        <span class="bookmark-btn" onclick="toggleBookmark(this)" title="Save">🔖</span>
+                    </div>
+                    <div class="card-company">Infosys</div>
+                    <div class="card-role">Systems Engineer</div>
+                    <div class="card-location">📍 Pan India</div>
+                    <div class="card-tags">
+                        <span class="card-tag tag-type">Full Time</span>
+                        <span class="card-tag tag-package">₹3.6 LPA</span>
+                        <span class="card-tag tag-cgpa">CGPA ≥ 6.0</span>
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-deadline">Deadline: <strong>27 Mar 2026</strong></span>
+                        <span class="meta-dot">·</span>
+                        <span class="meta-eligible eligible-yes">✓ Eligible</span>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-apply" onclick="applyDrive(this, 'https://infosys.com/careers')">Apply
+                            Now</button>
+                        <span class="card-status status-open">Open</span>
+                    </div>
+                </div>
+
+                <!-- Card 8: Meesho -->
+                <div class="drive-card card-accent-pink" data-role="Data" data-cgpa="7.0" data-company-type="startup"
+                    data-company="Meesho" data-deadline="8">
+                    <div class="card-top">
+                        <div class="company-logo" style="background:linear-gradient(135deg,#8B2FC9,#EC4899)">Me</div>
+                        <span class="bookmark-btn" onclick="toggleBookmark(this)" title="Save">🔖</span>
+                    </div>
+                    <div class="card-company">Meesho</div>
+                    <div class="card-role">Data Analyst</div>
+                    <div class="card-location">📍 Bangalore, Karnataka</div>
+                    <div class="card-tags">
+                        <span class="card-tag tag-type">Full Time</span>
+                        <span class="card-tag tag-package">₹14–18 LPA</span>
+                        <span class="card-tag tag-cgpa">CGPA ≥ 7.0</span>
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-deadline">Deadline: <strong>17 Mar 2026</strong></span>
+                        <span class="meta-dot">·</span>
+                        <span class="meta-eligible eligible-yes">✓ Eligible</span>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-apply" onclick="applyDrive(this, 'https://meesho.io/jobs')">Apply
+                            Now</button>
+                        <span class="card-status status-open">Open</span>
+                    </div>
+                </div>
+
+                <!-- Card 9: HDFC -->
+                <div class="drive-card card-accent-blue" data-role="Analyst" data-cgpa="7.5" data-company-type="finance"
+                    data-company="HDFC Bank" data-deadline="25">
+                    <div class="card-top">
+                        <div class="company-logo" style="background:linear-gradient(135deg,#004C8F,#0072CE)">HD</div>
+                        <span class="bookmark-btn" onclick="toggleBookmark(this)" title="Save">🔖</span>
+                    </div>
+                    <div class="card-company">HDFC Bank</div>
+                    <div class="card-role">IT Analyst — Fresher</div>
+                    <div class="card-location">📍 Mumbai / Pune</div>
+                    <div class="card-tags">
+                        <span class="card-tag tag-type">Full Time</span>
+                        <span class="card-tag tag-package">₹6.5 LPA</span>
+                        <span class="card-tag tag-cgpa">CGPA ≥ 7.5</span>
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-deadline">Deadline: <strong>3 Apr 2026</strong></span>
+                        <span class="meta-dot">·</span>
+                        <span class="meta-eligible eligible-yes">✓ Eligible</span>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-apply" onclick="applyDrive(this, 'https://hdfcbank.com/careers')">Apply
+                            Now</button>
+                        <span class="card-status status-soon">Opens soon</span>
+                    </div>
+                </div>
+
+                <!-- Empty state -->
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon">🔍</div>
+                    <div class="empty-title">No drives match your filters</div>
+                    <div class="empty-sub">Try adjusting your filters or search query.</div>
+                </div>
+
+            </div><!-- end drives-grid -->
+
+        </main>
+    </div>
+
+    <script>
+        /* ================================================================
+           drives.js — filter, search, bookmark, apply logic
+    
+           TEACH: The filtering system works entirely in the browser.
+           Each drive card has data-* attributes. filterDrives() reads
+           the current filter state and shows/hides cards accordingly.
+           No API call needed — perfect for MVP with static data.
+           In production, filters would be query params to the backend.
+        ================================================================ */
+
+        const API_BASE_URL = 'http://localhost:4000';
+
+        /* Set user avatar from localStorage */
+        function setUserInfo() {
+            const name = localStorage.getItem('nextern_name') || 'R';
+            const el = document.getElementById('navAvatar');
+            if (el) el.textContent = name.charAt(0).toUpperCase();
+        }
+
+        function escapeHtml(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function roleCategory(role) {
+            const value = String(role || '').toLowerCase();
+            if (value.includes('data')) return 'Data';
+            if (value.includes('analyst')) return 'Analyst';
+            if (value.includes('intern')) return 'Intern';
+            return 'SDE';
+        }
+
+        function companyCategory(company) {
+            const value = String(company || '').toLowerCase();
+            if (value.includes('goldman') || value.includes('hdfc') || value.includes('jpmorgan')) return 'finance';
+            if (value.includes('infosys') || value.includes('tcs') || value.includes('wipro') || value.includes('accenture')) return 'service';
+            if (value.includes('meesho') || value.includes('razorpay') || value.includes('zomato') || value.includes('swiggy')) return 'startup';
+            return 'product';
+        }
+
+        function extractCgpa(eligibility) {
+            const value = String(eligibility || '');
+            const match = value.match(/(\d+(\.\d+)?)/);
+            return match ? parseFloat(match[1]) : 0;
+        }
+
+        function daysLeft(deadline) {
+            if (!deadline) return 99;
+            const date = new Date(deadline);
+            if (Number.isNaN(date.getTime())) return 99;
+            return Math.ceil((date.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+        }
+
+        function deadlineText(deadline) {
+            const days = daysLeft(deadline);
+            if (days <= 0) return 'Today';
+            if (days === 1) return 'Tomorrow';
+            return `${days} days left`;
+        }
+
+        function statusBadge(days) {
+            if (days <= 1) return { label: '⚡ Last day!', cls: 'status-closing' };
+            if (days <= 3) return { label: `⚡ ${days} days left`, cls: 'status-closing' };
+            if (days <= 10) return { label: 'Open', cls: 'status-open' };
+            return { label: 'Opens soon', cls: 'status-soon' };
+        }
+
+        function accentClass(index) {
+            const classes = ['card-accent-blue', 'card-accent-teal', 'card-accent-purple', 'card-accent-amber', 'card-accent-green', 'card-accent-pink'];
+            return classes[index % classes.length];
+        }
+
+        function companyInitial(company) {
+            const words = String(company || '').trim().split(/\s+/).filter(Boolean);
+            if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase();
+            return (words[0]?.slice(0, 2) || 'N').toUpperCase();
+        }
+
+        function renderDriveCards(drives) {
+            const grid = document.getElementById('drivesGrid');
+            if (!grid) return;
+
+            const cards = drives.map((drive, index) => {
+                const role = roleCategory(drive.role);
+                const companyType = companyCategory(drive.company);
+                const cgpa = drive.cgpaCutoff || extractCgpa(drive.eligibility) || 0;
+                const days = daysLeft(drive.deadline);
+                const badge = statusBadge(days);
+                const location = drive.location ? `📍 ${escapeHtml(drive.location)}` : '📍 Location not specified';
+                const applyUrl = drive.applyUrl || drive.sourceUrl || '#';
+                const deadlineDate = drive.deadline ? new Date(drive.deadline).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'TBD';
+                const packageText = drive.ctc ? escapeHtml(drive.ctc) : 'Package TBD';
+                const packageMatch = String(drive.ctc || '').match(/(\d+(\.\d+)?)/);
+                const packageSortValue = packageMatch ? parseFloat(packageMatch[1]) : 0;
+                const eligibilityText = cgpa > 0 ? `CGPA ≥ ${cgpa.toFixed(1)}` : 'Open for all';
+                const cardTypeTag = String(drive.role || '').toLowerCase().includes('intern') ? 'Internship' : 'Full Time';
+
+                return `
+                    <div class="drive-card ${accentClass(index)}" data-role="${role}" data-cgpa="${cgpa}" data-company-type="${companyType}"
+                        data-company="${escapeHtml(drive.company)}" data-deadline="${days}" data-package="${packageSortValue}"
+                        data-apply-url="${escapeHtml(applyUrl)}">
+                        <div class="card-top">
+                            <div class="company-logo" style="background:linear-gradient(135deg,#2563eb,#0ea5e9)">${escapeHtml(companyInitial(drive.company))}</div>
+                            <span class="bookmark-btn" onclick="toggleBookmark(this)" title="Save">🔖</span>
+                        </div>
+                        <div class="card-company">${escapeHtml(drive.company)}</div>
+                        <div class="card-role">${escapeHtml(drive.role)}</div>
+                        <div class="card-location">${location}</div>
+                        <div class="card-tags">
+                            <span class="card-tag tag-type">${cardTypeTag}</span>
+                            <span class="card-tag tag-package">${packageText}</span>
+                            <span class="card-tag tag-cgpa">${eligibilityText}</span>
+                        </div>
+                        <div class="card-meta">
+                            <span class="meta-deadline">Deadline: <strong>${escapeHtml(deadlineDate)}</strong></span>
+                            <span class="meta-dot">·</span>
+                            <span class="meta-eligible eligible-yes">✓ Eligible</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-apply" onclick="applyDrive(this, this.closest('.drive-card').dataset.applyUrl)">Apply Now</button>
+                            <span class="card-status ${badge.cls}">${badge.label}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            grid.innerHTML = `
+                ${cards}
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon">🔍</div>
+                    <div class="empty-title">No drives match your filters</div>
+                    <div class="empty-sub">Try adjusting your filters or search query.</div>
+                </div>
+            `;
+        }
+
+        async function loadDrives() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/drives?limit=60`);
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error('Failed to load drives');
+                }
+
+                const drives = Array.isArray(data.drives) ? data.drives : [];
+                renderDriveCards(drives);
+            } catch (error) {
+                // Keep fallback static cards if backend fetch fails.
+            } finally {
+                filterDrives();
+            }
+        }
+
+        /* ── FILTER DRIVES ──────────────────────────────────────────
+           Reads:
+           - checked role type checkboxes
+           - CGPA slider value
+           - company type checkboxes
+           - search input text
+           Then shows/hides each .drive-card accordingly.
+        ────────────────────────────────────────────────────────────── */
+        function filterDrives() {
+            // 1. Collect active role types
+            const roleChecks = document.querySelectorAll('input[type="checkbox"][value="SDE"], input[type="checkbox"][value="Analyst"], input[type="checkbox"][value="Intern"], input[type="checkbox"][value="Data"]');
+            const activeRoles = Array.from(roleChecks)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+
+            // 2. Collect active company types
+            const compChecks = document.querySelectorAll('input[type="checkbox"][value="product"], input[type="checkbox"][value="service"], input[type="checkbox"][value="startup"], input[type="checkbox"][value="finance"]');
+            const activeCompTypes = Array.from(compChecks)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+
+            // 3. Min CGPA
+            const minCGPA = parseFloat(document.getElementById('cgpaSlider').value);
+
+            // 4. Search text
+            const searchText = document.getElementById('driveSearch').value.toLowerCase().trim();
+
+            // 5. Loop through all cards
+            const cards = document.querySelectorAll('.drive-card[data-role]');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const role = card.dataset.role;
+                const cgpa = parseFloat(card.dataset.cgpa);
+                const compType = card.dataset.companyType;
+                const company = card.dataset.company.toLowerCase();
+                const roleText = card.querySelector('.card-role')?.textContent?.toLowerCase() || '';
+
+                const roleMatch = activeRoles.includes(role);
+                const cgpaMatch = cgpa <= (minCGPA === 0 ? 99 : minCGPA + 0.5) || minCGPA === 0;
+                const compMatch = activeCompTypes.includes(compType);
+                const searchMatch = searchText === '' || company.includes(searchText) || roleText.includes(searchText);
+
+                if (roleMatch && cgpaMatch && compMatch && searchMatch) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Sort visible cards
+            const sortBy = document.getElementById('sortSelect').value;
+            const grid = document.getElementById('drivesGrid');
+            const visibleCards = Array.from(cards).filter(card => card.style.display !== 'none');
+
+            visibleCards.sort((a, b) => {
+                if (sortBy === 'company') {
+                    return (a.dataset.company || '').localeCompare(b.dataset.company || '');
+                }
+                if (sortBy === 'package') {
+                    const aPkg = parseFloat(a.dataset.package || '0');
+                    const bPkg = parseFloat(b.dataset.package || '0');
+                    return bPkg - aPkg;
+                }
+                const aDeadline = parseFloat(a.dataset.deadline || '999');
+                const bDeadline = parseFloat(b.dataset.deadline || '999');
+                return aDeadline - bDeadline;
+            });
+
+            visibleCards.forEach(card => grid.appendChild(card));
+
+            // Update results meta
+            const meta = document.getElementById('resultsMeta');
+            if (meta) meta.innerHTML = `Showing <strong>${visibleCount}</strong> drives matching your profile`;
+
+            // Show empty state if no results
+            const emptyState = document.getElementById('emptyState');
+            if (emptyState) emptyState.classList.toggle('show', visibleCount === 0);
+        }
+
+        /* ── UPDATE CGPA DISPLAY ── */
+        function updateCGPA(val) {
+            const display = document.getElementById('cgpaDisplay');
+            if (display) {
+                display.textContent = val == 0
+                    ? 'Show all (≥ 0.0)'
+                    : `CGPA cutoff ≤ ${parseFloat(val).toFixed(1)}`;
+            }
+            filterDrives();
+        }
+
+        /* ── RESET ALL FILTERS ── */
+        function resetFilters() {
+            document.querySelectorAll('.filter-option input[type="checkbox"]')
+                .forEach(cb => cb.checked = true);
+            document.getElementById('cgpaSlider').value = 0;
+            document.getElementById('driveSearch').value = '';
+            updateCGPA(0);
+            filterDrives();
+        }
+
+        /* ── BOOKMARK TOGGLE ──
+           TEACH: We toggle a class and change the emoji.
+           In the backend phase, this would call:
+           POST /api/drives/:id/bookmark
+        ── */
+        function toggleBookmark(btn) {
+            btn.classList.toggle('saved');
+            btn.textContent = btn.classList.contains('saved') ? '🔖' : '🔖';
+            btn.style.opacity = btn.classList.contains('saved') ? '1' : '';
+            btn.style.color = btn.classList.contains('saved') ? 'var(--accent)' : '';
+        }
+
+        /* ── APPLY TO DRIVE ──
+           TEACH: Opens the company's careers page in a new tab.
+           We also mark the button as "Applied" so user knows they clicked.
+           In the backend phase: POST /api/applications { driveId }
+        ── */
+        function applyDrive(btn, url) {
+            // Open company site in new tab
+            window.open(url, '_blank');
+
+            // Mark as applied
+            btn.textContent = '✓ Applied';
+            btn.classList.add('applied');
+            btn.onclick = null; // prevent double-applying
+        }
+
+        /* INIT */
+        setUserInfo();
+        loadDrives();
+    </script>
+
+</body>
+
+</html>

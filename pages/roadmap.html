@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roadmap — Nextern</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --accent: #6C63FF;
+            --accent-light: #EEF2FF;
+            --accent-hover: #5A52E0;
+            --green: #22C55E;
+            --green-light: #F0FDF4;
+            --amber: #F59E0B;
+            --amber-light: #FFF7ED;
+            --blue: #3B82F6;
+            --blue-light: #EFF6FF;
+            --red: #EF4444;
+            --bg: #F3F4F8;
+            --bg-white: #FFFFFF;
+            --text: #0F172A;
+            --text-soft: #64748B;
+            --text-muted: #94A3B8;
+            --border: #E2E8F0;
+            --font-head: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-pill: 100px;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: var(--font-body);
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        /* ── NAVBAR ── */
+        .topnav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            gap: 16px;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-logo {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .nav-logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: auto;
+        }
+
+        .nav-link-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .nav-link-item:hover {
+            color: var(--text);
+        }
+
+        .nav-link-item.active {
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .nav-link-icon {
+            font-size: 1.1rem;
+        }
+
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #4C1D95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.78rem;
+            color: #fff;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+
+        /* ── LAYOUT ── */
+        .page-wrap {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 76px 16px 60px;
+        }
+
+        /* ── PAGE HEADER ── */
+        .page-header {
+            margin-bottom: 28px;
+        }
+
+        .page-header h1 {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 1.8rem;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        .page-header p {
+            font-size: 0.88rem;
+            color: var(--text-soft);
+        }
+
+        /* ── FORM CARD ── */
+        .form-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 28px;
+        }
+
+        .form-card h2 {
+            font-family: var(--font-head);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .label-hint {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            margin-left: 4px;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px 13px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 0.87rem;
+            color: var(--text);
+            background: var(--bg-white);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            appearance: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
+
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394A3B8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 34px;
+            cursor: pointer;
+        }
+
+        /* Skills tag input */
+        .tag-input-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 10px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            min-height: 46px;
+            cursor: text;
+            transition: border-color 0.2s;
+        }
+
+        .tag-input-wrap:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
+
+        .tag-input-wrap input {
+            border: none;
+            outline: none;
+            padding: 2px 4px;
+            font-size: 0.84rem;
+            min-width: 100px;
+            flex: 1;
+            background: transparent;
+            font-family: var(--font-body);
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid rgba(108, 99, 255, 0.2);
+            border-radius: var(--radius-pill);
+            padding: 2px 9px;
+            font-size: 0.76rem;
+            font-weight: 500;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            opacity: 0.6;
+            background: none;
+            border: none;
+            color: var(--accent);
+            padding: 0;
+            font-size: 0.9rem;
+        }
+
+        .tag-remove:hover {
+            opacity: 1;
+        }
+
+        /* Level selector */
+        .level-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .level-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.84rem;
+            font-weight: 500;
+            color: var(--text-soft);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: var(--bg-white);
+        }
+
+        .level-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .level-btn.selected {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Generate button */
+        .btn-generate {
+            width: 100%;
+            padding: 13px;
+            margin-top: 20px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-generate:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-generate:active {
+            transform: scale(0.99);
+        }
+
+        .btn-generate:disabled {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        /* ── ROADMAP OUTPUT ── */
+        .roadmap-output {
+            display: none;
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .roadmap-output.show {
+            display: block;
+        }
+
+        .output-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .output-header h2 {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .btn-regenerate {
+            padding: 7px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-soft);
+            cursor: pointer;
+            transition: all 0.15s;
+            background: var(--bg-white);
+        }
+
+        .btn-regenerate:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Streaming text area */
+        .stream-content {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--text);
+            white-space: pre-wrap;
+            min-height: 100px;
+        }
+
+        /* Rendered roadmap weeks */
+        .roadmap-weeks {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .week-card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: box-shadow 0.15s;
+        }
+
+        .week-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .week-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            cursor: pointer;
+            background: var(--bg);
+            transition: background 0.15s;
+        }
+
+        .week-header:hover {
+            background: #ECEEF5;
+        }
+
+        .week-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 3px 10px;
+            border-radius: var(--radius-pill);
+            flex-shrink: 0;
+        }
+
+        .badge-1 {
+            background: var(--blue-light);
+            color: var(--blue);
+        }
+
+        .badge-2 {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .badge-3 {
+            background: var(--amber-light);
+            color: var(--amber);
+        }
+
+        .badge-4 {
+            background: var(--green-light);
+            color: #16A34A;
+        }
+
+        .week-title {
+            font-weight: 600;
+            font-size: 0.92rem;
+            flex: 1;
+        }
+
+        .week-progress {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        .week-chevron {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            transition: transform 0.2s;
+        }
+
+        .week-card.open .week-chevron {
+            transform: rotate(180deg);
+        }
+
+        .week-body {
+            display: none;
+            padding: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .week-card.open .week-body {
+            display: block;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            background: var(--bg);
+            border: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+        .task-item:hover {
+            background: #ECEEF5;
+        }
+
+        .task-item.done {
+            opacity: 0.5;
+        }
+
+        .task-item.done .task-text {
+            text-decoration: line-through;
+        }
+
+        .task-check {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 2px solid var(--border);
+            flex-shrink: 0;
+            margin-top: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+            background: var(--bg-white);
+        }
+
+        .task-item.done .task-check {
+            background: var(--green);
+            border-color: var(--green);
+        }
+
+        .task-item.done .task-check::after {
+            content: '✓';
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .task-text {
+            font-size: 0.84rem;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .task-tag {
+            font-size: 0.68rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: var(--radius-pill);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .tag-dsa {
+            background: var(--blue-light);
+            color: var(--blue);
+        }
+
+        .tag-project {
+            background: var(--green-light);
+            color: #16A34A;
+        }
+
+        .tag-cs {
+            background: var(--amber-light);
+            color: #D97706;
+        }
+
+        .tag-behavioural {
+            background: #FDF4FF;
+            color: #9333EA;
+        }
+
+        .tag-system {
+            background: #FFF1F2;
+            color: #E11D48;
+        }
+
+        /* Progress bar in output header */
+        .overall-progress {
+            margin-bottom: 20px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            margin-bottom: 6px;
+        }
+
+        .progress-label span:first-child {
+            color: var(--text-soft);
+        }
+
+        .progress-label span:last-child {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: var(--radius-pill);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #818CF8);
+            border-radius: var(--radius-pill);
+            transition: width 0.4s ease;
+        }
+
+        /* Loading dots */
+        .loading-dots {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .loading-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: bounce 1.2s infinite ease-in-out;
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0.6);
+                opacity: 0.4;
+            }
+
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .level-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="topnav">
+        <div class="nav-logo">Nex<span>tern</span></div>
+        <div class="nav-links">
+            <a href="feed.html" class="nav-link-item">Home</a>
+            <a href="drives.html" class="nav-link-item">Drives</a>
+            <a href="roadmap.html" class="nav-link-item active">Roadmap</a>
+            <a href="prep-hub.html" class="nav-link-item">Prep</a>
+            <a href="seniors.html" class="nav-link-item">Seniors</a>
+        </div>
+        <div class="nav-avatar" id="navAvatar">R</div>
+    </nav>
+
+    <div class="page-wrap">
+
+        <div class="page-header">
+            <h1>Prep Roadmap</h1>
+            <p>Answer 3 quick questions to generate a practical week-by-week plan.</p>
+        </div>
+
+        <!-- FORM CARD -->
+        <div class="form-card">
+            <h2>Tell us your goal</h2>
+
+            <div class="form-grid">
+
+                <!-- Target Company -->
+                <div class="form-group">
+                    <label for="targetCompany">Target Company</label>
+                    <input type="text" id="targetCompany" placeholder="e.g. Google, Microsoft, Razorpay" />
+                </div>
+
+                <!-- Target Role -->
+                <div class="form-group">
+                    <label for="targetRole">Target Role</label>
+                    <select id="targetRole">
+                        <option value="">Select role</option>
+                        <option value="SDE">Software Engineer (SDE)</option>
+                        <option value="Analyst">Business / Data Analyst</option>
+                        <option value="Data Scientist">Data Scientist / ML</option>
+                        <option value="Product Manager">Product Manager</option>
+                        <option value="DevOps">DevOps / Cloud</option>
+                    </select>
+                </div>
+
+                <!-- Current Skills -->
+                <div class="form-group full">
+                    <label>Current Skills <span class="label-hint">— press Enter to add</span></label>
+                    <div class="tag-input-wrap" id="skillTagWrap">
+                        <input type="text" id="skillInput" placeholder="e.g. Python, DSA, React..." />
+                    </div>
+                    <input type="hidden" id="skillsHidden" />
+                </div>
+
+                <!-- Current Level -->
+                <div class="form-group full">
+                    <label>Current Level</label>
+                    <div class="level-options">
+                        <button class="level-btn" data-level="Beginner" onclick="selectLevel(this)">🌱
+                            Beginner<br /><small style="font-weight:400;font-size:0.72rem">Less than 1 year
+                                coding</small></button>
+                        <button class="level-btn" data-level="Intermediate" onclick="selectLevel(this)">⚡
+                            Intermediate<br /><small style="font-weight:400;font-size:0.72rem">1–2 years, knows
+                                basics</small></button>
+                        <button class="level-btn selected" data-level="Advanced" onclick="selectLevel(this)">🚀
+                            Advanced<br /><small style="font-weight:400;font-size:0.72rem">Strong DSA +
+                                projects</small></button>
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="btn-generate" id="generateBtn" onclick="generateRoadmap()">
+                Generate My Roadmap
+            </button>
+        </div>
+
+        <!-- ROADMAP OUTPUT -->
+        <div class="roadmap-output" id="roadmapOutput">
+
+            <div class="output-header">
+                <h2 id="outputTitle">Your Personalised Roadmap</h2>
+                <button class="btn-regenerate" onclick="regenerate()">↺ Regenerate</button>
+            </div>
+
+            <!-- Overall progress -->
+            <div class="overall-progress">
+                <div class="progress-label">
+                    <span>Overall Progress</span>
+                    <span id="progressText">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+                </div>
+            </div>
+
+            <!-- Streaming area — shows while generating -->
+            <div id="streamArea">
+                <div class="loading-dots">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+
+            <!-- Rendered weeks — shown after generation -->
+            <div class="roadmap-weeks" id="roadmapWeeks"></div>
+
+        </div>
+
+    </div>
+
+    <script>
+        /* ================================================================
+           roadmap.js
+    
+           Flow:
+           1. User fills form → clicks Generate
+           2. We POST to /api/roadmap/generate
+           3. Backend returns a deterministic roadmap JSON
+           4. We render week cards + track progress locally
+        ================================================================ */
+
+        const API_BASE = 'http://localhost:4000';
+        let selectedLevel = 'Advanced';
+        let currentSkills = [];
+        let savedRoadmap = null;
+
+        /* ── INIT ── */
+        function init() {
+            const name = localStorage.getItem('nextern_name') || 'R';
+            document.getElementById('navAvatar').textContent = name.charAt(0).toUpperCase();
+
+            // Pre-fill skills from localStorage if available
+            const user = JSON.parse(localStorage.getItem('nextern_user') || '{}');
+            if (user.skills && user.skills.length) {
+                user.skills.forEach(s => addTag(s));
+            }
+            if (user.targetCompanies && user.targetCompanies[0]) {
+                document.getElementById('targetCompany').value = user.targetCompanies[0];
+            }
+
+            // Load saved roadmap if exists
+            const saved = localStorage.getItem('nextern_roadmap');
+            if (saved) {
+                try {
+                    savedRoadmap = JSON.parse(saved);
+                    renderRoadmap(savedRoadmap);
+                } catch (e) { }
+            }
+
+            initTagInput();
+        }
+
+        /* ── LEVEL SELECTOR ── */
+        function selectLevel(btn) {
+            document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedLevel = btn.dataset.level;
+        }
+
+        /* ── TAG INPUT ── */
+        function initTagInput() {
+            const input = document.getElementById('skillInput');
+            if (!input) return;
+            input.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ',') {
+                    e.preventDefault();
+                    const val = this.value.replace(',', '').trim();
+                    if (val) addTag(val);
+                    this.value = '';
+                }
+            });
+        }
+
+        function addTag(value) {
+            if (currentSkills.some(s => s.toLowerCase() === value.toLowerCase())) return;
+            currentSkills.push(value);
+            renderTags();
+        }
+
+        function removeTag(value) {
+            currentSkills = currentSkills.filter(s => s !== value);
+            renderTags();
+        }
+
+        function renderTags() {
+            const wrap = document.getElementById('skillTagWrap');
+            const input = document.getElementById('skillInput');
+            wrap.querySelectorAll('.tag').forEach(t => t.remove());
+            currentSkills.forEach(value => {
+                const tag = document.createElement('span');
+                tag.className = 'tag';
+                tag.innerHTML = `${value}<button class="tag-remove" onclick="removeTag('${value}')">×</button>`;
+                wrap.insertBefore(tag, input);
+            });
+            document.getElementById('skillsHidden').value = currentSkills.join(',');
+        }
+
+        /* ================================================================
+           GENERATE ROADMAP
+        ================================================================ */
+        async function generateRoadmap() {
+            const company = document.getElementById('targetCompany').value.trim();
+            const role = document.getElementById('targetRole').value;
+            const skills = currentSkills;
+
+            if (!company) {
+                document.getElementById('targetCompany').focus();
+                document.getElementById('targetCompany').style.borderColor = '#EF4444';
+                setTimeout(() => document.getElementById('targetCompany').style.borderColor = '', 2000);
+                return;
+            }
+            if (!role) {
+                document.getElementById('targetRole').style.borderColor = '#EF4444';
+                setTimeout(() => document.getElementById('targetRole').style.borderColor = '', 2000);
+                return;
+            }
+
+            const output = document.getElementById('roadmapOutput');
+            output.classList.add('show');
+            document.getElementById('roadmapWeeks').innerHTML = '';
+            document.getElementById('outputTitle').textContent = `Your Roadmap for ${company} — ${role}`;
+
+            document.getElementById('streamArea').innerHTML = `
+        <div class="loading-dots"><span></span><span></span><span></span></div>
+        <div id="streamText" class="stream-content" style="margin-top:12px">Building your roadmap...</div>
+      `;
+
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.textContent = 'Generating...';
+
+            output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            const token = localStorage.getItem('nextern_token');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/roadmap/generate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ company, role, level: selectedLevel, skills })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Server error. Is the backend running?');
+                }
+
+                const data = await response.json();
+                if (!data.success) {
+                    throw new Error(data.message || 'Could not generate roadmap.');
+                }
+
+                const roadmap = data.roadmap || data;
+                savedRoadmap = roadmap;
+                localStorage.setItem('nextern_roadmap', JSON.stringify(roadmap));
+                renderRoadmap(roadmap);
+
+            } catch (error) {
+                document.getElementById('streamArea').innerHTML = `
+          <p style="color:#EF4444;font-size:0.88rem">
+            ❌ ${error.message || 'Something went wrong. Make sure the server is running.'}
+          </p>`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Generate My Roadmap';
+            }
+        }
+
+        function renderRoadmap(data) {
+            const container = document.getElementById('roadmapWeeks');
+            container.innerHTML = '';
+
+            const output = document.getElementById('roadmapOutput');
+            output.classList.add('show');
+            document.getElementById('streamArea').style.display = 'none';
+
+            const weeks = data.weeks || [];
+            const badgeClasses = ['badge-1', 'badge-2', 'badge-3', 'badge-4'];
+
+            weeks.forEach((week, wi) => {
+                const weekEl = document.createElement('div');
+                weekEl.className = 'week-card' + (wi === 0 ? ' open' : '');
+                weekEl.innerHTML = `
+          <div class="week-header" onclick="toggleWeek(this)">
+            <span class="week-badge ${badgeClasses[wi % 4]}">Week ${week.week}</span>
+            <span class="week-title">${week.title}</span>
+            <span class="week-progress" id="wp-${wi}">0/${week.tasks.length} done</span>
+            <span class="week-chevron">▾</span>
+          </div>
+          <div class="week-body">
+            <div class="task-list" id="tl-${wi}">
+              ${week.tasks.map((task, ti) => `
+                <div class="task-item" id="task-${wi}-${ti}" onclick="toggleTask(${wi},${ti})">
+                  <div class="task-check"></div>
+                  <span class="task-text">${task.text}</span>
+                  ${task.tag ? `<span class="task-tag tag-${task.tag.toLowerCase().replace(' ', '-')}">${task.tag}</span>` : ''}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+                container.appendChild(weekEl);
+            });
+
+            // Restore saved progress
+            loadProgress();
+            updateOverallProgress();
+        }
+
+        /* ── WEEK TOGGLE ── */
+        function toggleWeek(header) {
+            const card = header.closest('.week-card');
+            card.classList.toggle('open');
+        }
+
+        /* ── TASK TOGGLE ── */
+        function toggleTask(wi, ti) {
+            const task = document.getElementById(`task-${wi}-${ti}`);
+            task.classList.toggle('done');
+            saveProgress();
+            updateWeekProgress(wi);
+            updateOverallProgress();
+        }
+
+        /* ── PROGRESS ── */
+        function updateWeekProgress(wi) {
+            const tasks = document.querySelectorAll(`[id^="task-${wi}-"]`);
+            const done = document.querySelectorAll(`[id^="task-${wi}-"].done`).length;
+            const el = document.getElementById(`wp-${wi}`);
+            if (el) el.textContent = `${done}/${tasks.length} done`;
+        }
+
+        function updateOverallProgress() {
+            const all = document.querySelectorAll('.task-item').length;
+            const done = document.querySelectorAll('.task-item.done').length;
+            const pct = all ? Math.round((done / all) * 100) : 0;
+            document.getElementById('progressText').textContent = `${pct}%`;
+            document.getElementById('progressFill').style.width = `${pct}%`;
+        }
+
+        /* ── SAVE / LOAD PROGRESS ── */
+        function saveProgress() {
+            const done = [];
+            document.querySelectorAll('.task-item.done').forEach(t => done.push(t.id));
+            localStorage.setItem('nextern_roadmap_progress', JSON.stringify(done));
+        }
+
+        function loadProgress() {
+            const saved = JSON.parse(localStorage.getItem('nextern_roadmap_progress') || '[]');
+            saved.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('done');
+            });
+            // Update all week progress labels
+            document.querySelectorAll('.week-card').forEach((_, wi) => updateWeekProgress(wi));
+        }
+
+        /* ── REGENERATE ── */
+        function regenerate() {
+            localStorage.removeItem('nextern_roadmap');
+            localStorage.removeItem('nextern_roadmap_progress');
+            document.getElementById('roadmapWeeks').innerHTML = '';
+            document.getElementById('roadmapOutput').classList.remove('show');
+            document.getElementById('streamArea').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        init();
+    </script>
+
+</body>
+
+</html>

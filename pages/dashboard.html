@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — Nextern</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        /* ================================================================
+   NEXTERN — dashboard.css
+
+   TEACH: Dashboard CSS is organised in this order:
+   1. Variables & Reset
+   2. Layout (the grid that holds sidebar + main)
+   3. Sidebar styles
+   4. Topbar styles
+   5. Each widget/card (readiness, drives, roadmap)
+   6. Reusable components (pills, badges, buttons)
+   7. Responsive (mobile)
+================================================================ */
+
+        /* ----------------------------------------------------------------
+   1. VARIABLES
+---------------------------------------------------------------- */
+        :root {
+            --accent: #6C63FF;
+            --accent-light: #EEF2FF;
+            --accent-hover: #5A52E0;
+            --green: #22C55E;
+            --green-light: #F0FDF4;
+            --amber: #F59E0B;
+            --amber-light: #FFF7ED;
+            --red: #EF4444;
+            --red-light: #FEF2F2;
+            --blue: #3B82F6;
+            --blue-light: #EFF6FF;
+
+            --bg: #F5F6FA;
+            /* page background — slightly off-white */
+            --bg-white: #FFFFFF;
+            --sidebar-bg: #0D0D14;
+            /* dark sidebar like Naukri/LinkedIn */
+            --sidebar-text: rgba(255, 255, 255, 0.65);
+            --sidebar-hover: rgba(255, 255, 255, 0.06);
+            --sidebar-active: rgba(108, 99, 255, 0.2);
+
+            --text: #111827;
+            --text-soft: #6B7280;
+            --text-muted: #9CA3AF;
+            --border: #E5E7EB;
+
+            --font-head: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+
+            --sidebar-width: 240px;
+            --topbar-height: 64px;
+
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-pill: 100px;
+
+            --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.07);
+        }
+
+        /* ----------------------------------------------------------------
+   2. RESET & BASE
+---------------------------------------------------------------- */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        button {
+            font-family: var(--font-body);
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+
+        /* ----------------------------------------------------------------
+   3. DASHBOARD LAYOUT
+   
+   TEACH: CSS Grid with named areas makes dashboard layouts
+   very readable. We define:
+   - sidebar: fixed 240px column on left
+   - main: rest of the width (1fr)
+   The sidebar uses position:sticky so it stays while main scrolls.
+---------------------------------------------------------------- */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            min-height: 100vh;
+        }
+
+
+        /* ----------------------------------------------------------------
+   4. SIDEBAR
+---------------------------------------------------------------- */
+        .sidebar {
+            background: var(--sidebar-bg);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            /* Hide scrollbar but allow scrolling */
+            scrollbar-width: none;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Logo */
+        .sidebar-logo {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: #fff;
+            display: block;
+            margin-bottom: 28px;
+            padding: 0 8px;
+        }
+
+        .sidebar-logo span {
+            color: var(--accent);
+        }
+
+        /* User mini card */
+        .sidebar-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            margin-bottom: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #4C1D95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .user-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-meta {
+            font-size: 0.72rem;
+            color: var(--sidebar-text);
+            margin-top: 2px;
+        }
+
+        /* Section label inside nav */
+        .nav-section-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.25);
+            padding: 0 12px;
+            margin-bottom: 6px;
+        }
+
+        /* Nav links */
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            color: var(--sidebar-text);
+            transition: background 0.15s, color 0.15s;
+            margin-bottom: 2px;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            background: var(--sidebar-hover);
+            color: #fff;
+        }
+
+        /* Active state — accent background */
+        .nav-link.active {
+            background: var(--sidebar-active);
+            color: #fff;
+        }
+
+        .nav-link.active .nav-icon {
+            opacity: 1;
+        }
+
+        .nav-icon {
+            font-size: 1rem;
+            opacity: 0.7;
+            flex-shrink: 0;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Notification badge on nav item */
+        .nav-badge {
+            margin-left: auto;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            border-radius: var(--radius-pill);
+            padding: 2px 7px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* Logout — subtle red tint on hover */
+        .nav-link-logout:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #FCA5A5;
+        }
+
+        /* Push logout to bottom */
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .nav-link-logout {
+            margin-top: auto;
+        }
+
+
+        /* ----------------------------------------------------------------
+   5. MAIN CONTENT + TOPBAR
+---------------------------------------------------------------- */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Top bar */
+        .topbar {
+            height: var(--topbar-height);
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            flex-shrink: 0;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .hamburger {
+            display: none;
+            /* hidden on desktop, shown on mobile */
+            font-size: 1.2rem;
+            color: var(--text-soft);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .topbar-greeting {
+            font-family: var(--font-head);
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: -0.3px;
+        }
+
+        .topbar-date {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+        }
+
+        /* Notification bell button */
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.15s;
+        }
+
+        .icon-btn:hover {
+            background: #EDEDF5;
+        }
+
+        /* Red dot on bell when there are unread notifications */
+        .notif-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 7px;
+            height: 7px;
+            background: var(--red);
+            border-radius: 50%;
+            border: 1.5px solid #fff;
+        }
+
+        /* Notification dropdown */
+        .notif-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 320px;
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            z-index: 200;
+
+            /* Hidden by default — JS toggles .open class */
+            display: none;
+            animation: dropIn 0.2s ease both;
+        }
+
+        .notif-dropdown.open {
+            display: block;
+        }
+
+        @keyframes dropIn {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .notif-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px 10px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .notif-clear {
+            font-size: 0.75rem;
+            color: var(--accent);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: var(--font-body);
+        }
+
+        .notif-clear:hover {
+            text-decoration: underline;
+        }
+
+        .notif-list {
+            padding: 8px 0;
+        }
+
+        .notif-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 16px;
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+
+        .notif-item:hover {
+            background: var(--bg);
+        }
+
+        /* Unread items have a blue left border */
+        .notif-item.unread {
+            background: #FAFBFF;
+            border-left: 3px solid var(--accent);
+            padding-left: 13px;
+        }
+
+        .notif-icon {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .notif-item p {
+            font-size: 0.83rem;
+            color: var(--text);
+            line-height: 1.5;
+            margin-bottom: 3px;
+        }
+
+        .notif-item span {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* Topbar avatar */
+        .topbar-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #4C1D95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #fff;
+            cursor: pointer;
+        }
+
+
+        /* ----------------------------------------------------------------
+   6. PAGE CONTENT + GRID ROWS
+   
+   TEACH: We use two rows:
+   Row 1: Readiness card (wider) + 3 stat cards stacked
+   Row 2: Drives list + Roadmap progress (equal width)
+   Each row is a CSS Grid.
+---------------------------------------------------------------- */
+        .page-content {
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            flex: 1;
+        }
+
+        /* Row 1: readiness (2fr) + stats (1fr) */
+        .row-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        /* Row 2: drives (1fr) + roadmap (1fr) */
+        .row-bottom {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+
+        /* ----------------------------------------------------------------
+   7. CARD BASE STYLES
+   All widget cards share this base. Each card adds its own bits.
+---------------------------------------------------------------- */
+        .card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 22px 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header h2 {
+            font-family: var(--font-head);
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: -0.2px;
+        }
+
+        .card-link {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 500;
+            transition: opacity 0.15s;
+        }
+
+        .card-link:hover {
+            opacity: 0.75;
+            text-decoration: underline;
+        }
+
+        /* Small badge in card header */
+        .card-badge {
+            font-size: 0.7rem;
+            font-weight: 500;
+            border-radius: var(--radius-pill);
+            padding: 3px 10px;
+        }
+
+        .badge-blue {
+            background: var(--blue-light);
+            color: var(--blue);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+
+        /* ----------------------------------------------------------------
+   8. READINESS CARD
+---------------------------------------------------------------- */
+        .readiness-body {
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+        }
+
+        /* SVG ring wrapper — needed to position the score number in centre */
+        .ring-wrap {
+            position: relative;
+            flex-shrink: 0;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ring-svg {
+            position: absolute;
+            inset: 0;
+        }
+
+        /* Number in centre of ring */
+        .ring-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ring-score {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 2rem;
+            letter-spacing: -1px;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .ring-label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* Details section beside ring */
+        .readiness-details {
+            flex: 1;
+        }
+
+        .readiness-status {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+
+        .readiness-hint {
+            font-size: 0.82rem;
+            color: var(--text-soft);
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        /* Sub-score bars (Resume, Roadmap, Applications) */
+        .sub-scores {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sub-scores li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.78rem;
+            color: var(--text-soft);
+        }
+
+        .sub-scores li>span:first-child {
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .mini-bar {
+            flex: 1;
+            height: 5px;
+            background: var(--bg);
+            border-radius: var(--radius-pill);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .mini-fill {
+            height: 100%;
+            width: 0;
+            /* animated by JS */
+            border-radius: var(--radius-pill);
+            transition: width 1s ease;
+        }
+
+        .sub-score-val {
+            width: 34px;
+            text-align: right;
+            font-weight: 500;
+            color: var(--text);
+            flex-shrink: 0;
+        }
+
+
+        /* ----------------------------------------------------------------
+   9. QUICK STAT CARDS
+---------------------------------------------------------------- */
+        .quick-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .stat-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .stat-card-number {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .stat-card-label {
+            font-size: 0.75rem;
+            color: var(--text-soft);
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+
+
+        /* ----------------------------------------------------------------
+   10. DRIVES LIST CARD
+---------------------------------------------------------------- */
+        .drives-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .drive-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+        }
+
+        .drive-row:last-child {
+            border-bottom: none;
+        }
+
+        .drive-row:hover {
+            background: var(--bg);
+            padding-left: 8px;
+            padding-right: 8px;
+            margin: 0 -8px;
+        }
+
+        /* Company coloured initials */
+        .drive-initial {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.82rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .di-google {
+            background: linear-gradient(135deg, #4285F4, #34A853);
+        }
+
+        .di-razorpay {
+            background: linear-gradient(135deg, #072654, #3395FF);
+        }
+
+        .di-tcs {
+            background: linear-gradient(135deg, #1C3C78, #3B82F6);
+        }
+
+        .di-ms {
+            background: linear-gradient(135deg, #00A4EF, #FFB900);
+        }
+
+        .di-gs {
+            background: linear-gradient(135deg, #1A1A2E, #6C63FF);
+        }
+
+        .drive-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .drive-company {
+            font-size: 0.88rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .drive-role {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .drive-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        /* Status pills */
+        .status-pill {
+            font-size: 0.67rem;
+            font-weight: 600;
+            border-radius: var(--radius-pill);
+            padding: 2px 9px;
+            white-space: nowrap;
+        }
+
+        .pill-open {
+            background: var(--green-light);
+            color: #16A34A;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .pill-closing {
+            background: var(--amber-light);
+            color: #D97706;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .pill-soon {
+            background: var(--blue-light);
+            color: var(--blue);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .drive-deadline {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+
+        /* ----------------------------------------------------------------
+   11. ROADMAP CARD
+---------------------------------------------------------------- */
+        /* Target company row */
+        .roadmap-target {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--accent-light);
+            border-radius: var(--radius-sm);
+            margin-bottom: 18px;
+            font-size: 0.83rem;
+        }
+
+        .target-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        .target-company {
+            font-weight: 600;
+            color: var(--accent);
+            flex: 1;
+        }
+
+        .target-change {
+            font-size: 0.75rem;
+            color: var(--accent);
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.15s;
+        }
+
+        .target-change:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        /* Overall progress bar */
+        .roadmap-overall {
+            margin-bottom: 18px;
+        }
+
+        .roadmap-overall-top {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-soft);
+            margin-bottom: 8px;
+        }
+
+        .roadmap-pct {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .overall-bar {
+            height: 6px;
+            background: var(--bg);
+            border-radius: var(--radius-pill);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .overall-fill {
+            height: 100%;
+            width: 0;
+            /* animated by JS */
+            background: linear-gradient(90deg, var(--accent), var(--green));
+            border-radius: var(--radius-pill);
+            transition: width 1.1s ease;
+        }
+
+        /* Phase list */
+        .phase-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin-bottom: 20px;
+        }
+
+        .phase-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .phase-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Phase dot */
+        .phase-dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .dot-done {
+            background: var(--green);
+            color: #fff;
+        }
+
+        .dot-active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .dot-todo {
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        .phase-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .phase-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .phase-meta {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 1px;
+        }
+
+        /* Dim todo phases */
+        .phase-todo .phase-name,
+        .phase-todo .phase-meta {
+            opacity: 0.5;
+        }
+
+        .phase-pct {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-soft);
+            flex-shrink: 0;
+            min-width: 30px;
+            text-align: right;
+        }
+
+        .phase-done .phase-pct {
+            color: var(--green);
+        }
+
+        .phase-active .phase-pct {
+            color: var(--accent);
+        }
+
+        /* CTA button inside card */
+        .btn-continue {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background: var(--accent-light);
+            color: var(--accent);
+            border-radius: var(--radius-md);
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: background 0.15s;
+        }
+
+        .btn-continue:hover {
+            background: #E0DCFF;
+        }
+
+
+        /* ----------------------------------------------------------------
+   12. RESPONSIVE — MOBILE
+   
+   TEACH: On mobile the sidebar becomes a drawer — hidden off-screen
+   by default. The hamburger button slides it in/out using JS.
+---------------------------------------------------------------- */
+        @media (max-width: 900px) {
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+                /* single column on mobile */
+            }
+
+            /* Sidebar slides in from the left as an overlay */
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                z-index: 200;
+                transform: translateX(-100%);
+                /* hidden off-screen */
+                transition: transform 0.25s ease;
+                width: var(--sidebar-width);
+            }
+
+            /* JS adds .open class to slide it in */
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            /* show hamburger on mobile */
+
+            .row-top {
+                grid-template-columns: 1fr;
+            }
+
+            .row-bottom {
+                grid-template-columns: 1fr;
+            }
+
+            .readiness-body {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .sub-scores li>span:first-child {
+                width: 60px;
+            }
+
+            .page-content {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============================================================
+    TEACH: Dashboard layout = sidebar + main area.
+    We use CSS Grid on .dashboard-layout:
+      grid-template-columns: 240px 1fr
+    Sidebar is fixed width, main content takes the rest.
+  ============================================================ -->
+    <div class="dashboard-layout">
+
+        <!-- ══════════════════════════════════════
+         SIDEBAR
+         Navigation links + user profile info
+    ══════════════════════════════════════ -->
+        <aside class="sidebar" id="sidebar">
+
+            <!-- Logo -->
+            <a href="feed.html" class="sidebar-logo">
+                Nex<span>tern</span>
+            </a>
+
+            <!-- User profile mini card -->
+            <div class="sidebar-user">
+                <div class="user-avatar" id="userAvatar">R</div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">Rajan Garudkar</div>
+                    <div class="user-meta" id="userMeta">CSE · 3rd Year</div>
+                </div>
+            </div>
+
+            <!-- Nav links -->
+            <!--
+        TEACH: aria-current="page" marks the active page for
+        screen readers. We also use it in CSS to style the active link.
+      -->
+            <nav class="sidebar-nav">
+                <p class="nav-section-label">Main</p>
+
+                <a href="/pages/dashboard.html" class="nav-link active" aria-current="page">
+                    Dashboard
+                </a>
+                <a href="/pages/drives.html" class="nav-link">
+                    Placement Drives
+                    <!-- Badge showing count of new drives -->
+                    <span class="nav-badge">3</span>
+                </a>
+                <a href="/pages/roadmap.html" class="nav-link">
+                    My Roadmap
+                </a>
+                <a href="/pages/prep-hub.html" class="nav-link">
+                    Prep Hub
+                </a>
+                <a href="/pages/seniors.html" class="nav-link">
+                    Senior Connect
+                </a>
+
+                <p class="nav-section-label" style="margin-top: 24px;">Account</p>
+
+                <a href="/profile.html" class="nav-link">
+                    My Profile
+                </a>
+                <a href="/profile.html#resume" class="nav-link">
+                    Resume
+                </a>
+                <a href="/login.html" class="nav-link nav-link-logout" onclick="handleLogout()">
+                    Logout
+                </a>
+            </nav>
+
+        </aside>
+
+        <!-- ══════════════════════════════════════
+         MAIN CONTENT AREA
+    ══════════════════════════════════════ -->
+        <main class="main-content">
+
+            <!-- Top bar — greeting + notifications -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <!-- Hamburger — shown on mobile to toggle sidebar -->
+                    <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+                    <div>
+                        <h1 class="topbar-greeting" id="topbarGreeting">Good morning, Riya 👋</h1>
+                        <p class="topbar-date" id="topbarDate">Monday, 9 March 2026</p>
+                    </div>
+                </div>
+
+                <div class="topbar-right">
+                    <!-- Notification bell -->
+                    <button class="icon-btn notif-btn" onclick="toggleNotifications()" aria-label="Notifications">
+                        🔔
+                        <span class="notif-dot"></span>
+                    </button>
+
+                    <!-- Notification dropdown -->
+                    <div class="notif-dropdown" id="notifDropdown">
+                        <div class="notif-header">
+                            <span>Notifications</span>
+                            <button class="notif-clear" onclick="clearNotifications()">Mark all read</button>
+                        </div>
+                        <ul class="notif-list">
+                            <li class="notif-item unread">
+                                <span class="notif-icon">📡</span>
+                                <div>
+                                    <p>New drive: <strong>Google SDE Intern</strong> — you're eligible!</p>
+                                    <span>2 hours ago</span>
+                                </div>
+                            </li>
+                            <li class="notif-item unread">
+                                <span class="notif-icon">⏱</span>
+                                <div>
+                                    <p><strong>TCS NQT</strong> deadline in 48 hours. Don't miss it.</p>
+                                    <span>5 hours ago</span>
+                                </div>
+                            </li>
+                            <li class="notif-item">
+                                <span class="notif-icon">🗺️</span>
+                                <div>
+                                    <p>You haven't touched your roadmap in 3 days.</p>
+                                    <span>Yesterday</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Profile avatar -->
+                    <div class="topbar-avatar" id="topbarAvatar">R</div>
+                </div>
+            </header>
+
+            <!-- ── PAGE CONTENT ── -->
+            <div class="page-content">
+
+                <!-- ────────────────────────────────────────
+          ROW 1: Readiness score + Quick stats
+        ──────────────────────────────────────── -->
+                <div class="row-top">
+
+                    <!-- PLACEMENT READINESS SCORE CARD -->
+                    <!--
+            TEACH: This is the "hero widget" of the dashboard.
+            A circular progress ring drawn with SVG.
+            JS animates the stroke-dashoffset to fill the circle.
+            The formula: circumference = 2 * π * r = 2 * 3.14 * 54 ≈ 339
+          -->
+                    <div class="card card-readiness">
+                        <div class="card-header">
+                            <h2>Placement Readiness</h2>
+                            <span class="card-badge badge-blue">Updated today</span>
+                        </div>
+
+                        <div class="readiness-body">
+                            <!-- SVG circle ring -->
+                            <div class="ring-wrap">
+                                <svg class="ring-svg" viewBox="0 0 120 120" width="140" height="140">
+                                    <!-- Background track circle -->
+                                    <circle class="ring-track" cx="60" cy="60" r="54" fill="none" stroke="#F3F4F6"
+                                        stroke-width="10" />
+                                    <!-- Animated progress circle -->
+                                    <!-- stroke-dasharray = circumference (339) -->
+                                    <!-- stroke-dashoffset = circumference - (score/100 * circumference) -->
+                                    <!-- JS sets this dynamically based on score -->
+                                    <circle class="ring-progress" id="readinessRing" cx="60" cy="60" r="54" fill="none"
+                                        stroke="#6C63FF" stroke-width="10" stroke-linecap="round" stroke-dasharray="339"
+                                        stroke-dashoffset="339" transform="rotate(-90 60 60)" />
+                                </svg>
+                                <!-- Score number in centre of ring -->
+                                <div class="ring-center">
+                                    <span class="ring-score" id="readinessScore">0</span>
+                                    <span class="ring-label">/ 100</span>
+                                </div>
+                            </div>
+
+                            <div class="readiness-details">
+                                <p class="readiness-status" id="readinessStatus">Getting stronger 💪</p>
+                                <p class="readiness-hint">Complete your roadmap and upload a resume to improve your
+                                    score.</p>
+
+                                <!-- Sub-scores breakdown -->
+                                <ul class="sub-scores">
+                                    <li>
+                                        <span>Resume</span>
+                                        <div class="mini-bar">
+                                            <div class="mini-fill" data-width="60" style="background:#6C63FF"></div>
+                                        </div>
+                                        <span class="sub-score-val">60%</span>
+                                    </li>
+                                    <li>
+                                        <span>Roadmap</span>
+                                        <div class="mini-bar">
+                                            <div class="mini-fill" data-width="42" style="background:#22C55E"></div>
+                                        </div>
+                                        <span class="sub-score-val">42%</span>
+                                    </li>
+                                    <li>
+                                        <span>Applications</span>
+                                        <div class="mini-bar">
+                                            <div class="mini-fill" data-width="30" style="background:#F59E0B"></div>
+                                        </div>
+                                        <span class="sub-score-val">30%</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- QUICK STATS — 3 small number cards -->
+                    <div class="quick-stats">
+
+                        <div class="stat-card">
+                            <div>
+                                <div class="stat-card-number">12</div>
+                                <div class="stat-card-label">Drives You're<br />Eligible For</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div>
+                                <div class="stat-card-number">3</div>
+                                <div class="stat-card-label">Applications<br />Submitted</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div>
+                                <div class="stat-card-number">42%</div>
+                                <div class="stat-card-label">Roadmap<br />Complete</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ────────────────────────────────────────
+          ROW 2: Upcoming Drives + Roadmap Progress
+        ──────────────────────────────────────── -->
+                <div class="row-bottom">
+
+                    <!-- UPCOMING ELIGIBLE DRIVES -->
+                    <div class="card card-drives">
+                        <div class="card-header">
+                            <h2>Upcoming Drives</h2>
+                            <a href="/pages/drives.html" class="card-link">View all →</a>
+                        </div>
+
+                        <!--
+              TEACH: Each drive-row is built with flexbox.
+              Left: company initial + name + role
+              Right: status badge + deadline
+              This exact pattern is used by Naukri, LinkedIn Jobs.
+            -->
+                        <ul class="drives-list">
+
+                            <li class="drive-row">
+                                <div class="drive-info">
+                                    <div class="drive-company">Google</div>
+                                    <div class="drive-role">SDE Intern · Bangalore</div>
+                                </div>
+                                <div class="drive-right">
+                                    <span class="status-pill pill-open">Open</span>
+                                    <span class="drive-deadline">3 days left</span>
+                                </div>
+                            </li>
+
+                            <li class="drive-row">
+                                <div class="drive-info">
+                                    <div class="drive-company">Razorpay</div>
+                                    <div class="drive-role">Backend Engineer · Remote</div>
+                                </div>
+                                <div class="drive-right">
+                                    <span class="status-pill pill-open">Open</span>
+                                    <span class="drive-deadline">6 days left</span>
+                                </div>
+                            </li>
+
+                            <li class="drive-row">
+                                <div class="drive-info">
+                                    <div class="drive-company">TCS</div>
+                                    <div class="drive-role">System Engineer · Pan India</div>
+                                </div>
+                                <div class="drive-right">
+                                    <span class="status-pill pill-closing">Closing soon</span>
+                                    <span class="drive-deadline">Tomorrow</span>
+                                </div>
+                            </li>
+
+                            <li class="drive-row">
+                                <div class="drive-info">
+                                    <div class="drive-company">Microsoft</div>
+                                    <div class="drive-role">SDE Intern · Hyderabad</div>
+                                </div>
+                                <div class="drive-right">
+                                    <span class="status-pill pill-soon">Opening Soon</span>
+                                    <span class="drive-deadline">In 2 weeks</span>
+                                </div>
+                            </li>
+
+                            <li class="drive-row">
+                                <div class="drive-info">
+                                    <div class="drive-company">Goldman Sachs</div>
+                                    <div class="drive-role">Technology Analyst · Mumbai</div>
+                                </div>
+                                <div class="drive-right">
+                                    <span class="status-pill pill-soon">Opening Soon</span>
+                                    <span class="drive-deadline">In 3 weeks</span>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                    <!-- ROADMAP PROGRESS -->
+                    <div class="card card-roadmap">
+                        <div class="card-header">
+                            <h2>My Roadmap</h2>
+                            <a href="/pages/roadmap.html" class="card-link">Full view →</a>
+                        </div>
+
+                        <!-- Target company badge -->
+                        <div class="roadmap-target">
+                            <span class="target-label">Target</span>
+                            <span class="target-company">Google — SDE</span>
+                            <span class="target-change" onclick="changeTarget()">Change</span>
+                        </div>
+
+                        <!-- Overall progress bar -->
+                        <div class="roadmap-overall">
+                            <div class="roadmap-overall-top">
+                                <span>Overall Progress</span>
+                                <span class="roadmap-pct">42%</span>
+                            </div>
+                            <div class="overall-bar">
+                                <div class="overall-fill" data-width="42"></div>
+                            </div>
+                        </div>
+
+                        <!-- Phase list -->
+                        <ul class="phase-list">
+
+                            <li class="phase-item phase-done">
+                                <div class="phase-dot dot-done">✓</div>
+                                <div class="phase-info">
+                                    <span class="phase-name">Arrays &amp; Strings</span>
+                                    <span class="phase-meta">28 problems · Done</span>
+                                </div>
+                                <span class="phase-pct">100%</span>
+                            </li>
+
+                            <li class="phase-item phase-done">
+                                <div class="phase-dot dot-done">✓</div>
+                                <div class="phase-info">
+                                    <span class="phase-name">Trees &amp; Graphs</span>
+                                    <span class="phase-meta">35 problems · Done</span>
+                                </div>
+                                <span class="phase-pct">100%</span>
+                            </li>
+
+                            <li class="phase-item phase-active">
+                                <div class="phase-dot dot-active">3</div>
+                                <div class="phase-info">
+                                    <span class="phase-name">Dynamic Programming</span>
+                                    <span class="phase-meta">12 / 30 done · In progress</span>
+                                </div>
+                                <span class="phase-pct">40%</span>
+                            </li>
+
+                            <li class="phase-item phase-todo">
+                                <div class="phase-dot dot-todo">4</div>
+                                <div class="phase-info">
+                                    <span class="phase-name">System Design</span>
+                                    <span class="phase-meta">Not started</span>
+                                </div>
+                                <span class="phase-pct">0%</span>
+                            </li>
+
+                            <li class="phase-item phase-todo">
+                                <div class="phase-dot dot-todo">5</div>
+                                <div class="phase-info">
+                                    <span class="phase-name">Behavioural Round</span>
+                                    <span class="phase-meta">Not started</span>
+                                </div>
+                                <span class="phase-pct">0%</span>
+                            </li>
+
+                        </ul>
+
+                        <a href="/pages/roadmap.html" class="btn-continue">Continue Roadmap →</a>
+                    </div>
+
+                </div>
+            </div>
+            <!-- end page-content -->
+
+        </main>
+    </div>
+    <!-- end dashboard-layout -->
+
+    <script>/* ================================================================
+NEXTERN — dashboard.js
+
+TEACH: This file handles all the interactivity on the dashboard.
+It's split into small focused functions — one per feature.
+
+Functions in this file:
+1. setGreeting()         — "Good morning/afternoon/evening, Name"
+2. animateReadinessRing()— SVG circle progress animation
+3. animateBars()         — mini progress bars
+4. toggleNotifications() — show/hide dropdown
+5. clearNotifications()  — mark all read
+6. toggleSidebar()       — mobile drawer open/close
+7. handleLogout()        — clear session, redirect to login
+8. init()                — runs everything on page load
+================================================================ */
+
+
+        /* ----------------------------------------------------------------
+           1. GREETING — changes based on time of day
+           
+           TEACH: new Date() gives us the current date/time.
+           .getHours() returns 0–23. We use that to pick the greeting.
+        ---------------------------------------------------------------- */
+        function setGreeting() {
+            const now = new Date();
+            const hour = now.getHours();
+            const greetingEl = document.getElementById('topbarGreeting');
+            const dateEl = document.getElementById('topbarDate');
+
+            // Pick greeting based on hour
+            let timeGreeting = 'Good evening';
+            if (hour >= 5 && hour < 12) timeGreeting = 'Good morning';
+            if (hour >= 12 && hour < 17) timeGreeting = 'Good afternoon';
+
+            /*
+              TEACH: In the backend phase, we'll fetch the real user name from:
+              GET /api/user/me  →  { name: "Rajan Garudkar", ... }
+              For now we read from localStorage or use a default.
+            */
+            const userName = localStorage.getItem('nextern_name') || 'there';
+            const firstName = userName.split(' ')[0]; // "Rajan Garudkar" → "Rajan"
+
+            if (greetingEl) greetingEl.textContent = `${timeGreeting}, ${firstName} 👋`;
+
+            // Format date: "Monday, 9 March 2026"
+            if (dateEl) {
+                const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+                dateEl.textContent = now.toLocaleDateString('en-IN', options);
+            }
+        }
+
+
+        /* ----------------------------------------------------------------
+           2. READINESS RING ANIMATION
+           
+           TEACH: SVG circle trick —
+           - stroke-dasharray  = full circumference of the circle
+           - stroke-dashoffset = how much of the dash to "offset" (hide)
+           
+           Setting dashoffset = circumference → circle is fully hidden
+           Setting dashoffset = 0             → circle is fully filled
+           
+           For a score of 68%:
+           offset = circumference - (68/100 * circumference)
+                  = 339 - (0.68 * 339)
+                  = 339 - 230.5
+                  = 108.5
+           
+           We animate dashoffset from 339 (empty) to 108.5 (68% filled)
+           using requestAnimationFrame.
+        ---------------------------------------------------------------- */
+        function animateReadinessRing() {
+            const ring = document.getElementById('readinessRing');
+            const scoreEl = document.getElementById('readinessScore');
+            const statusEl = document.getElementById('readinessStatus');
+            if (!ring || !scoreEl) return;
+
+            const TARGET_SCORE = 68;           // TODO: fetch from API later
+            const CIRCUMFERENCE = 339;          // 2 * π * 54 ≈ 339
+            const DURATION = 1400;         // ms
+
+            // Status message based on score
+            const statusMessages = {
+                low: 'Just getting started 🌱',
+                mid: 'Getting stronger 💪',
+                good: 'Looking good! 🚀',
+                great: 'Almost there! ⭐',
+                top: 'Placement ready! 🎉',
+            };
+
+            function getStatus(score) {
+                if (score < 30) return statusMessages.low;
+                if (score < 50) return statusMessages.mid;
+                if (score < 70) return statusMessages.good;
+                if (score < 90) return statusMessages.great;
+                return statusMessages.top;
+            }
+
+            // Colour changes with score — green at high, amber at mid, red at low
+            function getRingColor(score) {
+                if (score >= 70) return '#22C55E';
+                if (score >= 40) return '#6C63FF';
+                return '#F59E0B';
+            }
+
+            let startTime = null;
+
+            function tick(currentTime) {
+                if (!startTime) startTime = currentTime;
+                const progress = Math.min((currentTime - startTime) / DURATION, 1);
+
+                // Ease out cubic — starts fast, slows down
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const currentScore = Math.floor(eased * TARGET_SCORE);
+                const offset = CIRCUMFERENCE - (currentScore / 100) * CIRCUMFERENCE;
+
+                // Update ring
+                ring.style.strokeDashoffset = offset;
+                ring.style.stroke = getRingColor(currentScore);
+
+                // Update score number
+                scoreEl.textContent = currentScore;
+
+                if (progress < 1) {
+                    requestAnimationFrame(tick);
+                } else {
+                    // Snap to final values
+                    scoreEl.textContent = TARGET_SCORE;
+                    ring.style.strokeDashoffset = CIRCUMFERENCE - (TARGET_SCORE / 100) * CIRCUMFERENCE;
+                    if (statusEl) statusEl.textContent = getStatus(TARGET_SCORE);
+                }
+            }
+
+            // Small delay before starting so page loads first
+            setTimeout(() => requestAnimationFrame(tick), 400);
+        }
+
+
+        /* ----------------------------------------------------------------
+           3. ANIMATE PROGRESS BARS
+           
+           TEACH: We use data-width="60" on the element.
+           JS reads that value and sets element.style.width = "60%"
+           CSS transition: width 1s ease  →  animates smoothly.
+           
+           This pattern (data attributes + CSS transitions) is
+           much cleaner than animating width in JS directly.
+        ---------------------------------------------------------------- */
+        function animateBars() {
+            // Small delay so bars animate after the ring
+            setTimeout(() => {
+                document.querySelectorAll('[data-width]').forEach(bar => {
+                    bar.style.width = bar.dataset.width + '%';
+                });
+            }, 600);
+        }
+
+
+        /* ----------------------------------------------------------------
+           4. NOTIFICATION DROPDOWN
+           
+           TEACH: We toggle a CSS class (.open) on the dropdown.
+           The CSS already handles show/hide:
+             .notif-dropdown        { display: none }
+             .notif-dropdown.open   { display: block }
+           
+           We also close it when clicking outside — standard UX pattern.
+        ---------------------------------------------------------------- */
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notifDropdown');
+            if (!dropdown) return;
+            dropdown.classList.toggle('open');
+        }
+
+        // Close dropdown when clicking outside of it
+        document.addEventListener('click', function (e) {
+            const dropdown = document.getElementById('notifDropdown');
+            const bell = document.querySelector('.notif-btn');
+            if (!dropdown || !bell) return;
+
+            // If click was NOT inside the dropdown or on the bell, close it
+            if (!dropdown.contains(e.target) && !bell.contains(e.target)) {
+                dropdown.classList.remove('open');
+            }
+        });
+
+        function clearNotifications() {
+            // Remove .unread class from all notification items
+            document.querySelectorAll('.notif-item.unread').forEach(item => {
+                item.classList.remove('unread');
+            });
+            // Hide the red dot
+            const dot = document.querySelector('.notif-dot');
+            if (dot) dot.style.display = 'none';
+        }
+
+
+        /* ----------------------------------------------------------------
+           5. MOBILE SIDEBAR TOGGLE
+           
+           TEACH: On mobile, the sidebar has:
+             transform: translateX(-100%)   →  hidden off screen (left)
+           
+           When we add .open:
+             transform: translateX(0)       →  slides into view
+           
+           CSS transition: transform 0.25s ease  →  smooth slide
+           
+           We also add an overlay behind the sidebar so clicking outside closes it.
+        ---------------------------------------------------------------- */
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar) return;
+            sidebar.classList.toggle('open');
+
+            // Create/remove overlay
+            let overlay = document.getElementById('sidebarOverlay');
+            if (sidebar.classList.contains('open')) {
+                if (!overlay) {
+                    overlay = document.createElement('div');
+                    overlay.id = 'sidebarOverlay';
+                    overlay.style.cssText = `
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 199;
+      `;
+                    overlay.onclick = toggleSidebar; // click overlay to close
+                    document.body.appendChild(overlay);
+                }
+            } else {
+                if (overlay) overlay.remove();
+            }
+        }
+
+
+        /* ----------------------------------------------------------------
+           6. LOGOUT
+           
+           TEACH: On logout we:
+           1. Clear any stored tokens / user data from localStorage
+           2. Redirect to login page
+           
+           In the backend phase this will also call:
+           POST /api/auth/logout  (to invalidate the session on server)
+        ---------------------------------------------------------------- */
+        function handleLogout() {
+            localStorage.removeItem('nextern_token');
+            localStorage.removeItem('nextern_name');
+            window.location.href = "/login.html";
+        }
+
+
+        /* ----------------------------------------------------------------
+           7. CHANGE TARGET COMPANY
+           Placeholder — will open a modal in a future update.
+        ---------------------------------------------------------------- */
+        function changeTarget() {
+            alert('Target company selector coming soon!\nFor now, update it from your profile.');
+        }
+
+
+        /* ----------------------------------------------------------------
+           8. SET USER INFO FROM STORAGE
+           
+           TEACH: After login/register, we'll store the user's name:
+           localStorage.setItem('nextern_name', 'Riya Sharma')
+           
+           Dashboard reads it on load and fills in the name fields.
+           Later this will be replaced with a real API call.
+        ---------------------------------------------------------------- */
+        function setUserInfo() {
+            const name = localStorage.getItem('nextern_name') || 'Rajan Garudkar';
+            const branch = localStorage.getItem('nextern_branch') || 'CSE';
+            const year = localStorage.getItem('nextern_year') || '3rd Year';
+
+            const initial = name.charAt(0).toUpperCase();
+
+            // Sidebar
+            const nameEl = document.getElementById('userName');
+            const metaEl = document.getElementById('userMeta');
+            const avatarEl = document.getElementById('userAvatar');
+            if (nameEl) nameEl.textContent = name;
+            if (metaEl) metaEl.textContent = `${branch} · ${year}`;
+            if (avatarEl) avatarEl.textContent = initial;
+
+            // Topbar avatar
+            const topAvatar = document.getElementById('topbarAvatar');
+            if (topAvatar) topAvatar.textContent = initial;
+        }
+
+
+        /* ----------------------------------------------------------------
+           INIT
+        ---------------------------------------------------------------- */
+        function init() {
+            setGreeting();
+            setUserInfo();
+            animateReadinessRing();
+            animateBars();
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

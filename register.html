@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register — Nextern</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --accent: #6C63FF;
+            --accent-light: #EEF2FF;
+            --accent-hover: #5A52E0;
+            --green: #22C55E;
+            --red: #EF4444;
+            --text: #111827;
+            --text-soft: #6B7280;
+            --text-muted: #9CA3AF;
+            --border: #E5E7EB;
+            --bg: #F9FAFB;
+            --bg-white: #FFFFFF;
+            --font-head: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --radius-md: 10px;
+            --radius-pill: 100px;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            font-family: var(--font-body);
+            cursor: pointer;
+            border: none;
+        }
+
+        /* ── LAYOUT ── */
+        .auth-layout {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            min-height: 100vh;
+        }
+
+        .auth-left {
+            background: #0D0D14;
+            color: #fff;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .logo {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 48px;
+            display: inline-block;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .logo:hover {
+            text-decoration: none;
+        }
+
+        .auth-left-body {
+            flex: 1;
+        }
+
+        .auth-left-body h2 {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 1.7rem;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+        .auth-left-body p {
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+
+        .auth-perks {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .auth-perks li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+
+        .perk-icon {
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .auth-left-footer {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .auth-right {
+            background: var(--bg-white);
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 40px 24px;
+            overflow-y: auto;
+        }
+
+        .auth-form-wrap {
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .auth-form-header {
+            margin-bottom: 24px;
+        }
+
+        .auth-form-header h1 {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 1.6rem;
+            letter-spacing: -0.4px;
+            margin-bottom: 4px;
+        }
+
+        .auth-form-header p {
+            font-size: 0.88rem;
+            color: var(--text-soft);
+        }
+
+        .btn-google {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 11px 20px;
+            background: #fff;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text);
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: var(--font-body);
+            margin-bottom: 20px;
+        }
+
+        .btn-google:hover {
+            border-color: #aaa;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .divider span {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        /* ── FORM ── */
+        .form-section {
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+            margin-top: 24px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="url"],
+        select {
+            width: 100%;
+            padding: 9px 13px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 0.87rem;
+            color: var(--text);
+            background: var(--bg-white);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            appearance: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
+
+        input.error,
+        select.error {
+            border-color: var(--red);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        input::placeholder {
+            color: var(--text-muted);
+        }
+
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239CA3AF' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 34px;
+            cursor: pointer;
+        }
+
+        .input-with-toggle {
+            position: relative;
+        }
+
+        .input-with-toggle input {
+            padding-right: 44px;
+        }
+
+        .toggle-pw {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            opacity: 0.5;
+            padding: 0;
+        }
+
+        .toggle-pw:hover {
+            opacity: 1;
+        }
+
+        .input-with-prefix {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-with-prefix:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
+
+        .input-prefix {
+            padding: 9px 11px;
+            background: var(--bg);
+            border-right: 1.5px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text-soft);
+            flex-shrink: 0;
+        }
+
+        .input-with-prefix input {
+            border: none;
+            border-radius: 0;
+            flex: 1;
+        }
+
+        .input-with-prefix input:focus {
+            box-shadow: none;
+        }
+
+        .pw-strength {
+            height: 3px;
+            background: var(--border);
+            border-radius: var(--radius-pill);
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .pw-strength-bar {
+            height: 100%;
+            width: 0;
+            border-radius: var(--radius-pill);
+            transition: width 0.3s, background 0.3s;
+        }
+
+        .pw-strength-label {
+            font-size: 0.7rem;
+            margin-top: 3px;
+            display: block;
+        }
+
+        .field-error {
+            font-size: 0.73rem;
+            color: var(--red);
+            min-height: 15px;
+        }
+
+        /* ── TAG INPUT ── */
+        .tag-input-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 10px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            min-height: 44px;
+            cursor: text;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .tag-input-wrap:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+        }
+
+        .tag-input-wrap input {
+            border: none;
+            outline: none;
+            box-shadow: none;
+            padding: 2px 4px;
+            font-size: 0.84rem;
+            min-width: 100px;
+            flex: 1;
+            background: transparent;
+        }
+
+        .tag-input-wrap input:focus {
+            box-shadow: none;
+            border: none;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid rgba(108, 99, 255, 0.2);
+            border-radius: var(--radius-pill);
+            padding: 2px 9px;
+            font-size: 0.76rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            font-size: 0.85rem;
+            opacity: 0.6;
+            background: none;
+            border: none;
+            color: var(--accent);
+            padding: 0;
+        }
+
+        .tag-remove:hover {
+            opacity: 1;
+        }
+
+        .field-hint {
+            font-size: 0.73rem;
+            color: var(--text-muted);
+            margin-top: -10px;
+            margin-bottom: 6px;
+        }
+
+        /* ── CHECKBOX ── */
+        .checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            cursor: pointer;
+            font-size: 0.83rem;
+            color: var(--text-soft);
+            line-height: 1.5;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 15px;
+            height: 15px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        /* ── SUBMIT ── */
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            margin-top: 8px;
+        }
+
+        .btn-submit:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.99);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        /* ── SUCCESS STATE ── */
+        .success-state {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .success-state.show {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        .success-state h2 {
+            font-family: var(--font-head);
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .success-state p {
+            color: var(--text-soft);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .auth-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-left {
+                display: none;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .btn-google {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .google-icon {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="auth-layout">
+
+        <!-- LEFT PANEL -->
+        <div class="auth-left">
+            <a href="/index.html" class="logo">Nex<span>tern</span></a>
+            <div class="auth-left-body">
+                <h2>Your placement journey starts here.</h2>
+                <p>Join thousands of students already using Nextern to land their dream offers.</p>
+                <ul class="auth-perks">
+                    <li><span class="perk-icon">📡</span> Live drives scraped daily</li>
+                    <li><span class="perk-icon">🗺️</span> AI roadmap for your dream company</li>
+                    <li><span class="perk-icon">🧠</span> DSA sheets, quizzes, mock interviews</li>
+                    <li><span class="perk-icon">🤝</span> Connect with seniors who got placed</li>
+                </ul>
+            </div>
+            <p class="auth-left-footer">Used by students at 40+ colleges across India</p>
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="auth-right">
+            <div class="auth-form-wrap">
+
+                <div class="auth-form-header">
+                    <h1>Create your account</h1>
+                    <p>Already have an account? <a href="/login.html">Sign in</a></p>
+                </div>
+
+                <button class="btn-google" type="button" onclick="handleGoogleAuth()">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+                        alt="Google" class="google-icon">
+                    Continue with Google
+                </button>
+
+                <div class="divider"><span>or sign up with email</span></div>
+
+                <!-- SUCCESS STATE -->
+                <div class="success-state" id="successState">
+                    <div class="success-icon">🎉</div>
+                    <h2>You're in!</h2>
+                    <p>Account created successfully.<br />Taking you to your feed...</p>
+                </div>
+
+                <!-- REGISTER FORM -->
+                <form id="registerForm" novalidate>
+
+                    <!-- BASIC INFO -->
+                    <div class="section-title">Basic Info</div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" placeholder="Rajan" />
+                            <span class="field-error" id="firstNameError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" placeholder="Gupta" />
+                            <span class="field-error" id="lastNameError"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regEmail">Email Address</label>
+                        <input type="email" id="regEmail" placeholder="you@college.edu" />
+                        <span class="field-error" id="regEmailError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <div class="input-with-prefix">
+                            <span class="input-prefix">+91</span>
+                            <input type="tel" id="phone" placeholder="9876543210" maxlength="10" />
+                        </div>
+                        <span class="field-error" id="phoneError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <div class="input-with-toggle">
+                            <input type="password" id="regPassword" placeholder="Min. 8 characters" />
+                            <button type="button" class="toggle-pw"
+                                onclick="togglePassword('regPassword', this)">👁</button>
+                        </div>
+                        <div class="pw-strength">
+                            <div class="pw-strength-bar" id="pwStrengthBar"></div>
+                        </div>
+                        <span class="pw-strength-label" id="pwStrengthLabel"></span>
+                        <span class="field-error" id="regPasswordError"></span>
+                    </div>
+
+                    <!-- ACADEMIC INFO -->
+                    <div class="section-title">Academic Info</div>
+
+                    <div class="form-group">
+                        <label for="college">College Name</label>
+                        <input type="text" id="college" placeholder="e.g. SPIT, VJTI, COEP" />
+                        <span class="field-error" id="collegeError"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="branch">Branch</label>
+                            <select id="branch">
+                                <option value="">Select branch</option>
+                                <option>Computer Science</option>
+                                <option>Information Technology</option>
+                                <option>Electronics</option>
+                                <option>Mechanical</option>
+                                <option>Civil</option>
+                                <option>Chemical</option>
+                                <option>Other</option>
+                            </select>
+                            <span class="field-error" id="branchError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="year">Year</label>
+                            <select id="year">
+                                <option value="">Select year</option>
+                                <option>1st</option>
+                                <option>2nd</option>
+                                <option>3rd</option>
+                                <option>4th</option>
+                            </select>
+                            <span class="field-error" id="yearError"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cgpa">CGPA</label>
+                            <input type="number" id="cgpa" placeholder="e.g. 8.5" min="0" max="10" step="0.1" />
+                            <span class="field-error" id="cgpaError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="graduationYear">Graduation Year</label>
+                            <select id="graduationYear">
+                                <option value="">Select year</option>
+                                <option>2025</option>
+                                <option>2026</option>
+                                <option>2027</option>
+                                <option>2028</option>
+                            </select>
+                            <span class="field-error" id="graduationYearError"></span>
+                        </div>
+                    </div>
+
+                    <!-- CAREER GOALS -->
+                    <div class="section-title">Career Goals</div>
+
+                    <div class="form-group">
+                        <label>Skills</label>
+                        <div class="tag-input-wrap" id="skillTagWrap">
+                            <input type="text" id="skillInput" placeholder="Type a skill, press Enter..." />
+                        </div>
+                        <input type="hidden" id="skillsHidden" />
+                        <p class="field-hint">e.g. JavaScript, Python, DSA, React</p>
+                        <span class="field-error" id="skillsError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Target Companies</label>
+                        <div class="tag-input-wrap" id="companyTagWrap">
+                            <input type="text" id="companyInput" placeholder="Type a company, press Enter..." />
+                        </div>
+                        <input type="hidden" id="companiesHidden" />
+                        <p class="field-hint">e.g. Google, Microsoft, Razorpay</p>
+                        <span class="field-error" id="companiesError"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="linkedin">LinkedIn (optional)</label>
+                            <input type="url" id="linkedin" placeholder="linkedin.com/in/yourname" />
+                        </div>
+                        <div class="form-group">
+                            <label for="github">GitHub (optional)</label>
+                            <input type="url" id="github" placeholder="github.com/yourname" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms" />
+                            I agree to the <a href="/terms.html" target="_blank" rel="noopener">Terms of Service</a>
+                            and <a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
+                        </label>
+                        <span class="field-error" id="termsError"></span>
+                    </div>
+
+                    <button type="button" class="btn-submit" id="registerBtn" onclick="handleRegister()">
+                        Create Account
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+
+</body>
+
+</html>
