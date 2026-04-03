@@ -75,7 +75,6 @@ const UserSchema = new mongoose.Schema({
     // If googleId exists, password is not required
     googleId: { type: String },
     avatar: { type: String },   // profile picture URL (from Google)
-    isAdmin: { type: Boolean, default: false },
 
     // ── TIMESTAMPS ──
     // createdAt and updatedAt are added automatically by { timestamps: true }
