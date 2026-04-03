@@ -8,6 +8,10 @@
 
 const fs = require('fs');
 const path = require('path');
+
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
+
+const scrapeAdzuna = require('./adzuna');
 const scrapeGoogle = require('./google');
 const scrapeMicrosoft = require('./microsoft');
 const seedDrives = require('./seedDrives');
@@ -38,11 +42,20 @@ async function runScraper() {
         console.error('❌ Microsoft scraper failed:', e.message);
     }
 
-    // 3. Add seed data
+    // 3. Scrape Adzuna
+    try {
+        const adzunaJobs = await scrapeAdzuna();
+        results.push(...adzunaJobs);
+        console.log(`✅ Adzuna: ${adzunaJobs.length} drives found`);
+    } catch (e) {
+        console.error('❌ Adzuna scraper failed:', e.message);
+    }
+
+    // 4. Add seed data
     results.push(...seedDrives);
     console.log(`✅ Seed data: ${seedDrives.length} drives added`);
 
-    // 4. Deduplicate by company + role
+    // 5. Deduplicate by company + role
     const seen = new Set();
     const unique = results.filter(drive => {
         const key = `${drive.company}-${drive.role}`.toLowerCase();
@@ -51,13 +64,13 @@ async function runScraper() {
         return true;
     });
 
-    // 5. Add IDs
+    // 6. Add IDs
     const final = unique.map((drive, index) => ({
         id: `drive_${Date.now()}_${index}`,
         ...drive,
     }));
 
-    // 6. Save to JSON
+    // 7. Save to JSON
     const output = {
         lastUpdated: new Date().toISOString(),
         totalDrives: final.length,

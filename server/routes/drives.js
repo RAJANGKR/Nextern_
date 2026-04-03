@@ -7,6 +7,7 @@
    GET /api/drives?cgpa=7.5     — filter by CGPA cutoff
    GET /api/drives?type=product — filter by company type
    GET /api/drives?q=google     — search by company name
+   GET /api/drives?source=adzuna_api — filter by source
 ================================================================ */
 
 const express = require('express');
@@ -31,7 +32,7 @@ function loadDrives() {
 
 /* GET /api/drives */
 router.get('/', (req, res) => {
-    const { role, cgpa, type, q, status } = req.query;
+    const { role, cgpa, type, q, status, source } = req.query;
     const data = loadDrives();
     let drives = data.drives || [];
 
@@ -65,6 +66,12 @@ router.get('/', (req, res) => {
     // Filter by status
     if (status) {
         drives = drives.filter(d => d.status === status);
+    }
+
+    // Filter by source (example: adzuna_api, google_careers, seed)
+    if (source) {
+        const sourceValue = String(source).toLowerCase();
+        drives = drives.filter(d => String(d.source || '').toLowerCase() === sourceValue);
     }
 
     res.json({

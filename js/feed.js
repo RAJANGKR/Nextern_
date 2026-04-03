@@ -183,18 +183,18 @@ function renderPost(post) {
         <button onclick="toggleLike('${post._id}', this)" style="
           display:flex; align-items:center; gap:5px;
           font-size:0.8rem; color:${isLiked ? '#6C63FF' : '#94A3B8'};
-          background:none; border:none; cursor:pointer; padding:4px 8px;
-          border-radius:6px; transition:all 0.15s; font-family:inherit;
+          background:none; border:none; cursor:pointer; padding:6px 10px;
+          border-radius:6px; transition:all 0.15s; font-family:inherit; font-weight:500;
         " onmouseover="this.style.background='#F1F5F9'" onmouseout="this.style.background='none'">
-          <span style="font-size:1rem">${isLiked ? '❤️' : '🤍'}</span>
+          <span style="font-size:1rem" class="${isLiked ? 'heart-animate' : ''}">${isLiked ? '❤️' : '🤍'}</span>
           <span class="like-count-${post._id}">${likesCount}</span>
         </button>
 
-        <button style="
+        <button onclick="window.toggleComments('${post._id}')" style="
           display:flex; align-items:center; gap:5px;
           font-size:0.8rem; color:#94A3B8;
-          background:none; border:none; cursor:pointer; padding:4px 8px;
-          border-radius:6px; font-family:inherit;
+          background:none; border:none; cursor:pointer; padding:6px 10px;
+          border-radius:6px; transition:all 0.15s; font-family:inherit; font-weight:500;
         " onmouseover="this.style.background='#F1F5F9'" onmouseout="this.style.background='none'">
           <span style="font-size:1rem">💬</span> Comment
         </button>
@@ -202,11 +202,21 @@ function renderPost(post) {
         <button style="
           display:flex; align-items:center; gap:5px;
           font-size:0.8rem; color:#94A3B8;
-          background:none; border:none; cursor:pointer; padding:4px 8px;
-          border-radius:6px; font-family:inherit;
+          background:none; border:none; cursor:pointer; padding:6px 10px;
+          border-radius:6px; transition:all 0.15s; font-family:inherit; font-weight:500;
         " onmouseover="this.style.background='#F1F5F9'" onmouseout="this.style.background='none'">
           <span style="font-size:1rem">↗️</span> Share
         </button>
+      </div>
+
+      <!-- Comments Section -->
+      <div id="comments-${post._id}" class="comments-section" style="margin: 14px -20px -20px; border-radius: 0 0 14px 14px;">
+          <div class="comment-input-row">
+              <div class="peer-avatar-sm" style="background:linear-gradient(135deg,#6C63FF,#4C1D95);width:30px;height:30px">${initials.charAt(0) || 'U'}</div>
+              <input type="text" class="comment-input js-comment-input-${post._id}" placeholder="Add a comment..." onkeypress="if(event.key === 'Enter') window.postComment('${post._id}')" />
+              <button class="comment-btn" onclick="window.postComment('${post._id}')">Post</button>
+          </div>
+          <div id="comments-list-${post._id}"></div>
       </div>
     </div>
   `;
@@ -230,9 +240,17 @@ async function toggleLike(postId, btn) {
         // Update UI
         const heartEl = btn.querySelector('span:first-child');
         const countEl = document.querySelector(`.like-count-${postId}`);
-        heartEl.textContent = data.liked ? '❤️' : '🤍';
-        countEl.textContent = data.likes;
-        btn.style.color = data.liked ? '#6C63FF' : '#94A3B8';
+
+        if (data.liked) {
+            heartEl.textContent = '❤️';
+            heartEl.classList.add('heart-animate');
+            btn.style.color = '#6C63FF';
+        } else {
+            heartEl.textContent = '🤍';
+            heartEl.classList.remove('heart-animate');
+            btn.style.color = '#94A3B8';
+        }
+        if (countEl) countEl.textContent = data.likes;
 
     } catch (error) {
         console.error('Like error:', error);
@@ -363,6 +381,39 @@ function renderSkeleton() {
     </div>
   `).join('');
 }
+
+/* ================================================================
+   COMMENTS (Client-side interactivity mock)
+================================================================ */
+window.toggleComments = function (postId) {
+    const el = document.getElementById(`comments-${postId}`);
+    if (el) el.classList.toggle('open');
+};
+
+window.postComment = function (postId) {
+    const input = document.querySelector(`.js-comment-input-${postId}`);
+    const text = input?.value?.trim();
+    if (!text) return;
+
+    const list = document.getElementById(`comments-list-${postId}`);
+    if (!list) return;
+
+    const name = localStorage.getItem('nextern_name') || 'User';
+    const initial = name.charAt(0).toUpperCase();
+
+    const html = `
+        <div class="comment-item" style="animation: fadeUp 0.3s ease">
+            <div class="peer-avatar-sm" style="background:linear-gradient(135deg,#6C63FF,#4C1D95);width:30px;height:30px;flex-shrink:0;">${initial}</div>
+            <div class="comment-bubble">
+                <strong>${name}</strong>
+                ${escapeHtml(text)}
+            </div>
+        </div>
+    `;
+
+    list.insertAdjacentHTML('beforeend', html);
+    input.value = '';
+};
 
 // Init on page load
 document.addEventListener('DOMContentLoaded', initFeed);

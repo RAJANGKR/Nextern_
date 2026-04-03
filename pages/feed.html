@@ -147,7 +147,7 @@
             left: 12px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             opacity: 0.4;
         }
 
@@ -472,6 +472,208 @@
             color: var(--accent);
         }
 
+        /* ================================================================
+       STORIES ROW
+    ================================================================ */
+        .stories-row {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+
+        .stories-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .story-card {
+            width: 90px;
+            height: 130px;
+            border-radius: var(--radius-md);
+            background: #fff;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .story-card:hover {
+            transform: scale(1.03);
+            box-shadow: var(--shadow-md);
+        }
+
+        .story-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1));
+            z-index: 1;
+        }
+
+        .story-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            z-index: 2;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .story-text {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            right: 8px;
+            color: #fff;
+            font-size: 0.68rem;
+            font-weight: 600;
+            z-index: 2;
+            line-height: 1.2;
+        }
+
+        .story-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            inset: 0;
+            opacity: 0.7;
+            background: var(--text-soft);
+        }
+
+        /* Post Hover Lift & Animations */
+        @keyframes heartPop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .heart-animate {
+            animation: heartPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+            display: inline-block;
+        }
+
+        /* Create Post Enhancements */
+        .create-post-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .cp-action {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            color: var(--text-soft);
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            transition: background 0.15s;
+        }
+
+        .cp-action:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* Comments Section */
+        .comments-section {
+            border-top: 1px solid var(--border);
+            padding: 12px 16px;
+            background: #FAFAFA;
+            display: none;
+        }
+
+        .comments-section.open {
+            display: block;
+            animation: fadeUp 0.2s ease forwards;
+        }
+
+        .comment-input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-pill);
+            outline: none;
+            font-family: inherit;
+            font-size: 0.82rem;
+            background: var(--bg-white);
+        }
+
+        .comment-input:focus {
+            border-color: var(--accent);
+        }
+
+        .comment-btn {
+            background: var(--accent);
+            color: #fff;
+            border-radius: var(--radius-pill);
+            padding: 0 14px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .comment-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 0.82rem;
+        }
+
+        .comment-bubble {
+            background: var(--bg-white);
+            padding: 8px 12px;
+            border-radius: 0 12px 12px 12px;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .comment-bubble strong {
+            display: block;
+            font-size: 0.78rem;
+            margin-bottom: 2px;
+            color: var(--text);
+        }
+
+        /* Image inside post */
+        .post-image {
+            width: calc(100% + 32px);
+            margin: 12px -16px 0;
+            max-height: 400px;
+            object-fit: cover;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
 
         /* ================================================================
        FEED POST CARD
@@ -488,6 +690,12 @@
             box-shadow: var(--shadow-sm);
             overflow: hidden;
             animation: fadeUp 0.3s ease both;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         @keyframes fadeUp {
@@ -790,6 +998,21 @@
 
         .post-action-icon {
             font-size: 0.95rem;
+        }
+
+        .is-hidden {
+            display: none !important;
+        }
+
+        .feed-empty-state {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 18px;
+            font-size: 0.84rem;
+            color: var(--text-soft);
+            text-align: center;
         }
 
 
@@ -1204,8 +1427,8 @@
         <a href="feed.html" class="nav-logo">Nex<span>tern</span></a>
 
         <div class="nav-search">
-            <span class="nav-search-icon">🔍</span>
-            <input type="text" placeholder="Search drives, companies, seniors..." />
+            <span class="nav-search-icon">⌕</span>
+            <input id="navSearchInput" type="text" placeholder="Search posts, drives, companies..." />
         </div>
 
         <div class="nav-links">
@@ -1304,25 +1527,67 @@
     ══════════════════════════ -->
         <main class="feed-centre">
 
+            <!-- Stories Row -->
+            <div class="stories-row">
+                <div class="story-card">
+                    <div class="story-bg"></div>
+                    <div class="story-img" style="background: linear-gradient(135deg, #6C63FF, #4C1D95)"></div>
+                    <div class="story-avatar">N</div>
+                    <div class="story-text">Google Deadlines</div>
+                </div>
+                <div class="story-card">
+                    <div class="story-bg"></div>
+                    <div class="story-img" style="background: linear-gradient(135deg, #22C55E, #15803D)"></div>
+                    <div class="story-avatar">A</div>
+                    <div class="story-text">Day in the Life</div>
+                </div>
+                <div class="story-card">
+                    <div class="story-bg"></div>
+                    <div class="story-img" style="background: linear-gradient(135deg, #F59E0B, #B45309)"></div>
+                    <div class="story-avatar">S</div>
+                    <div class="story-text">Alumni Tips</div>
+                </div>
+                <div class="story-card">
+                    <div class="story-bg"></div>
+                    <div class="story-img" style="background: linear-gradient(135deg, #3B82F6, #1D4ED8)"></div>
+                    <div class="story-avatar">P</div>
+                    <div class="story-text">Microsoft Prep</div>
+                </div>
+            </div>
+
             <!-- Create post box -->
-            <div class="create-post">
-                <div class="create-post-avatar" id="createAvatar">R</div>
-                <button class="create-post-btn" onclick="alert('Post creation coming soon!')">
-                    Share an update, tip, or experience...
-                </button>
+            <div class="create-post" style="flex-direction: column; align-items: stretch;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="create-post-avatar" id="createAvatar">R</div>
+                    <button class="create-post-btn" onclick="alert('Post creation coming soon!')">
+                        Share an update, tip, or experience...
+                    </button>
+                </div>
+                <div class="create-post-actions">
+                    <div class="cp-action" onclick="alert('Image upload coming soon')">
+                        <span style="font-size: 1.1rem">🖼️</span> Media
+                    </div>
+                    <div class="cp-action" onclick="alert('Event tagging coming soon')">
+                        <span style="font-size: 1.1rem">📅</span> Event
+                    </div>
+                    <div class="cp-action" onclick="alert('Emoji picker coming soon')">
+                        <span style="font-size: 1.1rem">😀</span> Feeling
+                    </div>
+                </div>
             </div>
 
             <!-- Feed filter tabs -->
             <div class="feed-tabs">
-                <button class="feed-tab active" onclick="setTab(this)">All</button>
-                <button class="feed-tab" onclick="setTab(this)">Drives</button>
-                <button class="feed-tab" onclick="setTab(this)">Peers</button>
-                <button class="feed-tab" onclick="setTab(this)">Tips</button>
+                <button class="feed-tab active" onclick="setTab(this, 'all')">All</button>
+                <button class="feed-tab" onclick="setTab(this, 'drives')">Drives</button>
+                <button class="feed-tab" onclick="setTab(this, 'peers')">Peers</button>
+                <button class="feed-tab" onclick="setTab(this, 'tips')">Tips</button>
             </div>
 
 
             <!-- ── POST 1: Platform tip / notification ── -->
-            <div class="post-card">
+            <div class="post-card" data-category="tips"
+                data-search="nextern prep dynamic programming interview tip roadmap">
                 <div class="post-header">
                     <div class="post-avatar pa-nextern">N</div>
                     <div class="post-meta">
@@ -1340,15 +1605,25 @@
                     This week focus on <strong>Dynamic Programming</strong>, aptitude revision and one mock interview.
                 </div>
                 <div class="post-footer">
-                    <button class="post-action" onclick="toggleLike(this)">
-                        <span class="post-action-icon">👍</span> Helpful
+                    <button class="post-action" data-action="like" onclick="toggleLikeMock(this)">
+                        <span style="font-size:1rem">🤍</span> <span class="like-count">12</span>
+                    </button>
+                    <button class="post-action" onclick="toggleComments('mock-comments-1')">
+                        <span style="font-size:1rem">💬</span> Comment
                     </button>
                     <button class="post-action">
-                        <span class="post-action-icon">💬</span> Comment
+                        <span style="font-size:1rem">↗️</span> Share
                     </button>
-                    <button class="post-action">
-                        <span class="post-action-icon">↗</span> Share
-                    </button>
+                </div>
+                <!-- Comments Section -->
+                <div id="mock-comments-1" class="comments-section">
+                    <div class="comment-input-row">
+                        <div class="peer-avatar-sm"
+                            style="background:linear-gradient(135deg,var(--accent),#4C1D95);width:30px;height:30px">R
+                        </div>
+                        <input type="text" class="comment-input" placeholder="Add a comment..." />
+                        <button class="comment-btn">Post</button>
+                    </div>
                 </div>
             </div>
 
@@ -1357,20 +1632,21 @@
 
 
             <!-- ── POST 3: Peer activity ── -->
-            <div class="post-card">
+            <div class="post-card" data-category="peers"
+                data-search="batch activity arjun priya karan razorpay microsoft google prep">
                 <div class="post-header">
                     <div class="post-avatar pa-blue">N</div>
                     <div class="post-meta">
                         <div class="post-author">
                             Batch Activity
-                            <span class="post-type type-peer">👥 Peer Activity</span>
+                            <span class="post-type type-peer">Peer Activity</span>
                         </div>
                         <div class="post-time">4 hours ago</div>
                     </div>
                     <span class="post-menu">···</span>
                 </div>
                 <div class="post-body">
-                    Here's what your batchmates have been up to today 👀
+                    Here is what your batchmates have been up to today.
 
                     <div class="peer-activity">
                         <div class="peer-row">
@@ -1400,27 +1676,38 @@
                     </div>
                 </div>
                 <div class="post-footer">
-                    <button class="post-action" onclick="toggleLike(this)">
-                        <span class="post-action-icon">👍</span> 18
+                    <button class="post-action" data-action="like" onclick="toggleLikeMock(this)">
+                        <span style="font-size:1rem">🤍</span> <span class="like-count">18</span>
+                    </button>
+                    <button class="post-action" onclick="toggleComments('mock-comments-2')">
+                        <span style="font-size:1rem">💬</span> Comment
                     </button>
                     <button class="post-action">
-                        <span class="post-action-icon">💬</span> 3
+                        <span style="font-size:1rem">↗️</span> Share
                     </button>
-                    <button class="post-action">
-                        <span class="post-action-icon">↗</span> Share
-                    </button>
+                </div>
+                <!-- Comments Section -->
+                <div id="mock-comments-2" class="comments-section">
+                    <div class="comment-input-row">
+                        <div class="peer-avatar-sm"
+                            style="background:linear-gradient(135deg,var(--accent),#4C1D95);width:30px;height:30px">R
+                        </div>
+                        <input type="text" class="comment-input" placeholder="Add a comment..." />
+                        <button class="comment-btn">Post</button>
+                    </div>
                 </div>
             </div>
 
 
             <!-- ── POST 5: Platform tip ── -->
-            <div class="post-card">
+            <div class="post-card" data-category="tips"
+                data-search="interview tips google arrays strings sliding window two pointers prefix sum hashmap kadane">
                 <div class="post-header">
                     <div class="post-avatar pa-amber">N</div>
                     <div class="post-meta">
                         <div class="post-author">
                             Interview Tips
-                            <span class="post-type type-tip">💡 Interview Tip</span>
+                            <span class="post-type type-tip">Interview Tip</span>
                         </div>
                         <div class="post-time">Yesterday</div>
                     </div>
@@ -1436,16 +1723,37 @@
                     Head to the <strong>Prep Hub</strong> to practise these patterns and mark your completion.
                 </div>
                 <div class="post-footer">
-                    <button class="post-action" onclick="toggleLike(this)">
-                        <span class="post-action-icon">👍</span> 94
+                    <button class="post-action" data-action="like" onclick="toggleLikeMock(this)">
+                        <span style="font-size:1rem">❤️</span> <span class="like-count">94</span>
+                    </button>
+                    <button class="post-action" onclick="toggleComments('mock-comments-3')">
+                        <span style="font-size:1rem">💬</span> Comment
                     </button>
                     <button class="post-action">
-                        <span class="post-action-icon">💬</span> 21
-                    </button>
-                    <button class="post-action">
-                        <span class="post-action-icon">↗</span> Share
+                        <span style="font-size:1rem">↗️</span> Share
                     </button>
                 </div>
+                <!-- Comments Section -->
+                <div id="mock-comments-3" class="comments-section">
+                    <div class="comment-input-row">
+                        <div class="peer-avatar-sm"
+                            style="background:linear-gradient(135deg,var(--accent),#4C1D95);width:30px;height:30px">R
+                        </div>
+                        <input type="text" class="comment-input" placeholder="Add a comment..." />
+                        <button class="comment-btn">Post</button>
+                    </div>
+                    <div class="comment-item">
+                        <div class="peer-avatar-sm" style="background:gray;width:30px;height:30px">A</div>
+                        <div class="comment-bubble">
+                            <strong>Ankit Sharma</strong>
+                            Absolutely! Sliding window has shown up in my last 3 OA assessments.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="feedEmptyState" class="feed-empty-state is-hidden">
+                No matching updates found. Try another tab or search keyword.
             </div>
 
         </main>
@@ -1518,6 +1826,8 @@
     <script>
 
         const API_BASE_URL = 'http://localhost:4000';
+        let activeFeedTab = 'all';
+        let currentSearchQuery = '';
 
         // Read token from URL if coming from Google OAuth
         const urlParams = new URLSearchParams(window.location.search);
@@ -1585,33 +1895,94 @@
         /* 3. Animate progress bars */
         function animateBars() {
             setTimeout(() => {
-                document.querySelectorAll('[data-width]').forEach(bar => {
-                    bar.style.width = bar.dataset.width + '%';
+                document.querySelectorAll('.rw-fill, .r-overall-fill').forEach(el => {
+                    const w = el.getAttribute('data-width');
+                    if (w) el.style.width = w + '%';
                 });
-            }, 700);
+            }, 300);
         }
+
+        window.toggleComments = function (id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.toggle('open');
+            }
+        };
+
+        window.toggleLikeMock = function (btn) {
+            const heartEl = btn.querySelector('span:first-child');
+            const countEl = btn.querySelector('.like-count');
+
+            if (heartEl.textContent === '❤️') {
+                heartEl.textContent = '🤍';
+                heartEl.classList.remove('heart-animate');
+                if (countEl) countEl.textContent = parseInt(countEl.textContent) - 1;
+                btn.style.color = '#94A3B8';
+            } else {
+                heartEl.textContent = '❤️';
+                heartEl.classList.add('heart-animate');
+                if (countEl) countEl.textContent = parseInt(countEl.textContent) + 1;
+                btn.style.color = '#6C63FF';
+            }
+        };
+
+        // Init everything using DOMContentLoaded ensures DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            setUserInfo();
+            animateMiniRing();
+            animateBars();
+            setupFeedSearch();
+            loadLiveDrives();
+            applyFeedFilters();
+        });
 
         /* 4. Feed tab switching
            TEACH: Remove .active from all tabs, add to clicked one.
            In real app this would filter the feed posts by type.
         */
-        function setTab(el) {
+        function setTab(el, tabKey) {
             document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
-            // TODO: filter feed posts based on tab
+            activeFeedTab = tabKey || 'all';
+            applyFeedFilters();
         }
 
         /* 5. Like toggle */
         function toggleLike(btn) {
             btn.classList.toggle('liked');
-            const icon = btn.querySelector('.post-action-icon');
-            if (btn.classList.contains('liked')) {
-                icon.textContent = '👍';
-                btn.style.color = 'var(--accent)';
-            } else {
-                icon.textContent = '👍';
-                btn.style.color = '';
+            const isLiked = btn.classList.contains('liked');
+            btn.style.color = isLiked ? 'var(--accent)' : '';
+            if (btn.dataset.action === 'like') {
+                btn.textContent = isLiked ? 'Liked' : 'Like';
             }
+        }
+
+        function applyFeedFilters() {
+            const cards = Array.from(document.querySelectorAll('.feed-centre .post-card'));
+            let visibleCount = 0;
+            cards.forEach((card) => {
+                const category = (card.dataset.category || 'all').toLowerCase();
+                const searchable = `${card.dataset.search || ''} ${card.textContent || ''}`.toLowerCase();
+                const tabMatch = activeFeedTab === 'all' || category === activeFeedTab;
+                const queryMatch = !currentSearchQuery || searchable.includes(currentSearchQuery);
+                const visible = tabMatch && queryMatch;
+                card.classList.toggle('is-hidden', !visible);
+                if (visible) visibleCount += 1;
+            });
+
+            const emptyState = document.getElementById('feedEmptyState');
+            if (emptyState) {
+                emptyState.classList.toggle('is-hidden', visibleCount !== 0);
+            }
+        }
+
+        function setupFeedSearch() {
+            const searchInput = document.getElementById('navSearchInput');
+            if (!searchInput) return;
+            searchInput.addEventListener('input', (e) => {
+                currentSearchQuery = (e.target.value || '').trim().toLowerCase();
+                applyFeedFilters();
+            });
         }
 
         /* 6. Logout */
@@ -1674,7 +2045,7 @@
             }
 
             container.innerHTML = drives.map((drive) => `
-                <div class="post-card">
+                <div class="post-card" data-category="drives" data-search="${escapeHtml(`${drive.company} ${drive.role} ${drive.location || ''} ${drive.ctc || ''} drive tnp`)}">
                     <div class="post-header">
                         <div class="post-avatar pa-green">N</div>
                         <div class="post-meta">
@@ -1700,6 +2071,8 @@
                     </div>
                 </div>
             `).join('');
+
+            applyFeedFilters();
         }
 
         function renderRightDrives(drives) {
@@ -1752,10 +2125,11 @@
         setUserInfo();
         animateMiniRing();
         animateBars();
+        setupFeedSearch();
         loadLiveDrives();
+        applyFeedFilters();
     </script>
 
 </body>
-<script src="../js/feed.js"></script>
 
 </html>

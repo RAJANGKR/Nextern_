@@ -63,6 +63,13 @@ const UserSchema = new mongoose.Schema({
     linkedin: { type: String, trim: true },
     github: { type: String, trim: true },
 
+
+    role: {
+        type: String,
+        enum: ['student', 'admin'],
+        default: 'student',
+    },
+
     // ── OAUTH ──
     // googleId is set when user signs in with Google
     // If googleId exists, password is not required
