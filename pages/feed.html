@@ -64,84 +64,54 @@
         }
 
         /* ── TOP NAVBAR ── */
-        .navbar {
-            position: fixed;
+        .topnav {
+            position: sticky;
             top: 0;
-            left: 0;
-            right: 0;
-            height: var(--nav-height);
-            background: var(--bg-white);
-            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            height: 56px;
+            background: white;
+            border-bottom: 1px solid #E2E8F0;
             display: flex;
             align-items: center;
-            padding: 0 24px;
-            z-index: 1000;
+            padding: 0 20px;
+            gap: 16px;
         }
 
         .nav-logo {
+            text-decoration: none;
             font-family: 'Syne', sans-serif;
             font-weight: 800;
             font-size: 1.4rem;
-            color: var(--text-dark);
-            margin-right: 40px;
-        }
-
-        .nav-logo span {
-            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 2px;
         }
 
         .nav-search {
             flex: 1;
             max-width: 400px;
-            position: relative;
+            display: flex;
+            align-items: center;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 6px 12px;
+            gap: 8px;
         }
 
         .nav-search input {
-            width: 100%;
-            padding: 8px 16px 8px 40px;
-            background: #F8FAFC;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-pill);
+            border: none;
+            background: transparent;
             outline: none;
+            width: 100%;
             font-size: 0.9rem;
         }
 
-        .search-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            width: 18px;
-        }
-
-        .nav-links {
+        .nav-right {
             display: flex;
             align-items: center;
-            gap: 20px;
-            margin: 0 auto;
-        }
-
-        .nav-link {
-            font-weight: 500;
-            font-size: 0.9rem;
-            color: var(--text-gray);
-            padding: 4px 0;
-            position: relative;
-        }
-
-        .nav-link.active {
-            color: var(--accent);
-        }
-
-        .nav-link.active::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--accent);
+            gap: 16px;
+            margin-left: auto;
         }
 
         .nav-right {
@@ -593,31 +563,28 @@
 
 <body>
 
-    <nav class="navbar">
-        <a href="feed.html" class="nav-logo">Nex<span>tern</span></a>
-        
+    <nav class="topnav">
+        <a href="feed.html" class="nav-logo">
+            <span style="color:#0F172A">Nex</span>
+            <span style="color:#6C63FF">tern</span>
+        </a>
+
         <div class="nav-search">
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
-            <input type="text" placeholder="Search posts, drives...">
+            <input type="text" placeholder="Search..." />
         </div>
 
-        <div class="nav-links">
-            <a href="feed.html" class="nav-link active">Home</a>
-            <a href="drives.html" class="nav-link">Drives</a>
-            <a href="roadmap.html" class="nav-link">Roadmap</a>
-            <a href="prep-hub.html" class="nav-link">Prep Hub</a>
-            <a href="seniors.html" class="nav-link">Seniors</a>
-        </div>
-
-        
-        <div style="display: flex; align-items: center; gap: 12px; margin-left: auto;">
+        <div class="nav-right" style="margin-left:auto; display:flex; align-items:center; gap:16px;">
             <button class="theme-toggle-btn" id="themeToggleBtn" onclick="window.toggleTheme()">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
             </button>
-            <a href="../profile.html" style="text-decoration:none;">
-                <div class="nav-avatar" id="navAvatar">U</div>
+            <a href="../profile.html" id="navAvatar" style="width:32px; height:32px; border-radius:50%; background:#6C63FF; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; text-decoration:none;">
+                U
             </a>
         </div>
     </nav>

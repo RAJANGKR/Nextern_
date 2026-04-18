@@ -29,6 +29,57 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background: var(--bg-body); color: var(--text-dark); min-height: 100vh; }
 
+        /* --- TOP NAVBAR --- */
+        .topnav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 56px;
+            background: white;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 16px;
+        }
+
+        .nav-logo {
+            text-decoration: none;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .nav-search {
+            flex: 1;
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 6px 12px;
+            gap: 8px;
+        }
+
+        .nav-search input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-left: auto;
+        }
+
         /* --- LAYOUT --- */
         .analytics-container { display: flex; min-height: 100vh; }
         .main-content { flex: 1; padding: 32px 40px; }
@@ -79,15 +130,30 @@
 </head>
 <body>
 
-    <!-- TOPNAV (Standard across all pages) -->
-    <nav style="height: 60px; background: var(--bg-white); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 24px; position: sticky; top: 0; z-index: 100;">
-        <div style="font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--accent); cursor: pointer;" onclick="window.location.href='../index.html'">NEXTERN</div>
-        <div id="sidebar-mount-btn" style="margin-left: 16px;"></div>
-        <div style="display: flex; align-items: center; gap: 16px; margin-left: auto;">
-            <button class="theme-toggle-btn" id="themeToggleBtn" onclick="window.toggleTheme()" style="background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <!-- TOP NAVBAR -->
+    <nav class="topnav">
+        <a href="feed.html" class="nav-logo">
+            <span style="color:#0F172A">Nex</span>
+            <span style="color:#6C63FF">tern</span>
+        </a>
+
+        <div class="nav-search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" placeholder="Search..." />
+        </div>
+
+        <div class="nav-right" style="margin-left:auto; display:flex; align-items:center; gap:16px;">
+            <button class="theme-toggle-btn" id="themeToggleBtn" onclick="window.toggleTheme()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
             </button>
-            <a href="profile.html" id="navAvatar" style="width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; text-decoration: none;">U</a>
+            <a href="../profile.html" id="navAvatar" style="width:32px; height:32px; border-radius:50%; background:#6C63FF; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; text-decoration:none;">
+                U
+            </a>
         </div>
     </nav>
 
