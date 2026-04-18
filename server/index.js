@@ -75,7 +75,12 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/roadmap', require('./routes/roadmap'));
 app.use('/api/drives', driveRoutes);
-
+app.use('/api/prep', require('./routes/prep'));
+app.use('/api/notifications', require('./routes/notification.routes'));
+app.use('/api/analyze', require('./routes/analyze.routes'));
+app.use('/api/admin', require('./routes/admin'));
+app.use('/api/posts', require('./routes/posts'));
+app.use('/api/applications', require('./routes/applications.routes'));
 
 /* ── Health check route — visit http://localhost:5000/api/health ── */
 app.get('/api/health', (req, res) => {
@@ -107,24 +112,17 @@ app.use((err, req, res, next) => {
 /* ================================================================
    START SERVER
 ================================================================ */
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
     console.log(`
-  ╔════════════════════════════════╗
-  ║   Nextern API running          ║
-  ║   http://localhost:${PORT}       ║
-  ╚════════════════════════════════╝
+  Starting Nextern API...
+  PORT: ${PORT}
   `);
 });
-const drivesRoutes = require('./routes/drives');
-app.use('/api/drives', drivesRoutes);
 
 const startScheduler = require('./scraper/schedule');
 startScheduler();
-
-const postsRoutes = require('./routes/posts');
-app.use('/api/posts', postsRoutes);
 
 const seedPosts = require('./scraper/seedPosts');
 seedPosts(); // seeds on server start if empty

@@ -1,26 +1,8 @@
 /* ================================================================
    middleware/protect.js — JWT Auth Middleware
 
-   TEACH: Middleware is a function that runs BETWEEN the request
-   arriving and the route handler running.
-
-   Express middleware signature: (req, res, next) => {}
-   - req  = the incoming request
-   - res  = the response we'll send back
-   - next = function to call to move to the next middleware/route
-
-   We use this middleware on any route that requires login.
-   Example: router.get('/me', protect, getUserProfile)
-   The 'protect' middleware runs first, checks the token,
-   then calls next() to let getUserProfile run.
-
-   JWT Flow:
-   1. User logs in → server creates token → sends to client
-   2. Client stores token in localStorage
-   3. Client sends token in every request: Authorization: Bearer <token>
-   4. This middleware reads and verifies the token
-   5. If valid, attaches user ID to req.user
-   6. Route handler can then use req.user to know who's asking
+   Verifies JWT token from Authorization header, attaches user
+   to req.user, and updates lastActive timestamp.
 ================================================================ */
 
 const jwt = require('jsonwebtoken');
@@ -60,9 +42,16 @@ const protect = async (req, res, next) => {
             });
         }
 
+        // Update lastActive (non-blocking — don't await)
+        User.updateOne(
+            { _id: req.user._id },
+            { $set: { lastActive: new Date() } }
+        ).catch(() => {});
+
         next(); // Token is valid — proceed to route handler
 
     } catch (error) {
+        console.error('JWT Verify Error:', error.message);
         return res.status(401).json({
             success: false,
             message: 'Token invalid or expired. Please log in again.',

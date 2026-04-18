@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nextern Central - Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #f4f6fb;
+            --card: #fff;
+            --border: #dbe1ea;
+            --text: #0f172a;
+            --text-soft: #64748b;
+            --accent: #4f46e5;
+            --accent-dark: #3730a3;
+            --accent-light: #eef2ff;
+            --error: #dc2626;
+            --ok: #16a34a;
+            --radius-lg: 14px;
+            --radius-md: 10px;
+            --shadow: 0 10px 28px rgba(15, 23, 42, 0.07);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(180deg, #eef2ff, #f8fafc 45%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 26px 14px 100px;
+        }
+
+        .wrap { max-width: 1000px; margin: 0 auto; display: grid; gap: 24px; }
+
+        .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+
+        h1 { font-family: 'Syne', sans-serif; font-size: 1.6rem; color: var(--text); }
+        h1 span { color: var(--accent); }
+
+        .back-link { text-decoration: none; color: var(--accent); font-weight: 700; font-size: 0.9rem; }
+
+        .tab-nav { display: flex; gap: 8px; margin-bottom: 4px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+        .tab-btn { background: transparent; color: var(--text-soft); padding: 8px 16px; border-radius: var(--radius-md); font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; }
+        .tab-btn.active { background: var(--accent-light); color: var(--accent); }
+
+        .admin-grid { display: grid; grid-template-columns: 220px 1fr; gap: 24px; align-items: start; }
+...
+        <div id="sidebar-mount"></div>
+        <script src="../js/sidebar.js"></script>
+
+        <div class="admin-grid">
+            <div class="sidebar-secondary">
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="card-header">System Health</div>
+                    <div class="stats-block">
+                        <div class="stat-item">
+                            <span class="stat-val" id="statUsers">...</span>
+                            <span class="stat-label">Students</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-val" id="statDrives">...</span>
+                            <span class="stat-label">Live Drives</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Activity Log</div>
+                    <div id="activityList" class="list-wrap">
+                        <p style="font-size:0.8rem; color:var(--text-soft)">Loading activity...</p>
+                    </div>
+                </div>
+            </div>
+
+            <main class="main-panel">
+                <!-- BROADCAST SECTION -->
+                <div id="broadcastPanel" class="card">
+                    <div class="card-header">📢 Create System Announcement</div>
+                    <form id="broadcastForm">
+                        <div class="form-group">
+                            <label>Announcement Type</label>
+                            <select id="annType">
+                                <option value="announcement">Important Notice</option>
+                                <option value="tip">Daily Tip</option>
+                                <option value="general">General Update</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Content *</label>
+                            <textarea id="annContent" placeholder="What would you like to broadcast to all students?" style="height: 120px;" required></textarea>
+                        </div>
+                        <button type="submit" class="primary" id="btnAnn">Post to Student Feed</button>
+                    </form>
+                </div>
+
+                <!-- DRIVES SECTION (Hidden by default) -->
+                <div id="drivesPanel" class="card" style="display:none;">
+                    <div class="card-header">💼 New Placement Drive</div>
+                    <form id="driveForm" style="grid-template-columns: 1fr 1fr; display: grid;">
+                        <div class="form-group">
+                            <label>Company *</label>
+                            <input id="drCompany" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Role *</label>
+                            <input id="drRole" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Package (LPA)</label>
+                            <input id="drPackage" placeholder="e.g. 12.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Deadline</label>
+                            <input id="drDeadline" type="date">
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label>Apply URL *</label>
+                            <input id="drApplyUrl" type="url" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Min CGPA</label>
+                            <input id="drCgpa" type="number" step="0.1" value="6.0">
+                        </div>
+                        <div class="form-group">
+                            <label>Target Branches</label>
+                            <input id="drBranches" placeholder="CS, IT, EC (comma separated)">
+                        </div>
+                        <button type="submit" class="primary" style="grid-column: span 2;" id="btnDr">Publish Drive</button>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script>
+        const API_BASE_URL = window.API_BASE || 'http://localhost:4000';
+
+        function showMsg(text, type) {
+            const el = document.getElementById('statusMsg');
+            el.textContent = text;
+            el.className = type === 'ok' ? 'msg-ok' : 'msg-err';
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 5000);
+        }
+
+        function switchSection(sec) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`[onclick*="${sec}"]`).classList.add('active');
+            
+            document.getElementById('broadcastPanel').style.display = sec === 'broadcast' ? 'block' : 'none';
+            document.getElementById('drivesPanel').style.display = sec === 'drives' ? 'block' : 'none';
+        }
+
+        async function requireAdmin() {
+            const token = localStorage.getItem('nextern_token');
+            if (!token) return logout();
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/user/me`, {
+                    headers: window.getAuthHeaders()
+                });
+                const data = await res.json();
+                if (!data.success || data.data.role !== 'admin') {
+                    alert('Admin access required.');
+                    window.location.href = 'feed.html';
+                }
+            } catch (e) { logout(); }
+        }
+
+        function logout() {
+            window.clearLocalSession();
+            window.location.href = '../login.html';
+        }
+
+        async function loadStats() {
+            try {
+                // We'll use the existing /api/drives for drive count
+                const dryRes = await fetch(`${API_BASE_URL}/api/drives`);
+                const dryData = await dryRes.json();
+                if (dryData.success) document.getElementById('statDrives').textContent = dryData.drives.length;
+                
+                // Placeholder for users
+                document.getElementById('statUsers').textContent = '240+'; // Mock or expand later
+            } catch (e) { }
+        }
+
+        async function loadRecentActivity() {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/posts`, { headers: window.getAuthHeaders() });
+                const data = await res.json();
+                if (data.success) {
+                    const recent = data.posts.slice(0, 5);
+                    document.getElementById('activityList').innerHTML = recent.map(p => `
+                        <div class="list-item">
+                            <div class="item-info">
+                                <strong>${p.content.substring(0, 30)}...</strong>
+                                <span>${new Date(p.createdAt).toLocaleDateString()}</span>
+                            </div>
+                            <span class="badge ${p.isSystem ? 'badge-ann':'badge-drive'}">${p.type}</span>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) { }
+        }
+
+        // --- FORMS ---
+
+        document.getElementById('broadcastForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnAnn');
+            btn.disabled = true;
+            btn.textContent = 'Posting...';
+
+            const payload = {
+                content: document.getElementById('annContent').value,
+                type: document.getElementById('annType').value,
+                isSystem: true
+            };
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/posts`, {
+                    method: 'POST',
+                    headers: window.getAuthHeaders(),
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showMsg('Announcement broadcasted successfully!', 'ok');
+                    document.getElementById('broadcastForm').reset();
+                    loadRecentActivity();
+                } else { throw new Error(data.message); }
+            } catch (err) { showMsg(err.message, 'err'); }
+            finally { btn.disabled = false; btn.textContent = 'Post to Student Feed'; }
+        }
+
+        document.getElementById('driveForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnDr');
+            btn.disabled = true;
+
+            const payload = {
+                company: document.getElementById('drCompany').value,
+                role: document.getElementById('drRole').value,
+                package: document.getElementById('drPackage').value,
+                deadline: document.getElementById('drDeadline').value,
+                applyUrl: document.getElementById('drApplyUrl').value,
+                cgpaCutoff: document.getElementById('drCgpa').value,
+                targetBranches: document.getElementById('drBranches').value.split(',').map(s => s.trim())
+            };
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/drives`, {
+                    method: 'POST',
+                    headers: window.getAuthHeaders(),
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showMsg('Placement drive published!', 'ok');
+                    document.getElementById('driveForm').reset();
+                    loadStats();
+                } else { throw new Error(data.message); }
+            } catch (err) { showMsg(err.message, 'err'); }
+            finally { btn.disabled = false; btn.textContent = 'Publish Drive'; }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            requireAdmin();
+            loadStats();
+            loadRecentActivity();
+        });
+    </script>
+</body>
+
+</html>

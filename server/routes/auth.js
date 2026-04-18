@@ -64,7 +64,7 @@ router.post('/login', async (req, res) => {
             success: true, token,
             user: {
                 id: user._id, firstName: user.firstName, lastName: user.lastName,
-                email: user.email, college: user.college, branch: user.branch, year: user.year
+                email: user.email, college: user.college, branch: user.branch, year: user.year, role: user.role
             }
         });
     } catch (error) {
@@ -126,9 +126,14 @@ router.get('/google/callback',
         const fullName = `${req.user.firstName || ''} ${req.user.lastName || ''}`.trim();
         const name = encodeURIComponent(fullName);
         const clientBaseUrl = (process.env.CLIENT_URL || '').replace(/\/$/, '');
-        const redirectPath = hasCollegeProfile(req.user)
-            ? '/pages/feed.html'
-            : '/complete-profile.html';
+        let redirectPath;
+        if (req.user.role === 'admin') {
+            redirectPath = '/pages/admin.html';
+        } else {
+            redirectPath = hasCollegeProfile(req.user)
+                ? '/pages/feed.html'
+                : '/complete-profile.html';
+        }
 
         res.redirect(`${clientBaseUrl}${redirectPath}?token=${token}&name=${name}`);
     }

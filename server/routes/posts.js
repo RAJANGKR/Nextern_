@@ -7,7 +7,7 @@
 ================================================================ */
 
 const express = require('express');
-const Post = require('../models/post');
+const Post = require('../models/Post');
 const protect = require('../middleware/protect');
 const router = express.Router();
 
@@ -17,12 +17,29 @@ const router = express.Router();
 ================================================================ */
 router.get('/', protect, async (req, res) => {
     try {
-        const posts = await Post.find()
+        let query = {};
+        
+        // If student, filter system posts by targeting
+        if (req.user && req.user.role === 'student') {
+            const user = req.user;
+            query = {
+                $or: [
+                    { isSystem: { $ne: true } }, // Regular user posts
+                    { 
+                        isSystem: true,
+                        $and: [
+                            { $or: [{ 'meta.targetBranch': user.branch }, { 'meta.targetBranch': null }, { 'meta.targetBranch': '' }] },
+                            { $or: [{ 'meta.targetYear': user.year }, { 'meta.targetYear': null }, { 'meta.targetYear': '' }] }
+                        ]
+                    }
+                ]
+            };
+        }
+
+        const posts = await Post.find(query)
             .sort({ isPinned: -1, createdAt: -1 })  // pinned first, then newest
             .limit(15)
             .populate('author', 'firstName lastName college branch year avatar');
-        // TEACH: populate() replaces the author ObjectId with the actual
-        // user document fields we specify. Like a JOIN in SQL.
 
         res.json({ success: true, posts });
 

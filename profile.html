@@ -10,6 +10,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;700&display=swap"
         rel="stylesheet" />
+    <script src="js/config.js"></script>
     <style>
         :root {
             --accent: #6C63FF;
@@ -447,17 +448,9 @@
     </nav>
 
     <div class="page-layout">
-        <aside class="left-sidebar">
-            <div class="sidebar-card">
-                <a href="pages/feed.html" class="sidebar-nav-link">Feed</a>
-                <a href="pages/drives.html" class="sidebar-nav-link">Drives <span class="snav-badge">3</span></a>
-                <a href="pages/roadmap.html" class="sidebar-nav-link">Roadmap</a>
-                <a href="pages/prep-hub.html" class="sidebar-nav-link">Prep Hub</a>
-                <a href="pages/seniors.html" class="sidebar-nav-link">Seniors</a>
-                <a href="profile.html" class="sidebar-nav-link active">My Profile</a>
-                <a href="pages/dashboard.html" class="sidebar-nav-link">Dashboard</a>
-            </div>
-        </aside>
+        <!-- LEFT SIDEBAR -->
+        <div id="sidebar-mount"></div>
+        <script src="js/sidebar.js"></script>
 
         <main class="content">
             <section class="profile-card">
@@ -546,152 +539,250 @@
                 <p class="preview-line" id="previewSkills">Skills: Not set</p>
             </section>
         </main>
-    </div>
-
-    <script>
-        const formIds = [
-            'fullName',
-            'email',
-            'phone',
-            'college',
-            'branch',
-            'year',
-            'cgpa',
-            'targetCompany',
-            'bio'
-        ];
-
-        let skills = [];
-
-        function getValue(id) {
-            return document.getElementById(id).value.trim();
-        }
-
-        function setValue(id, value) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            el.value = value || '';
-        }
-
-        function renderSkills() {
-            const list = document.getElementById('skillList');
-            list.innerHTML = '';
-
-            skills.forEach((skill, index) => {
-                const chip = document.createElement('span');
-                chip.className = 'skill-chip';
-                chip.innerHTML = `${skill} <button type="button" aria-label="Remove skill">x</button>`;
-                chip.querySelector('button').addEventListener('click', () => {
-                    skills.splice(index, 1);
-                    renderSkills();
-                    updatePreview();
-                });
-                list.appendChild(chip);
-            });
-        }
-
-        function updatePreview() {
-            const name = getValue('fullName') || 'Rajan Garudkar';
-            const branch = getValue('branch') || 'CSE';
-            const year = getValue('year') || '3rd Year';
-            const college = getValue('college') || 'Not set';
-            const target = getValue('targetCompany') || 'Not set';
-
-            document.getElementById('navAvatar').textContent = name.charAt(0).toUpperCase();
-            document.getElementById('previewAvatar').textContent = name.charAt(0).toUpperCase();
-            document.getElementById('previewName').textContent = name;
-            document.getElementById('previewMeta').textContent = `${branch} · ${year}`;
-            document.getElementById('previewCollege').textContent = `College: ${college}`;
-            document.getElementById('previewTarget').textContent = `Target: ${target}`;
-            document.getElementById('previewSkills').textContent = `Skills: ${skills.length ? skills.join(', ') : 'Not set'}`;
-        }
-
-        function loadProfile() {
-            setValue('fullName', localStorage.getItem('nextern_name') || '');
-            setValue('email', localStorage.getItem('nextern_email') || '');
-            setValue('phone', localStorage.getItem('nextern_phone') || '');
-            setValue('college', localStorage.getItem('nextern_college') || '');
-            setValue('branch', localStorage.getItem('nextern_branch') || '');
-            setValue('year', localStorage.getItem('nextern_year') || '3rd Year');
-            setValue('cgpa', localStorage.getItem('nextern_cgpa') || '');
-            setValue('targetCompany', localStorage.getItem('nextern_target_company') || '');
-            setValue('bio', localStorage.getItem('nextern_bio') || '');
-
-            try {
-                const parsed = JSON.parse(localStorage.getItem('nextern_skills') || '[]');
-                skills = Array.isArray(parsed) ? parsed : [];
-            } catch (err) {
-                skills = [];
+        <script>
+            // 1. CATCH TOKEN FROM URL (Useful for social login redirects)
+            const urlParams = new URLSearchParams(window.location.search);
+            const tokenFromUrl = urlParams.get('token');
+            const nameFromUrl = urlParams.get('name');
+            if (tokenFromUrl) {
+                localStorage.setItem('nextern_token', tokenFromUrl);
+                if (nameFromUrl) localStorage.setItem('nextern_name', decodeURIComponent(nameFromUrl));
+                window.history.replaceState({}, '', window.location.pathname); // Clean URL
             }
 
-            renderSkills();
-            updatePreview();
-        }
+            // 2. STRICT AUTH GUARD
+            if (!window.checkAuth('login.html')) {
+                // If checkAuth failed, the page will redirect, 
+                // but we hide the body to avoid flash of content
+                document.body.style.display = 'none';
+            }
 
-        function saveProfile() {
-            const name = getValue('fullName') || 'Rajan Garudkar';
-            const branch = getValue('branch') || 'CSE';
-            const year = getValue('year') || '3rd Year';
+            const formIds = [
+                'fullName',
+                'email',
+                'phone',
+                'college',
+                'branch',
+                'year',
+                'cgpa',
+                'targetCompany',
+                'bio'
+            ];
 
-            localStorage.setItem('nextern_name', name);
-            localStorage.setItem('nextern_email', getValue('email'));
-            localStorage.setItem('nextern_phone', getValue('phone'));
-            localStorage.setItem('nextern_college', getValue('college'));
-            localStorage.setItem('nextern_branch', branch);
-            localStorage.setItem('nextern_year', year);
-            localStorage.setItem('nextern_cgpa', getValue('cgpa'));
-            localStorage.setItem('nextern_target_company', getValue('targetCompany'));
-            localStorage.setItem('nextern_bio', getValue('bio'));
-            localStorage.setItem('nextern_skills', JSON.stringify(skills));
+            let skills = [];
 
-            updatePreview();
+            function getValue(id) {
+                return document.getElementById(id).value.trim();
+            }
 
-            const msg = document.getElementById('saveMsg');
-            msg.style.display = 'inline';
-            setTimeout(() => {
-                msg.style.display = 'none';
-            }, 1800);
-        }
+            function setValue(id, value) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.value = value || '';
+            }
 
-        function resetForm() {
-            formIds.forEach(id => setValue(id, id === 'year' ? '3rd Year' : ''));
-            skills = [];
-            renderSkills();
-            updatePreview();
-        }
+            function renderSkills() {
+                const list = document.getElementById('skillList');
+                list.innerHTML = '';
 
-        document.getElementById('addSkillBtn').addEventListener('click', () => {
-            const input = document.getElementById('skillInput');
-            const value = input.value.trim();
-            if (!value) return;
+                skills.forEach((skill, index) => {
+                    const chip = document.createElement('span');
+                    chip.className = 'skill-chip';
+                    chip.innerHTML = `${skill} <button type="button" aria-label="Remove skill">x</button>`;
+                    chip.querySelector('button').addEventListener('click', () => {
+                        skills.splice(index, 1);
+                        renderSkills();
+                        updatePreview();
+                    });
+                    list.appendChild(chip);
+                });
+            }
 
-            const exists = skills.some(skill => skill.toLowerCase() === value.toLowerCase());
-            if (!exists) {
-                skills.push(value);
+            function updatePreview() {
+                const name = getValue('fullName') || 'Rajan Garudkar';
+                const branch = getValue('branch') || 'CSE';
+                const year = getValue('year') || '3rd Year';
+                const college = getValue('college') || 'Not set';
+                const target = getValue('targetCompany') || 'Not set';
+
+                document.getElementById('navAvatar').textContent = name.charAt(0).toUpperCase();
+                document.getElementById('previewAvatar').textContent = name.charAt(0).toUpperCase();
+                document.getElementById('previewName').textContent = name;
+                document.getElementById('previewMeta').textContent = `${branch} · ${year}`;
+                document.getElementById('previewCollege').textContent = `College: ${college}`;
+                document.getElementById('previewTarget').textContent = `Target: ${target}`;
+                document.getElementById('previewSkills').textContent = `Skills: ${skills.length ? skills.join(', ') : 'Not set'}`;
+            }
+
+            async function loadProfile() {
+                // First, populate from localStorage for instant perceived speed
+                const populateFromStorage = () => {
+                    setValue('fullName', localStorage.getItem('nextern_name') || '');
+                    setValue('email', localStorage.getItem('nextern_email') || '');
+                    setValue('phone', localStorage.getItem('nextern_phone') || '');
+                    setValue('college', localStorage.getItem('nextern_college') || '');
+                    setValue('branch', localStorage.getItem('nextern_branch') || '');
+                    setValue('year', localStorage.getItem('nextern_year') || '3rd Year');
+                    setValue('cgpa', localStorage.getItem('nextern_cgpa') || '');
+                    setValue('targetCompany', localStorage.getItem('nextern_target_company') || '');
+                    setValue('bio', localStorage.getItem('nextern_bio') || '');
+
+                    try {
+                        const parsed = JSON.parse(localStorage.getItem('nextern_skills') || '[]');
+                        skills = Array.isArray(parsed) ? parsed : [];
+                    } catch (err) {
+                        skills = [];
+                    }
+                    renderSkills();
+                    updatePreview();
+                };
+
+                populateFromStorage();
+
+                // Then, fetch fresh data from the server to ensure we're synced
+                try {
+                    const res = await fetch(`${window.API_BASE}/api/user/me`, {
+                        headers: window.getAuthHeaders()
+                    });
+                    const data = await res.json();
+
+                    if (data.success && data.user) {
+                        console.log('🔄 [Profile] Fresh data fetched from server.');
+                        window.syncLocalStorage(data.user);
+                        populateFromStorage(); // Re-populate with fresh server data
+                    }
+                } catch (err) {
+                    console.error('❌ [Profile] Failed to fetch fresh profile:', err);
+                }
+            }
+
+            async function saveProfile() {
+                const btn = document.getElementById('saveBtn');
+                const originalText = btn.textContent;
+                btn.textContent = 'Saving...';
+                btn.disabled = true;
+
+                const fullName = getValue('fullName') || 'Rajan Garudkar';
+                const nameParts = fullName.split(' ');
+                const firstName = nameParts[0] || 'Rajan';
+                const lastName = nameParts.slice(1).join(' ') || 'Garudkar';
+
+                const branch = getValue('branch') || 'CSE';
+                const year = getValue('year') || '3rd Year';
+
+                const targetStr = getValue('targetCompany');
+                const targetCompanies = targetStr ? targetStr.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+                const payload = {
+                    firstName,
+                    lastName,
+                    phone: getValue('phone'),
+                    college: getValue('college'),
+                    branch: branch,
+                    year: year,
+                    cgpa: getValue('cgpa') !== '' ? parseFloat(getValue('cgpa')) : null,
+                    targetCompanies,
+                    bio: getValue('bio'),
+                    skills: skills
+                };
+
+                try {
+                    if (!window.API_BASE) {
+                        throw new Error("config.js not loaded properly.");
+                    }
+
+                    const res = await fetch(`${window.API_BASE}/api/user/me`, {
+                        method: 'PUT',
+                        headers: window.getAuthHeaders(),
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await res.json();
+
+                    if (data.success) {
+                        // Use global helper to sync everything
+                        window.syncLocalStorage(data.user || {
+                            firstName, lastName, email: getValue('email'), phone: getValue('phone'),
+                            college: getValue('college'), branch, year, cgpa: getValue('cgpa'),
+                            bio: getValue('bio'), skills, targetCompanies
+                        });
+
+                        updatePreview();
+
+                        const msg = document.getElementById('saveMsg');
+                        msg.textContent = 'Profile updated';
+                        msg.style.color = '#16A34A';
+                        msg.style.display = 'inline';
+                        setTimeout(() => {
+                            msg.style.display = 'none';
+                        }, 2000);
+                    } else {
+                        throw new Error(data.message || 'Failed to save');
+                    }
+                } catch (err) {
+                    console.error("Save Error:", err);
+                    const tokenExtracted = window.getAuthToken();
+                    const msg = document.getElementById('saveMsg');
+                    if (!tokenExtracted || tokenExtracted === 'null') {
+                        msg.textContent = 'Token is MISSING (' + tokenExtracted + ') from your browser storage!';
+                    } else {
+                        msg.textContent = err.message || 'Error saving profile';
+                    }
+                    msg.style.color = '#EF4444';
+                    msg.style.display = 'inline';
+                    setTimeout(() => {
+                        msg.style.display = 'none';
+                    }, 8000);
+                } finally {
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                }
+            }
+
+            function resetForm() {
+                formIds.forEach(id => setValue(id, id === 'year' ? '3rd Year' : ''));
+                skills = [];
                 renderSkills();
                 updatePreview();
             }
-            input.value = '';
-            input.focus();
-        });
 
-        document.getElementById('skillInput').addEventListener('keydown', event => {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                document.getElementById('addSkillBtn').click();
-            }
-        });
+            document.getElementById('addSkillBtn').addEventListener('click', () => {
+                const input = document.getElementById('skillInput');
+                const value = input.value.trim();
+                if (!value) return;
 
-        formIds.forEach(id => {
-            document.getElementById(id).addEventListener('input', updatePreview);
-            document.getElementById(id).addEventListener('change', updatePreview);
-        });
+                const exists = skills.some(skill => skill.toLowerCase() === value.toLowerCase());
+                if (!exists) {
+                    skills.push(value);
+                    renderSkills();
+                    updatePreview();
+                }
+                input.value = '';
+                input.focus();
+            });
 
-        document.getElementById('saveBtn').addEventListener('click', saveProfile);
-        document.getElementById('resetBtn').addEventListener('click', resetForm);
+            document.getElementById('skillInput').addEventListener('keydown', event => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    document.getElementById('addSkillBtn').click();
+                }
+            });
 
-        loadProfile();
-    </script>
+            formIds.forEach(id => {
+                document.getElementById(id).addEventListener('input', updatePreview);
+                document.getElementById(id).addEventListener('change', updatePreview);
+            });
+
+            document.getElementById('saveBtn').addEventListener('click', saveProfile);
+            document.getElementById('resetBtn').addEventListener('click', resetForm);
+
+            window.handleLogout = function() {
+                window.clearLocalSession();
+                window.location.href = 'login.html';
+            };
+
+            loadProfile();
+        </script>
 </body>
 
 </html>

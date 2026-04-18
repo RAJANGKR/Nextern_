@@ -1,0 +1,110 @@
+/* ================================================================
+   GLOBAL DARK THEME OVERRIDES
+   Applied to body.dark-theme
+================================================================ */
+
+body.dark-theme {
+    /* SAAS THEME (DARK BLUE SLATE) */
+    --bg: #0B1120;             /* Navy slate bg */
+    --bg-white: #111827;       /* Navy slate panels */
+    --bg-hover: #1F2937;       /* Slightly lighter hover */
+    
+    --text: #F9FAFB;           /* Extremely light text */
+    --text-soft: #9CA3AF;
+    --text-muted: #6B7280;
+    
+    --border: #374151;         /* Subtly visible dark borders */
+    --border-lit: #4B5563;
+    
+    --accent: #3B82F6;         /* Bright blue - highly visible on dark */
+    --accent-hover: #60A5FA;   /* Lighter blue */
+    --accent-light: rgba(59, 130, 246, 0.15);
+    
+    /* Utilities */
+    --green: #10B981;
+    --green-light: rgba(16, 185, 129, 0.15);
+    
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Specific overrides for hardcoded backgrounds in dark mode */
+body.dark-theme .story-card,
+body.dark-theme .comments-section,
+body.dark-theme .comment-bubble,
+body.dark-theme .peer-row,
+body.dark-theme .drive-highlight,
+body.dark-theme .r-card,
+body.dark-theme .sidebar-profile-card,
+body.dark-theme .sidebar-nav-card,
+body.dark-theme .create-post,
+body.dark-theme .feed-tabs {
+    background: var(--bg-card);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+body.dark-theme .feed-post,
+body.dark-theme .post-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border) !important;
+}
+
+body.dark-theme .comment-input,
+body.dark-theme .create-post-btn,
+body.dark-theme input {
+    background: var(--bg);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+body.dark-theme .top-nav,
+body.dark-theme .navbar,
+body.dark-theme .topnav {
+    background: rgba(30, 41, 59, 0.85);
+    /* Frosty dark 800 */
+    border-bottom: 1px solid var(--border);
+}
+
+body.dark-theme .hero-bg .bg-grid {
+    background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+}
+
+body.dark-theme .rpd-todo {
+    border-color: var(--border);
+    background: var(--bg);
+    color: var(--text-muted);
+}
+
+/* Theme Toggle Button Styles */
+.theme-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    background: var(--bg-hover);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: background 0.2s;
+    border: 1px solid var(--border);
+    font-family: inherit;
+}
+
+.theme-btn:hover {
+    background: var(--bg-card);
+}
+
+.theme-toggle-icon {
+    font-size: 1rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.theme-toggle-icon:hover {
+    transform: scale(1.1);
+}

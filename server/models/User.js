@@ -58,6 +58,7 @@ const UserSchema = new mongoose.Schema({
     graduationYear: { type: Number },
 
     // ── CAREER INFO ──
+    bio: { type: String, trim: true },
     skills: [{ type: String }],
     targetCompanies: [{ type: String }],
     linkedin: { type: String, trim: true },
@@ -75,6 +76,11 @@ const UserSchema = new mongoose.Schema({
     // If googleId exists, password is not required
     googleId: { type: String },
     avatar: { type: String },   // profile picture URL (from Google)
+
+    // ── ADMIN FEATURES ──
+    isVerified: { type: Boolean, default: false },
+    lastActive: { type: Date },
+    isProfileComplete: { type: Boolean, default: false },
 
     // ── TIMESTAMPS ──
     // createdAt and updatedAt are added automatically by { timestamps: true }

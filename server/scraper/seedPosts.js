@@ -4,7 +4,7 @@
    Only runs if posts collection is empty
 ================================================================ */
 
-const Post = require('../models/post');
+const Post = require('../models/Post');
 const User = require('../models/User');
 
 async function seedPosts() {

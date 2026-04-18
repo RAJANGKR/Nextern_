@@ -5,67 +5,49 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home — Nextern</title>
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@800&display=swap" rel="stylesheet" />
+    
     <style>
-        /* ================================================================
-       NEXTERN — feed.css
-       3-column LinkedIn-style feed layout
-       Left: nav sidebar (light)
-       Centre: feed posts
-       Right: profile + drives + roadmap
-    ================================================================ */
-
         :root {
+            /* Palette */
             --accent: #6C63FF;
-            --accent-light: #EEF2FF;
-            --green: #22C55E;
-            --green-light: #F0FDF4;
-            --amber: #F59E0B;
-            --amber-light: #FFF7ED;
-            --blue: #3B82F6;
-            --blue-light: #EFF6FF;
-            --red: #EF4444;
-
-            --bg: #F3F4F8;
+            --accent-soft: #EEF2FF;
+            --bg-body: #F5F6FA;
             --bg-white: #FFFFFF;
-            --text: #0F172A;
-            --text-soft: #64748B;
-            --text-muted: #94A3B8;
             --border: #E2E8F0;
-
-            --font-head: 'Syne', sans-serif;
-            --font-body: 'DM Sans', sans-serif;
-
-            --radius-sm: 6px;
+            --text-dark: #0F172A;
+            --text-gray: #64748B;
+            --text-muted: #94A3B8;
+            --red: #EF4444;
+            --green: #22C55E;
+            
+            /* Sizing & Radius */
             --radius-md: 12px;
-            --radius-lg: 16px;
             --radius-pill: 100px;
-
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.07);
+            --nav-height: 60px;
+            --sidebar-w: 220px;
+            --right-panel-w: 280px;
+            
+            /* Shadow */
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
-        *,
-        *::before,
-        *::after {
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        html {
-            font-size: 16px;
-        }
-
         body {
-            font-family: var(--font-body);
-            background: var(--bg);
-            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-dark);
             min-height: 100vh;
+            line-height: 1.5;
         }
 
         a {
@@ -73,2063 +55,920 @@
             color: inherit;
         }
 
-        ul {
-            list-style: none;
-        }
-
         button {
-            font-family: var(--font-body);
+            font-family: inherit;
             cursor: pointer;
             border: none;
             background: none;
+            transition: all 0.2s;
         }
 
-        /* ================================================================
-       TOP NAVBAR
-       Fixed at top. Logo left, search centre, icons right.
-       TEACH: position:fixed + z-index keeps it above all content.
-       We add padding-top to body so content doesn't hide under it.
-    ================================================================ */
-        .topnav {
+        /* ── TOP NAVBAR ── */
+        .navbar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 56px;
+            height: var(--nav-height);
             background: var(--bg-white);
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             padding: 0 24px;
-            gap: 16px;
-            z-index: 100;
-            box-shadow: var(--shadow-sm);
+            z-index: 1000;
         }
 
         .nav-logo {
-            font-family: var(--font-head);
+            font-family: 'Syne', sans-serif;
             font-weight: 800;
-            font-size: 1.3rem;
-            color: var(--text);
-            flex-shrink: 0;
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            margin-right: 40px;
         }
 
         .nav-logo span {
             color: var(--accent);
         }
 
-        /* Search bar in navbar */
         .nav-search {
             flex: 1;
-            max-width: 320px;
+            max-width: 400px;
             position: relative;
         }
 
         .nav-search input {
             width: 100%;
-            padding: 8px 14px 8px 36px;
-            border: 1.5px solid var(--border);
+            padding: 8px 16px 8px 40px;
+            background: #F8FAFC;
+            border: 1px solid var(--border);
             border-radius: var(--radius-pill);
-            font-family: var(--font-body);
-            font-size: 0.85rem;
-            color: var(--text);
-            background: var(--bg);
             outline: none;
-            transition: border-color 0.2s;
+            font-size: 0.9rem;
         }
 
-        .nav-search input:focus {
-            border-color: var(--accent);
-        }
-
-        .nav-search-icon {
+        .search-icon {
             position: absolute;
-            left: 12px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 0.95rem;
-            opacity: 0.4;
+            color: var(--text-muted);
+            width: 18px;
         }
 
-        /* Nav links in centre */
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 4px;
-            margin-left: auto;
+            gap: 20px;
+            margin: 0 auto;
         }
 
-        .nav-link-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            padding: 6px 14px;
-            border-radius: var(--radius-sm);
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: color 0.15s;
+        .nav-link {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            padding: 4px 0;
             position: relative;
         }
 
-        .nav-link-item:hover {
-            color: var(--text);
-        }
-
-        .nav-link-item.active {
+        .nav-link.active {
             color: var(--accent);
-            border-bottom: 2px solid var(--accent);
         }
 
-        .nav-link-icon {
-            font-size: 1.1rem;
-        }
-
-        /* Notification badge */
-        .nav-badge {
+        .nav-link.active::after {
+            content: '';
             position: absolute;
-            top: 2px;
-            right: 8px;
-            background: var(--red);
-            color: #fff;
-            font-size: 0.6rem;
-            font-weight: 700;
-            border-radius: var(--radius-pill);
-            padding: 1px 5px;
-            min-width: 16px;
-            text-align: center;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent);
         }
 
-        /* Right side — avatar + dropdown */
         .nav-right {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-left: 8px;
+            gap: 16px;
+        }
+
+        .dark-toggle {
+            color: var(--text-gray);
+            display: flex;
+            align-items: center;
         }
 
         .nav-avatar {
             width: 32px;
             height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #4C1D95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.78rem;
-            color: #fff;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-
-        /* ================================================================
-       PAGE LAYOUT
-       3 columns: left sidebar | feed | right sidebar
-       TEACH: We use CSS Grid with named column sizes.
-       The centre feed (1fr) grows to fill remaining space.
-    ================================================================ */
-        .feed-layout {
-            display: grid;
-            grid-template-columns: 220px 1fr 300px;
-            gap: 20px;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 76px 16px 40px;
-            align-items: start;
-        }
-
-        /* Sticky sidebars — they stay while feed scrolls */
-        .left-sidebar,
-        .right-sidebar {
-            position: sticky;
-            top: 72px;
-        }
-
-
-        /* ================================================================
-       LEFT SIDEBAR — Navigation
-       Light white card with nav links
-    ================================================================ */
-        .left-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        /* User mini card at top of left sidebar */
-        .sidebar-profile-card {
-            background: var(--bg-white);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 4px;
-        }
-
-        /* Cover banner */
-        .profile-card-banner {
-            height: 52px;
-            background: linear-gradient(135deg, #6C63FF 0%, #4C1D95 100%);
-        }
-
-        .profile-card-body {
-            padding: 0 16px 16px;
-            position: relative;
-        }
-
-        .profile-card-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #4C1D95);
-            border: 3px solid #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1rem;
-            color: #fff;
-            margin-top: -24px;
-            margin-bottom: 8px;
-        }
-
-        .profile-card-name {
-            font-family: var(--font-head);
-            font-weight: 700;
-            font-size: 0.92rem;
-            margin-bottom: 2px;
-        }
-
-        .profile-card-meta {
-            font-size: 0.75rem;
-            color: var(--text-soft);
-            margin-bottom: 12px;
-        }
-
-        .profile-card-stats {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            border-top: 1px solid var(--border);
-            padding-top: 12px;
-        }
-
-        .profile-stat-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-        }
-
-        .profile-stat-row span:first-child {
-            color: var(--text-soft);
-        }
-
-        .profile-stat-row span:last-child {
-            font-weight: 600;
-            color: var(--accent);
-        }
-
-        /* Nav links card */
-        .sidebar-nav-card {
-            background: var(--bg-white);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 8px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .sidebar-nav-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 9px 12px;
-            border-radius: var(--radius-sm);
-            font-size: 0.85rem;
-            color: var(--text-soft);
-            transition: background 0.15s, color 0.15s;
-            cursor: pointer;
-        }
-
-        .sidebar-nav-link:hover {
-            background: var(--bg);
-            color: var(--text);
-        }
-
-        .sidebar-nav-link.active {
-            background: var(--accent-light);
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        .sidebar-nav-icon {
-            font-size: 1rem;
-            width: 20px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        /* Small badge on nav item */
-        .snav-badge {
-            margin-left: auto;
             background: var(--accent);
-            color: #fff;
-            font-size: 0.62rem;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-weight: 700;
-            border-radius: var(--radius-pill);
-            padding: 1px 6px;
+            font-size: 0.85rem;
         }
 
+        /* ── LAYOUT GRID ── */
+        .layout-grid {
+            display: grid;
+            grid-template-columns: var(--sidebar-width, 220px) 1fr 280px;
+            gap: 24px;
+            max-width: 1400px;
+            margin: calc(var(--nav-height) + 24px) auto 40px;
+            padding: 0 24px;
+            align-items: start;
+            transition: grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-        /* ================================================================
-       CENTRE FEED
-    ================================================================ */
+        /* Sidebar mount */
+        .sidebar-container {
+            position: sticky;
+            top: calc(var(--nav-height) + 24px);
+        }
+
+        /* ── CENTRE FEED ── */
         .feed-centre {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 20px;
             min-width: 0;
         }
 
-        /* Create post box */
+        /* Create Post */
         .create-post {
             background: var(--bg-white);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 14px 16px;
-            box-shadow: var(--shadow-sm);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .create-post-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #4C1D95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.82rem;
-            color: #fff;
-            flex-shrink: 0;
-        }
-
-        .create-post-btn {
-            flex: 1;
-            padding: 9px 16px;
-            border: 1.5px solid var(--border);
-            border-radius: var(--radius-pill);
-            background: var(--bg);
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            cursor: text;
-            text-align: left;
-            transition: border-color 0.2s;
-            font-family: var(--font-body);
-        }
-
-        .create-post-btn:hover {
-            border-color: var(--accent);
-        }
-
-
-        /* Feed filter tabs */
-        .feed-tabs {
-            background: var(--bg-white);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 4px 8px;
-            display: flex;
-            gap: 4px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .feed-tab {
-            padding: 7px 14px;
-            border-radius: var(--radius-sm);
-            font-size: 0.82rem;
-            font-weight: 500;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: background 0.15s, color 0.15s;
-            border: none;
-            background: none;
-            font-family: var(--font-body);
-        }
-
-        .feed-tab:hover {
-            color: var(--text);
-            background: var(--bg);
-        }
-
-        .feed-tab.active {
-            background: var(--accent-light);
-            color: var(--accent);
-        }
-
-        /* ================================================================
-       STORIES ROW
-    ================================================================ */
-        .stories-row {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            scrollbar-width: none;
-        }
-
-        .stories-row::-webkit-scrollbar {
-            display: none;
-        }
-
-        .story-card {
-            width: 90px;
-            height: 130px;
             border-radius: var(--radius-md);
-            background: #fff;
-            flex-shrink: 0;
-            position: relative;
-            overflow: hidden;
+            padding: 20px;
             box-shadow: var(--shadow-sm);
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .story-card:hover {
-            transform: scale(1.03);
-            box-shadow: var(--shadow-md);
+        .cp-top {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 16px;
         }
 
-        .story-bg {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1));
-            z-index: 1;
-        }
-
-        .story-avatar {
-            width: 30px;
-            height: 30px;
+        .cp-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-soft);
+            color: var(--accent);
             border-radius: 50%;
-            border: 2px solid var(--accent);
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            z-index: 2;
-            background: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
             font-weight: 700;
-            color: var(--accent);
         }
 
-        .story-text {
-            position: absolute;
-            bottom: 8px;
-            left: 8px;
-            right: 8px;
-            color: #fff;
-            font-size: 0.68rem;
-            font-weight: 600;
-            z-index: 2;
-            line-height: 1.2;
-        }
-
-        .story-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            inset: 0;
-            opacity: 0.7;
-            background: var(--text-soft);
-        }
-
-        /* Post Hover Lift & Animations */
-        @keyframes heartPop {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.3);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .heart-animate {
-            animation: heartPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-            display: inline-block;
-        }
-
-        /* Create Post Enhancements */
-        .create-post-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid var(--border);
-        }
-
-        .cp-action {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.82rem;
-            color: var(--text-soft);
-            cursor: pointer;
-            padding: 6px 10px;
-            border-radius: var(--radius-sm);
-            transition: background 0.15s;
-        }
-
-        .cp-action:hover {
-            background: var(--bg);
-            color: var(--text);
-        }
-
-        /* Comments Section */
-        .comments-section {
-            border-top: 1px solid var(--border);
-            padding: 12px 16px;
-            background: #FAFAFA;
-            display: none;
-        }
-
-        .comments-section.open {
-            display: block;
-            animation: fadeUp 0.2s ease forwards;
-        }
-
-        .comment-input-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .comment-input {
+        .cp-input {
             flex: 1;
-            padding: 8px 12px;
+            padding: 12px 16px;
+            background: #F8FAFC;
             border: 1px solid var(--border);
             border-radius: var(--radius-pill);
             outline: none;
-            font-family: inherit;
-            font-size: 0.82rem;
-            background: var(--bg-white);
+            font-size: 0.95rem;
+            color: var(--text-dark);
         }
 
-        .comment-input:focus {
-            border-color: var(--accent);
-        }
-
-        .comment-btn {
-            background: var(--accent);
-            color: #fff;
-            border-radius: var(--radius-pill);
-            padding: 0 14px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .comment-item {
+        .cp-bottom {
             display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            font-size: 0.82rem;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            border-top: 1px solid #F1F5F9;
         }
 
-        .comment-bubble {
-            background: var(--bg-white);
-            padding: 8px 12px;
-            border-radius: 0 12px 12px 12px;
-            border: 1px solid var(--border);
-            color: var(--text);
+        .cp-actions {
+            display: flex;
+            gap: 16px;
         }
 
-        .comment-bubble strong {
-            display: block;
-            font-size: 0.78rem;
-            margin-bottom: 2px;
-            color: var(--text);
+        .cp-btn-action {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            font-weight: 500;
         }
 
-        /* Image inside post */
-        .post-image {
-            width: calc(100% + 32px);
-            margin: 12px -16px 0;
-            max-height: 400px;
-            object-fit: cover;
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
+        .cp-btn-action:hover {
+            color: var(--accent);
         }
 
-        /* ================================================================
-       FEED POST CARD
-       TEACH: Each post follows the same structure:
-       - Header: avatar + name + meta + type badge
-       - Body: content text
-       - Footer: like/comment/share actions
-       This pattern is identical to LinkedIn, Twitter, etc.
-    ================================================================ */
+        .btn-post {
+            background: var(--accent);
+            color: white;
+            padding: 8px 24px;
+            border-radius: var(--radius-pill);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-tab {
+            padding: 8px 20px;
+            border-radius: var(--radius-pill);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-gray);
+            background: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-tab.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Post Card */
         .post-card {
             background: var(--bg-white);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-md);
+            padding: 20px;
             box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            animation: fadeUp 0.3s ease both;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .post-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Stagger animation for each card */
-        .post-card:nth-child(1) {
-            animation-delay: 0.05s;
-        }
-
-        .post-card:nth-child(2) {
-            animation-delay: 0.1s;
-        }
-
-        .post-card:nth-child(3) {
-            animation-delay: 0.15s;
-        }
-
-        .post-card:nth-child(4) {
-            animation-delay: 0.2s;
-        }
-
-        .post-card:nth-child(5) {
-            animation-delay: 0.25s;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
 
         .post-header {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .post-user {
+            display: flex;
             gap: 12px;
-            padding: 16px 16px 0;
-        }
-
-        /* Post avatar — different colours per post type */
-        .post-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
             align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.88rem;
-            color: #fff;
-            flex-shrink: 0;
         }
 
-        .pa-purple {
-            background: linear-gradient(135deg, #6C63FF, #4C1D95);
-        }
-
-        .pa-green {
-            background: linear-gradient(135deg, #22C55E, #15803D);
-        }
-
-        .pa-blue {
-            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
-        }
-
-        .pa-amber {
-            background: linear-gradient(135deg, #F59E0B, #B45309);
-        }
-
-        .pa-nextern {
-            background: linear-gradient(135deg, #6C63FF, #EC4899);
-        }
-
-        .post-meta {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .post-author {
-            font-weight: 600;
-            font-size: 0.88rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        /* Post type badge */
-        .post-type {
-            font-size: 0.65rem;
-            font-weight: 600;
-            border-radius: var(--radius-pill);
-            padding: 2px 8px;
-        }
-
-        .type-drive {
-            background: var(--green-light);
-            color: #16A34A;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-        }
-
-        .type-peer {
-            background: var(--blue-light);
-            color: var(--blue);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .type-tip {
-            background: var(--amber-light);
-            color: #D97706;
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .type-notif {
-            background: var(--accent-light);
-            color: var(--accent);
-            border: 1px solid rgba(108, 99, 255, 0.2);
-        }
-
-        .post-time {
-            font-size: 0.73rem;
-            color: var(--text-muted);
-            margin-top: 1px;
-        }
-
-        /* 3-dot menu */
-        .post-menu {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 4px;
-            border-radius: var(--radius-sm);
-            transition: background 0.15s;
-            flex-shrink: 0;
-        }
-
-        .post-menu:hover {
-            background: var(--bg);
-        }
-
-        /* Post body */
-        .post-body {
-            padding: 12px 16px 14px;
-            font-size: 0.88rem;
-            line-height: 1.7;
-            color: var(--text);
-        }
-
-        .post-body strong {
-            color: var(--accent);
-        }
-
-        /* Highlighted drive block inside post */
-        .drive-highlight {
-            margin-top: 12px;
-            padding: 12px 14px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            border-left: 3px solid var(--green);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .drive-highlight-logo {
+        .u-avatar {
             width: 38px;
             height: 38px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.82rem;
-            color: #fff;
-            flex-shrink: 0;
-        }
-
-        .drive-highlight-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .drive-highlight-company {
-            font-size: 0.88rem;
-            font-weight: 600;
-        }
-
-        .drive-highlight-role {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 1px;
-        }
-
-        .drive-highlight-btn {
-            padding: 6px 14px;
-            background: var(--accent);
-            color: #fff;
-            border-radius: var(--radius-pill);
-            font-size: 0.78rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.15s;
-            white-space: nowrap;
-            border: none;
-            font-family: var(--font-body);
-        }
-
-        .drive-highlight-btn:hover {
-            background: #5A52E0;
-        }
-
-        /* Peer activity block */
-        .peer-activity {
-            margin-top: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .peer-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 12px;
-            background: var(--bg);
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
-            font-size: 0.82rem;
-        }
-
-        .peer-avatar-sm {
-            width: 28px;
-            height: 28px;
             border-radius: 50%;
+            background: var(--accent-soft);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 0.7rem;
-            color: #fff;
-            flex-shrink: 0;
-        }
-
-        .peer-name {
-            font-weight: 500;
-        }
-
-        .peer-action {
-            color: var(--text-soft);
-        }
-
-        .peer-company {
-            font-weight: 600;
             color: var(--accent);
         }
 
-        .peer-time {
-            margin-left: auto;
-            font-size: 0.72rem;
+        .u-info .u-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .u-info .u-meta {
+            font-size: 0.75rem;
             color: var(--text-muted);
         }
 
-        /* Post footer actions */
+        .post-type-badge {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .post-content {
+            font-size: 0.95rem;
+            color: #334155;
+            white-space: pre-wrap;
+        }
+
+        /* Drive Box in Post */
+        .drive-highlight {
+            background: #F8FAFC;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .dh-info .dh-company {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .dh-info .dh-role {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+        }
+
+        .dh-pkg {
+            font-weight: 700;
+            color: var(--green);
+            font-size: 0.9rem;
+        }
+
+        .btn-apply-small {
+            background: var(--accent);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
         .post-footer {
             display: flex;
             align-items: center;
-            gap: 2px;
-            padding: 8px 12px;
-            border-top: 1px solid var(--border);
+            gap: 20px;
+            padding-top: 14px;
+            border-top: 1px solid #F1F5F9;
         }
 
         .post-action {
             display: flex;
             align-items: center;
             gap: 6px;
-            padding: 7px 12px;
-            border-radius: var(--radius-sm);
-            font-size: 0.8rem;
-            color: var(--text-soft);
-            cursor: pointer;
-            transition: background 0.15s, color 0.15s;
+            font-size: 0.85rem;
+            color: var(--text-gray);
             font-weight: 500;
-            border: none;
-            background: none;
-            font-family: var(--font-body);
         }
 
         .post-action:hover {
-            background: var(--bg);
-            color: var(--text);
+            color: var(--accent);
         }
 
         .post-action.liked {
-            color: var(--accent);
+            color: var(--red);
         }
 
-        .post-action-icon {
-            font-size: 0.95rem;
+        /* Skeletons */
+        .skeleton {
+            background: #E2E8F0;
+            background: linear-gradient(90deg, #E2E8F0 25%, #F1F5F9 50%, #E2E8F0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-pulse 1.5s infinite;
+            border-radius: 4px;
         }
 
-        .is-hidden {
-            display: none !important;
+        @keyframes skeleton-pulse {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
 
-        .feed-empty-state {
-            background: var(--bg-white);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
-            padding: 18px;
-            font-size: 0.84rem;
-            color: var(--text-soft);
-            text-align: center;
-        }
-
-
-        /* ================================================================
-       RIGHT SIDEBAR
-       Profile card + Upcoming drives + Roadmap progress
-    ================================================================ */
-        .right-sidebar {
+        .skeleton-card {
+            height: 180px;
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            max-height: calc(100vh - 90px);
-            overflow-y: auto;
-            scrollbar-width: none;
+            gap: 12px;
         }
 
-        .right-sidebar::-webkit-scrollbar {
-            display: none;
+        /* ── RIGHT PANEL ── */
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: sticky;
+            top: calc(var(--nav-height) + 24px);
         }
 
-        /* Shared card base */
-        .r-card {
+        .widget-card {
             background: var(--bg-white);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-md);
+            padding: 20px;
             box-shadow: var(--shadow-sm);
-            overflow: hidden;
         }
 
-        .r-card-header {
+        .w-header {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            padding: 14px 16px 10px;
-            border-bottom: 1px solid var(--border);
+            margin-bottom: 16px;
         }
 
-        .r-card-title {
-            font-family: var(--font-head);
-            font-weight: 700;
-            font-size: 0.88rem;
-            letter-spacing: -0.2px;
-        }
-
-        .r-card-link {
-            font-size: 0.75rem;
-            color: var(--accent);
-            cursor: pointer;
-        }
-
-        .r-card-link:hover {
-            text-decoration: underline;
-        }
-
-        /* ── RIGHT PROFILE CARD ── */
-        .r-profile-banner {
-            height: 60px;
-            background: linear-gradient(135deg, #6C63FF 0%, #4C1D95 60%, #EC4899 100%);
-        }
-
-        .r-profile-body {
-            padding: 0 16px 16px;
-        }
-
-        .r-profile-avatar {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #4C1D95);
-            border: 3px solid #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1rem;
-            color: #fff;
-            margin-top: -26px;
-            margin-bottom: 8px;
-        }
-
-        .r-profile-name {
-            font-family: var(--font-head);
-            font-weight: 700;
+        .w-header h3 {
             font-size: 0.95rem;
-            margin-bottom: 2px;
+            font-weight: 700;
         }
 
-        .r-profile-meta {
+        .w-link {
             font-size: 0.75rem;
-            color: var(--text-soft);
-            margin-bottom: 14px;
+            font-weight: 600;
+            color: var(--accent);
         }
 
-        /* Readiness mini ring in right card */
-        .r-readiness {
+        .drive-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 10px 12px;
-            background: var(--accent-light);
-            border-radius: var(--radius-md);
-            margin-bottom: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #F1F5F9;
         }
 
-        .r-ring-wrap {
-            position: relative;
-            width: 44px;
-            height: 44px;
-            flex-shrink: 0;
-        }
-
-        .r-ring-wrap svg {
-            position: absolute;
-            inset: 0;
-        }
-
-        .r-ring-score {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-head);
-            font-weight: 800;
-            font-size: 0.78rem;
-            color: var(--accent);
-        }
-
-        .r-readiness-text {
-            flex: 1;
-        }
-
-        .r-readiness-label {
-            font-size: 0.72rem;
-            color: var(--text-soft);
-            display: block;
-        }
-
-        .r-readiness-status {
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: var(--accent);
-            display: block;
-            margin-top: 1px;
-        }
-
-        .r-profile-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .r-btn {
-            flex: 1;
-            padding: 8px;
-            border-radius: var(--radius-sm);
-            font-size: 0.78rem;
-            font-weight: 500;
-            text-align: center;
-            cursor: pointer;
-            transition: background 0.15s;
-            font-family: var(--font-body);
-            border: none;
-        }
-
-        .r-btn-primary {
-            background: var(--accent);
-            color: #fff;
-        }
-
-        .r-btn-primary:hover {
-            background: #5A52E0;
-        }
-
-        .r-btn-secondary {
-            background: var(--bg);
-            color: var(--text-soft);
-            border: 1px solid var(--border);
-        }
-
-        .r-btn-secondary:hover {
-            border-color: #aaa;
-        }
-
-        /* ── RIGHT DRIVES ── */
-        .r-drives-list {
-            padding: 4px 0;
-        }
-
-        .r-drive-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 16px;
-            border-bottom: 1px solid var(--border);
-            cursor: pointer;
-            transition: background 0.15s;
-        }
-
-        .r-drive-row:last-child {
+        .drive-item:last-child {
             border-bottom: none;
         }
 
-        .r-drive-row:hover {
-            background: var(--bg);
-        }
-
-        .r-drive-logo {
-            width: 32px;
-            height: 32px;
+        .co-badge {
+            width: 36px;
+            height: 36px;
+            background: var(--accent-soft);
+            color: var(--accent);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 0.75rem;
-            color: #fff;
-            flex-shrink: 0;
+            font-weight: 800;
+            font-size: 0.9rem;
         }
 
-        .r-drive-info {
+        .di-info {
             flex: 1;
             min-width: 0;
         }
 
-        .r-drive-company {
-            font-size: 0.82rem;
+        .di-name {
             font-weight: 600;
+            font-size: 0.85rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .r-drive-role {
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            margin-top: 1px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .r-drive-pill {
-            font-size: 0.62rem;
-            font-weight: 600;
-            border-radius: var(--radius-pill);
-            padding: 2px 7px;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .dp-open {
-            background: var(--green-light);
-            color: #16A34A;
-        }
-
-        .dp-closing {
-            background: var(--amber-light);
-            color: #D97706;
-        }
-
-        /* ── RIGHT ROADMAP ── */
-        .r-roadmap-body {
-            padding: 12px 16px 16px;
-        }
-
-        .r-roadmap-target {
+        .di-role {
             font-size: 0.75rem;
-            color: var(--text-soft);
-            margin-bottom: 10px;
-        }
-
-        .r-roadmap-target strong {
-            color: var(--accent);
-        }
-
-        .r-overall-bar {
-            height: 5px;
-            background: var(--bg);
-            border-radius: var(--radius-pill);
+            color: var(--text-muted);
+            white-space: nowrap;
             overflow: hidden;
-            border: 1px solid var(--border);
-            margin-bottom: 14px;
+            text-overflow: ellipsis;
         }
 
-        .r-overall-fill {
-            height: 100%;
-            width: 0;
-            background: linear-gradient(90deg, var(--accent), var(--green));
-            border-radius: var(--radius-pill);
-            transition: width 1.1s ease;
+        .di-days {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--red);
+            background: #FEF2F2;
+            padding: 2px 6px;
+            border-radius: 4px;
         }
 
-        .r-phase-list {
+        /* Roadmap Widget */
+        .roadmap-summary {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 12px;
         }
 
-        .r-phase-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.78rem;
-        }
-
-        .r-phase-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.6rem;
+        .rs-company {
+            font-size: 0.85rem;
             font-weight: 700;
-            flex-shrink: 0;
+            color: var(--text-dark);
         }
 
-        .rpd-done {
-            background: var(--green);
-            color: #fff;
+        .rs-progress {
+            background: #F1F5F9;
+            height: 6px;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
-        .rpd-active {
+        .rs-bar {
+            height: 100%;
             background: var(--accent);
-            color: #fff;
+            width: 0%;
+            transition: width 1s ease;
         }
 
-        .rpd-todo {
-            background: var(--bg);
-            border: 1.5px solid var(--border);
-            color: var(--text-muted);
+        .rs-phases {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            margin-top: 4px;
         }
 
-        .r-phase-name {
-            flex: 1;
-            color: var(--text-soft);
+        .p-dot {
+            height: 4px;
+            background: #E2E8F0;
+            border-radius: 2px;
         }
 
-        .r-phase-active .r-phase-name {
-            color: var(--text);
-            font-weight: 500;
+        .p-dot.done {
+            background: var(--accent);
         }
 
-        .r-phase-pct {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        .r-phase-done .r-phase-pct {
-            color: var(--green);
-        }
-
-        .r-phase-active .r-phase-pct {
-            color: var(--accent);
-        }
-
-        .r-roadmap-cta {
-            display: block;
-            margin-top: 14px;
+        .error-state {
             text-align: center;
-            padding: 8px;
-            background: var(--accent-light);
-            color: var(--accent);
-            border-radius: var(--radius-sm);
-            font-size: 0.8rem;
-            font-weight: 500;
-            transition: background 0.15s;
-            cursor: pointer;
+            padding: 40px;
+            background: white;
+            border-radius: var(--radius-md);
         }
 
-        .r-roadmap-cta:hover {
-            background: #E0DCFF;
+        .btn-retry {
+            margin-top: 12px;
+            background: var(--accent);
+            color: white;
+            padding: 8px 20px;
+            border-radius: var(--radius-pill);
         }
 
-
-        /* ================================================================
-       RESPONSIVE
-    ================================================================ */
-        @media (max-width: 960px) {
-            .feed-layout {
-                grid-template-columns: 200px 1fr;
-            }
-
-            .right-sidebar {
-                display: none;
-            }
-        }
-
-        @media (max-width: 680px) {
-            .feed-layout {
-                grid-template-columns: 1fr;
-            }
-
-            .left-sidebar {
-                display: none;
-            }
-
-            .nav-search {
-                display: none;
-            }
-        }
+        .is-hidden { display: none; }
     </style>
 </head>
 
 <body>
 
-    <!-- ================================================================
-    TOP NAVBAR
-  ================================================================ -->
-    <nav class="topnav">
+    <nav class="navbar">
         <a href="feed.html" class="nav-logo">Nex<span>tern</span></a>
-
+        
         <div class="nav-search">
-            <span class="nav-search-icon">⌕</span>
-            <input id="navSearchInput" type="text" placeholder="Search posts, drives, companies..." />
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+            <input type="text" placeholder="Search posts, drives...">
         </div>
 
         <div class="nav-links">
-            <a href="feed.html" class="nav-link-item active">
-                Home
-            </a>
-            <a href="drives.html" class="nav-link-item">
-                Drives
-                <span class="nav-badge">3</span>
-            </a>
-            <a href="roadmap.html" class="nav-link-item">
-                Roadmap
-            </a>
-            <a href="prep-hub.html" class="nav-link-item">
-                Prep
-            </a>
-            <a href="seniors.html" class="nav-link-item">
-                Seniors
-            </a>
+            <a href="feed.html" class="nav-link active">Home</a>
+            <a href="drives.html" class="nav-link">Drives</a>
+            <a href="roadmap.html" class="nav-link">Roadmap</a>
+            <a href="prep-hub.html" class="nav-link">Prep Hub</a>
+            <a href="seniors.html" class="nav-link">Seniors</a>
         </div>
 
         <div class="nav-right">
-            <a href="../profile.html" class="nav-avatar" id="navAvatar">R</a>
+            <button class="dark-toggle" id="darkToggle">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:20px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                </svg>
+            </button>
+            <div id="navAvatar" class="nav-avatar">U</div>
         </div>
     </nav>
 
+    <div class="layout-grid">
+        <!-- LEFT SIDEBAR -->
+        <div class="sidebar-container">
+            <div id="sidebar-mount"></div>
+        </div>
 
-    <!-- ================================================================
-    3-COLUMN LAYOUT
-  ================================================================ -->
-    <div class="feed-layout">
-
-        <!-- ══════════════════════════
-         LEFT SIDEBAR
-    ══════════════════════════ -->
-        <aside class="left-sidebar">
-
-            <!-- Mini profile card -->
-            <div class="sidebar-profile-card">
-                <div class="profile-card-banner"></div>
-                <div class="profile-card-body">
-                    <div class="profile-card-avatar" id="sidebarAvatar">Rjn</div>
-                    <div class="profile-card-name" id="sidebarName">Rajan Garudkar</div>
-                    <div class="profile-card-meta" id="sidebarMeta">CSE · 3rd Year</div>
-                    <div class="profile-card-stats">
-                        <div class="profile-stat-row">
-                            <span>Profile views</span>
-                            <span>24</span>
-                        </div>
-                        <div class="profile-stat-row">
-                            <span>Applications</span>
-                            <span>3</span>
-                        </div>
-                        <div class="profile-stat-row">
-                            <span>Readiness</span>
-                            <span>68/100</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Nav card -->
-            <div class="sidebar-nav-card">
-                <a href="feed.html" class="sidebar-nav-link active">
-                    Feed
-                </a>
-                <a href="drives.html" class="sidebar-nav-link">
-                    Drives
-                    <span class="snav-badge">3</span>
-                </a>
-                <a href="roadmap.html" class="sidebar-nav-link">
-                    My Roadmap
-                </a>
-                <a href="prep-hub.html" class="sidebar-nav-link">
-                    Prep Hub
-                </a>
-                <a href="seniors.html" class="sidebar-nav-link">
-                    Seniors
-                </a>
-                <a href="dashboard.html" class="sidebar-nav-link">
-                    Dashboard
-                </a>
-                <a href="admin-drives.html" class="sidebar-nav-link">
-                    Admin Panel
-                </a>
-                <a href="../login.html" class="sidebar-nav-link" onclick="handleLogout()">
-                    Logout
-                </a>
-            </div>
-
-        </aside>
-
-
-        <!-- ══════════════════════════
-         CENTRE FEED
-    ══════════════════════════ -->
+        <!-- CENTRE FEED -->
         <main class="feed-centre">
-
-            <!-- Stories Row -->
-            <div class="stories-row">
-                <div class="story-card">
-                    <div class="story-bg"></div>
-                    <div class="story-img" style="background: linear-gradient(135deg, #6C63FF, #4C1D95)"></div>
-                    <div class="story-avatar">N</div>
-                    <div class="story-text">Google Deadlines</div>
+            <!-- Create Post Box -->
+            <div class="create-post shadow-md">
+                <div class="cp-top">
+                    <div id="cpAvatar" class="cp-avatar">U</div>
+                    <input type="text" class="cp-input" placeholder="Share an update, tip, or experience...">
                 </div>
-                <div class="story-card">
-                    <div class="story-bg"></div>
-                    <div class="story-img" style="background: linear-gradient(135deg, #22C55E, #15803D)"></div>
-                    <div class="story-avatar">A</div>
-                    <div class="story-text">Day in the Life</div>
-                </div>
-                <div class="story-card">
-                    <div class="story-bg"></div>
-                    <div class="story-img" style="background: linear-gradient(135deg, #F59E0B, #B45309)"></div>
-                    <div class="story-avatar">S</div>
-                    <div class="story-text">Alumni Tips</div>
-                </div>
-                <div class="story-card">
-                    <div class="story-bg"></div>
-                    <div class="story-img" style="background: linear-gradient(135deg, #3B82F6, #1D4ED8)"></div>
-                    <div class="story-avatar">P</div>
-                    <div class="story-text">Microsoft Prep</div>
+                <div class="cp-bottom">
+                    <div class="cp-actions">
+                        <button class="cp-btn-action">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:18px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                            </svg>
+                            Media
+                        </button>
+                        <button class="cp-btn-action">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:18px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
+                            </svg>
+                            Event
+                        </button>
+                        <button class="cp-btn-action">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:18px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
+                            </svg>
+                            Feeling
+                        </button>
+                    </div>
+                    <button class="btn-post">Post</button>
                 </div>
             </div>
 
-            <!-- Create post box -->
-            <div class="create-post" style="flex-direction: column; align-items: stretch;">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <div class="create-post-avatar" id="createAvatar">R</div>
-                    <button class="create-post-btn" onclick="alert('Post creation coming soon!')">
-                        Share an update, tip, or experience...
-                    </button>
-                </div>
-                <div class="create-post-actions">
-                    <div class="cp-action" onclick="alert('Image upload coming soon')">
-                        <span style="font-size: 1.1rem">🖼️</span> Media
-                    </div>
-                    <div class="cp-action" onclick="alert('Event tagging coming soon')">
-                        <span style="font-size: 1.1rem">📅</span> Event
-                    </div>
-                    <div class="cp-action" onclick="alert('Emoji picker coming soon')">
-                        <span style="font-size: 1.1rem">😀</span> Feeling
-                    </div>
-                </div>
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-tab="all">All</button>
+                <button class="filter-tab" data-tab="drive">Drives</button>
+                <button class="filter-tab" data-tab="peer">Peers</button>
+                <button class="filter-tab" data-tab="tip">Tips</button>
             </div>
 
-            <!-- Feed filter tabs -->
-            <div class="feed-tabs">
-                <button class="feed-tab active" onclick="setTab(this, 'all')">All</button>
-                <button class="feed-tab" onclick="setTab(this, 'drives')">Drives</button>
-                <button class="feed-tab" onclick="setTab(this, 'peers')">Peers</button>
-                <button class="feed-tab" onclick="setTab(this, 'tips')">Tips</button>
+            <!-- Feed Content Area -->
+            <div id="feedList">
+                <!-- Skeletons show initially -->
+                <div class="skeleton-card"><div class="skeleton" style="width: 40%; height: 16px;"></div><div class="skeleton" style="width: 100%; height: 80px;"></div></div>
+                <div class="skeleton-card"><div class="skeleton" style="width: 40%; height: 16px;"></div><div class="skeleton" style="width: 100%; height: 80px;"></div></div>
+                <div class="skeleton-card"><div class="skeleton" style="width: 40%; height: 16px;"></div><div class="skeleton" style="width: 100%; height: 80px;"></div></div>
             </div>
 
-
-            <!-- ── POST 1: Platform tip / notification ── -->
-            <div class="post-card" data-category="tips"
-                data-search="nextern prep dynamic programming interview tip roadmap">
-                <div class="post-header">
-                    <div class="post-avatar pa-nextern">N</div>
-                    <div class="post-meta">
-                        <div class="post-author">
-                            Nextern
-                        </div>
-                        <div class="post-time">Just now</div>
-                    </div>
-                    <span class="post-menu">···</span>
-                </div>
-                <div class="post-body">
-                    <strong>Pro tip:</strong> Students who track progress weekly are more consistent before interviews.
-                    Your current prep plan is 42% done.
-                    <br /><br />
-                    This week focus on <strong>Dynamic Programming</strong>, aptitude revision and one mock interview.
-                </div>
-                <div class="post-footer">
-                    <button class="post-action" data-action="like" onclick="toggleLikeMock(this)">
-                        <span style="font-size:1rem">🤍</span> <span class="like-count">12</span>
-                    </button>
-                    <button class="post-action" onclick="toggleComments('mock-comments-1')">
-                        <span style="font-size:1rem">💬</span> Comment
-                    </button>
-                    <button class="post-action">
-                        <span style="font-size:1rem">↗️</span> Share
-                    </button>
-                </div>
-                <!-- Comments Section -->
-                <div id="mock-comments-1" class="comments-section">
-                    <div class="comment-input-row">
-                        <div class="peer-avatar-sm"
-                            style="background:linear-gradient(135deg,var(--accent),#4C1D95);width:30px;height:30px">R
-                        </div>
-                        <input type="text" class="comment-input" placeholder="Add a comment..." />
-                        <button class="comment-btn">Post</button>
-                    </div>
-                </div>
+            <!-- Empty State -->
+            <div id="emptyState" class="is-hidden" style="text-align:center; padding: 60px 20px;">
+                <img src="https://cdni.iconscout.com/illustration/premium/thumb/no-data-found-8867280-7265556.png" style="width: 180px; opacity: 0.6; margin-bottom: 20px;">
+                <p style="color: var(--text-gray); font-weight: 500;">No posts found. Start a conversation!</p>
             </div>
-
-
-            <div id="dynamicDrivePosts"></div>
-
-
-            <!-- ── POST 3: Peer activity ── -->
-            <div class="post-card" data-category="peers"
-                data-search="batch activity arjun priya karan razorpay microsoft google prep">
-                <div class="post-header">
-                    <div class="post-avatar pa-blue">N</div>
-                    <div class="post-meta">
-                        <div class="post-author">
-                            Batch Activity
-                            <span class="post-type type-peer">Peer Activity</span>
-                        </div>
-                        <div class="post-time">4 hours ago</div>
-                    </div>
-                    <span class="post-menu">···</span>
-                </div>
-                <div class="post-body">
-                    Here is what your batchmates have been up to today.
-
-                    <div class="peer-activity">
-                        <div class="peer-row">
-                            <div class="peer-avatar-sm" style="background:linear-gradient(135deg,#6C63FF,#4C1D95)">A
-                            </div>
-                            <span class="peer-name">Arjun M.</span>
-                            <span class="peer-action">applied to</span>
-                            <span class="peer-company">Razorpay</span>
-                            <span class="peer-time">1h ago</span>
-                        </div>
-                        <div class="peer-row">
-                            <div class="peer-avatar-sm" style="background:linear-gradient(135deg,#22C55E,#15803D)">P
-                            </div>
-                            <span class="peer-name">Priya S.</span>
-                            <span class="peer-action">got shortlisted at</span>
-                            <span class="peer-company">Microsoft</span>
-                            <span class="peer-time">2h ago</span>
-                        </div>
-                        <div class="peer-row">
-                            <div class="peer-avatar-sm" style="background:linear-gradient(135deg,#F59E0B,#B45309)">K
-                            </div>
-                            <span class="peer-name">Karan V.</span>
-                            <span class="peer-action">completed roadmap phase at</span>
-                            <span class="peer-company">Google Prep</span>
-                            <span class="peer-time">3h ago</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="post-footer">
-                    <button class="post-action" data-action="like" onclick="toggleLikeMock(this)">
-                        <span style="font-size:1rem">🤍</span> <span class="like-count">18</span>
-                    </button>
-                    <button class="post-action" onclick="toggleComments('mock-comments-2')">
-                        <span style="font-size:1rem">💬</span> Comment
-                    </button>
-                    <button class="post-action">
-                        <span style="font-size:1rem">↗️</span> Share
-                    </button>
-                </div>
-                <!-- Comments Section -->
-                <div id="mock-comments-2" class="comments-section">
-                    <div class="comment-input-row">
-                        <div class="peer-avatar-sm"
-                            style="background:linear-gradient(135deg,var(--accent),#4C1D95);width:30px;height:30px">R
-                        </div>
-                        <input type="text" class="comment-input" placeholder="Add a comment..." />
-                        <button class="comment-btn">Post</button>
-                    </div>
-                </div>
+            
+            <!-- Error State -->
+            <div id="errorState" class="error-state is-hidden">
+                <p style="color: var(--red); font-weight: 600;">Failed to load the feed.</p>
+                <button onclick="loadFeed()" class="btn-retry">Try Again</button>
             </div>
-
-
-            <!-- ── POST 5: Platform tip ── -->
-            <div class="post-card" data-category="tips"
-                data-search="interview tips google arrays strings sliding window two pointers prefix sum hashmap kadane">
-                <div class="post-header">
-                    <div class="post-avatar pa-amber">N</div>
-                    <div class="post-meta">
-                        <div class="post-author">
-                            Interview Tips
-                            <span class="post-type type-tip">Interview Tip</span>
-                        </div>
-                        <div class="post-time">Yesterday</div>
-                    </div>
-                    <span class="post-menu">···</span>
-                </div>
-                <div class="post-body">
-                    <strong>Did you know?</strong> 78% of Google interviews start with an array or string problem. Here
-                    are the 5 patterns you MUST know before your interview:
-                    <br /><br />
-                    1. Sliding Window &nbsp;·&nbsp; 2. Two Pointers &nbsp;·&nbsp; 3. Prefix Sum &nbsp;·&nbsp; 4. HashMap
-                    Frequency &nbsp;·&nbsp; 5. Kadane's Algorithm
-                    <br /><br />
-                    Head to the <strong>Prep Hub</strong> to practise these patterns and mark your completion.
-                </div>
-                <div class="post-footer">
-                    <button class="post-action" data-action="like" onclick="toggleLikeMock(this)">
-                        <span style="font-size:1rem">❤️</span> <span class="like-count">94</span>
-                    </button>
-                    <button class="post-action" onclick="toggleComments('mock-comments-3')">
-                        <span style="font-size:1rem">💬</span> Comment
-                    </button>
-                    <button class="post-action">
-                        <span style="font-size:1rem">↗️</span> Share
-                    </button>
-                </div>
-                <!-- Comments Section -->
-                <div id="mock-comments-3" class="comments-section">
-                    <div class="comment-input-row">
-                        <div class="peer-avatar-sm"
-                            style="background:linear-gradient(135deg,var(--accent),#4C1D95);width:30px;height:30px">R
-                        </div>
-                        <input type="text" class="comment-input" placeholder="Add a comment..." />
-                        <button class="comment-btn">Post</button>
-                    </div>
-                    <div class="comment-item">
-                        <div class="peer-avatar-sm" style="background:gray;width:30px;height:30px">A</div>
-                        <div class="comment-bubble">
-                            <strong>Ankit Sharma</strong>
-                            Absolutely! Sliding window has shown up in my last 3 OA assessments.
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="feedEmptyState" class="feed-empty-state is-hidden">
-                No matching updates found. Try another tab or search keyword.
-            </div>
-
         </main>
 
-
-        <!-- ══════════════════════════
-         RIGHT SIDEBAR
-    ══════════════════════════ -->
-        <aside class="right-sidebar">
-            <!-- Upcoming drives -->
-            <div class="r-card">
-                <div class="r-card-header">
-                    <span class="r-card-title">Eligible Drives</span>
-                    <a href="drives.html" class="r-card-link">View all →</a>
+        <!-- RIGHT PANEL -->
+        <aside class="right-panel">
+            <!-- Active Drives Card -->
+            <div class="widget-card">
+                <div class="w-header">
+                    <h3>📡 Active Drives</h3>
+                    <a href="drives.html" class="w-link">View all</a>
                 </div>
-                <div class="r-drives-list" id="rightDrivesList">
-                    <div class="r-drive-row">
-                        <div class="r-drive-info">
-                            <div class="r-drive-company">Loading drives...</div>
-                        </div>
-                    </div>
+                <div id="sideDrivesList">
+                    <!-- Loaded via JS -->
                 </div>
             </div>
 
-            <!-- Roadmap progress -->
-            <div class="r-card">
-                <div class="r-card-header">
-                    <span class="r-card-title">My Roadmap</span>
-                    <a href="roadmap.html" class="r-card-link">Full view →</a>
+            <!-- Roadmap Summary Card -->
+            <div class="widget-card">
+                <div class="w-header">
+                    <h3>🏆 My Roadmap</h3>
+                    <a href="roadmap.html" class="w-link">Details</a>
                 </div>
-                <div class="r-roadmap-body">
-                    <div class="r-roadmap-target">Target: <strong>Google — SDE</strong></div>
-
-                    <div class="r-overall-bar">
-                        <div class="r-overall-fill" data-width="42"></div>
+                <div class="roadmap-summary">
+                    <p class="rs-company" id="rsTarget">Select a target company</p>
+                    <div class="rs-progress">
+                        <div class="rs-bar" id="rsBar"></div>
                     </div>
-
-                    <div class="r-phase-list">
-                        <div class="r-phase-row r-phase-done">
-                            <div class="r-phase-dot rpd-done">✓</div>
-                            <span class="r-phase-name">Arrays & Strings</span>
-                            <span class="r-phase-pct">100%</span>
-                        </div>
-                        <div class="r-phase-row r-phase-done">
-                            <div class="r-phase-dot rpd-done">✓</div>
-                            <span class="r-phase-name">Trees & Graphs</span>
-                            <span class="r-phase-pct">100%</span>
-                        </div>
-                        <div class="r-phase-row r-phase-active">
-                            <div class="r-phase-dot rpd-active">3</div>
-                            <span class="r-phase-name">Dynamic Programming</span>
-                            <span class="r-phase-pct">40%</span>
-                        </div>
-                        <div class="r-phase-row r-phase-todo">
-                            <div class="r-phase-dot rpd-todo">4</div>
-                            <span class="r-phase-name">System Design</span>
-                            <span class="r-phase-pct">0%</span>
-                        </div>
+                    <div class="rs-phases" id="rsPhases">
+                        <div class="p-dot"></div>
+                        <div class="p-dot"></div>
+                        <div class="p-dot"></div>
+                        <div class="p-dot"></div>
                     </div>
-
-                    <a href="roadmap.html" class="r-roadmap-cta">Continue Roadmap →</a>
                 </div>
             </div>
-
         </aside>
+    </div>
 
-    </div><!-- end feed-layout -->
-
+    <script src="../js/config.js"></script>
+    <!-- Universal Sidebar -->
+    <script src="../js/sidebar.js"></script>
 
     <script>
+        const API_BASE = window.API_BASE || 'http://localhost:4000';
+        let currentTab = 'all';
 
-        const API_BASE_URL = 'http://localhost:4000';
-        let activeFeedTab = 'all';
-        let currentSearchQuery = '';
-
-        // Read token from URL if coming from Google OAuth
-        const urlParams = new URLSearchParams(window.location.search);
-        const tokenFromGoogle = urlParams.get('token');
-        const nameFromGoogle = urlParams.get('name');
-        if (tokenFromGoogle) {
-            localStorage.setItem('nextern_token', tokenFromGoogle);
-            localStorage.setItem('nextern_name', decodeURIComponent(nameFromGoogle || ''));
-            // Clean the URL
-            window.history.replaceState({}, '', window.location.pathname);
-        }
-        /* ================================================================
-           feed.js — interactivity for the feed page
-    
-           Functions:
-           1. setUserInfo()   — fill name/avatar from localStorage
-           2. animateMiniRing() — small SVG ring in right sidebar
-           3. animateBars()   — progress bars
-           4. setTab()        — feed filter tab switching
-           5. toggleLike()    — like button toggle
-           6. handleLogout()  — clear session + redirect
-        ================================================================ */
-
-        /* 1. Fill user info from localStorage */
-        function setUserInfo() {
-            const name = localStorage.getItem('nextern_name') || 'Rajan Garudkar';
-            const storedUser = JSON.parse(localStorage.getItem('nextern_user') || '{}');
-            const branch = localStorage.getItem('nextern_branch') || storedUser.branch || 'CSE';
-            const year = localStorage.getItem('nextern_year') || storedUser.year || '3rd Year';
-            const initial = name.charAt(0).toUpperCase();
-
-            ['navAvatar', 'sidebarAvatar', 'createAvatar', 'rightAvatar'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = initial;
-            });
-
-            const nameEls = ['sidebarName', 'rightName'];
-            nameEls.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = name;
-            });
-
-            const metaEls = ['sidebarMeta', 'rightMeta'];
-            metaEls.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = `${branch} · ${year}`;
-            });
-        }
-
-        /* 2. Animate mini readiness ring in right sidebar
-           TEACH: Same SVG trick as dashboard — stroke-dashoffset animation
-           Mini ring: r=18, circumference = 2*π*18 ≈ 113
-        */
-        function animateMiniRing() {
-            const ring = document.getElementById('miniRing');
-            const scoreEl = document.getElementById('miniScore');
-            if (!ring || !scoreEl) return;
-
-            const TARGET = 68;
-            const CIRC = 113;
-            ring.style.strokeDashoffset = CIRC - (CIRC * TARGET / 100);
-            scoreEl.textContent = `${TARGET}%`;
-        }
-
-        /* 3. Animate progress bars */
-        function animateBars() {
-            setTimeout(() => {
-                document.querySelectorAll('.rw-fill, .r-overall-fill').forEach(el => {
-                    const w = el.getAttribute('data-width');
-                    if (w) el.style.width = w + '%';
-                });
-            }, 300);
-        }
-
-        window.toggleComments = function (id) {
-            const el = document.getElementById(id);
-            if (el) {
-                el.classList.toggle('open');
-            }
-        };
-
-        window.toggleLikeMock = function (btn) {
-            const heartEl = btn.querySelector('span:first-child');
-            const countEl = btn.querySelector('.like-count');
-
-            if (heartEl.textContent === '❤️') {
-                heartEl.textContent = '🤍';
-                heartEl.classList.remove('heart-animate');
-                if (countEl) countEl.textContent = parseInt(countEl.textContent) - 1;
-                btn.style.color = '#94A3B8';
-            } else {
-                heartEl.textContent = '❤️';
-                heartEl.classList.add('heart-animate');
-                if (countEl) countEl.textContent = parseInt(countEl.textContent) + 1;
-                btn.style.color = '#6C63FF';
-            }
-        };
-
-        // Init everything using DOMContentLoaded ensures DOM is ready
-        document.addEventListener('DOMContentLoaded', () => {
+        /* ── INITIALIZE ── */
+        function init() {
             setUserInfo();
-            animateMiniRing();
-            animateBars();
-            setupFeedSearch();
-            loadLiveDrives();
-            applyFeedFilters();
-        });
-
-        /* 4. Feed tab switching
-           TEACH: Remove .active from all tabs, add to clicked one.
-           In real app this would filter the feed posts by type.
-        */
-        function setTab(el, tabKey) {
-            document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-            activeFeedTab = tabKey || 'all';
-            applyFeedFilters();
+            loadFeed();
+            loadSidebarDrives();
+            loadRoadmapSummary();
+            setupFilterTabs();
         }
 
-        /* 5. Like toggle */
-        function toggleLike(btn) {
-            btn.classList.toggle('liked');
-            const isLiked = btn.classList.contains('liked');
-            btn.style.color = isLiked ? 'var(--accent)' : '';
-            if (btn.dataset.action === 'like') {
-                btn.textContent = isLiked ? 'Liked' : 'Like';
+        function setUserInfo() {
+            const name = localStorage.getItem('nextern_name') || 'Student User';
+            const initial = name.charAt(0).toUpperCase();
+            document.getElementById('navAvatar').textContent = initial;
+            document.getElementById('cpAvatar').textContent = initial;
+        }
+
+        /* ── FEED LOGIC ── */
+        async function loadFeed() {
+            const feedList = document.getElementById('feedList');
+            const emptyState = document.getElementById('emptyState');
+            const errorState = document.getElementById('errorState');
+
+            errorState.classList.add('is-hidden');
+            emptyState.classList.add('is-hidden');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/posts`, {
+                    headers: window.getAuthHeaders()
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    if (data.posts.length === 0) {
+                        feedList.innerHTML = '';
+                        emptyState.classList.remove('is-hidden');
+                    } else {
+                        renderPosts(data.posts);
+                    }
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (err) {
+                console.error('Feed error:', err);
+                feedList.innerHTML = '';
+                errorState.classList.remove('is-hidden');
             }
         }
 
-        function applyFeedFilters() {
-            const cards = Array.from(document.querySelectorAll('.feed-centre .post-card'));
-            let visibleCount = 0;
-            cards.forEach((card) => {
-                const category = (card.dataset.category || 'all').toLowerCase();
-                const searchable = `${card.dataset.search || ''} ${card.textContent || ''}`.toLowerCase();
-                const tabMatch = activeFeedTab === 'all' || category === activeFeedTab;
-                const queryMatch = !currentSearchQuery || searchable.includes(currentSearchQuery);
-                const visible = tabMatch && queryMatch;
-                card.classList.toggle('is-hidden', !visible);
-                if (visible) visibleCount += 1;
-            });
-
-            const emptyState = document.getElementById('feedEmptyState');
-            if (emptyState) {
-                emptyState.classList.toggle('is-hidden', visibleCount !== 0);
-            }
-        }
-
-        function setupFeedSearch() {
-            const searchInput = document.getElementById('navSearchInput');
-            if (!searchInput) return;
-            searchInput.addEventListener('input', (e) => {
-                currentSearchQuery = (e.target.value || '').trim().toLowerCase();
-                applyFeedFilters();
-            });
-        }
-
-        /* 6. Logout */
-        function handleLogout() {
-            localStorage.removeItem('nextern_token');
-            localStorage.removeItem('nextern_name');
-            localStorage.removeItem('nextern_branch');
-            localStorage.removeItem('nextern_year');
-            localStorage.removeItem('nextern_user');
-            window.location.href = '../login.html';
-        }
-
-        function escapeHtml(value) {
-            return String(value || '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        }
-
-        function daysLeft(deadline) {
-            if (!deadline) return null;
-            const target = new Date(deadline);
-            const now = new Date();
-            const ms = target.getTime() - now.getTime();
-            return Math.ceil(ms / (1000 * 60 * 60 * 24));
-        }
-
-        function deadlineLabel(deadline) {
-            const days = daysLeft(deadline);
-            if (days === null) return 'No deadline';
-            if (days <= 0) return 'Closing today';
-            if (days === 1) return '1 day left';
-            return `${days} days left`;
-        }
-
-        function postedTime(value) {
-            if (!value) return 'Recently posted';
-            const date = new Date(value);
-            const diffMs = Date.now() - date.getTime();
-            const hrs = Math.floor(diffMs / (1000 * 60 * 60));
-            if (hrs < 1) return 'Just now';
-            if (hrs < 24) return `${hrs}h ago`;
-            const days = Math.floor(hrs / 24);
-            return `${days}d ago`;
-        }
-
-        function companyInitial(company) {
-            return String(company || 'N').trim().charAt(0).toUpperCase() || 'N';
-        }
-
-        function renderDynamicDrivePosts(drives) {
-            const container = document.getElementById('dynamicDrivePosts');
-            if (!container) return;
-
-            if (!drives.length) {
+        function renderPosts(posts) {
+            const container = document.getElementById('feedList');
+            
+            const filtered = posts.filter(p => currentTab === 'all' || p.type === currentTab);
+            
+            if (filtered.length === 0) {
                 container.innerHTML = '';
+                document.getElementById('emptyState').classList.remove('is-hidden');
                 return;
+            } else {
+                document.getElementById('emptyState').classList.add('is-hidden');
             }
 
-            container.innerHTML = drives.map((drive) => `
-                <div class="post-card" data-category="drives" data-search="${escapeHtml(`${drive.company} ${drive.role} ${drive.location || ''} ${drive.ctc || ''} drive tnp`)}">
-                    <div class="post-header">
-                        <div class="post-avatar pa-green">N</div>
-                        <div class="post-meta">
-                            <div class="post-author">
-                                TnP Updates
-                                <span class="post-type type-drive">New Drive</span>
-                            </div>
-                            <div class="post-time">${escapeHtml(postedTime(drive.postedAt || drive.createdAt))}</div>
-                        </div>
-                        <span class="post-menu">···</span>
-                    </div>
-                    <div class="post-body">
-                        <strong>${escapeHtml(drive.company)}</strong> opened a ${escapeHtml(drive.role)} opportunity.
-                        <strong>${escapeHtml(deadlineLabel(drive.deadline))}</strong>.
+            container.innerHTML = filtered.map(post => {
+                const author = post.author || { firstName: 'Nextern', lastName: 'Admin' };
+                const timeStr = timeAgo(new Date(post.createdAt));
+                const isLiked = post.likes && post.likes.includes(window.getUserId());
+                
+                let driveHTML = '';
+                if (post.type === 'drive' && post.driveDetails) {
+                    const d = post.driveDetails;
+                    driveHTML = `
                         <div class="drive-highlight">
-                            <div class="drive-highlight-logo" style="background:linear-gradient(135deg,#1d4ed8,#0ea5e9)">${escapeHtml(companyInitial(drive.company))}</div>
-                            <div class="drive-highlight-info">
-                                <div class="drive-highlight-company">${escapeHtml(drive.company)}</div>
-                                <div class="drive-highlight-role">${escapeHtml(drive.role)}${drive.location ? ` · ${escapeHtml(drive.location)}` : ''}${drive.ctc ? ` · ${escapeHtml(drive.ctc)}` : ''}</div>
+                            <div class="dh-info">
+                                <div class="dh-company">${d.company}</div>
+                                <div class="dh-role">${d.role}</div>
                             </div>
-                            <button class="drive-highlight-btn" onclick="window.open('${escapeHtml(drive.applyUrl || 'drives.html')}', '_blank')">Apply</button>
+                            <div class="dh-pkg">${d.package ? d.package + ' LPA' : ''}</div>
+                            <a href="drives.html" class="btn-apply-small">Apply</a>
                         </div>
-                    </div>
-                </div>
-            `).join('');
+                    `;
+                }
 
-            applyFeedFilters();
-        }
-
-        function renderRightDrives(drives) {
-            const list = document.getElementById('rightDrivesList');
-            if (!list) return;
-
-            if (!drives.length) {
-                list.innerHTML = `
-                    <div class="r-drive-row">
-                        <div class="r-drive-info">
-                            <div class="r-drive-company">No live drives right now</div>
-                            <div class="r-drive-role">Check again after next sync</div>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            list.innerHTML = drives.map((drive) => {
-                const days = daysLeft(drive.deadline);
-                const pillClass = days !== null && days <= 1 ? 'dp-closing' : 'dp-open';
                 return `
-                    <div class="r-drive-row">
-                        <div class="r-drive-logo" style="background:linear-gradient(135deg,#1d4ed8,#0ea5e9)">${escapeHtml(companyInitial(drive.company))}</div>
-                        <div class="r-drive-info">
-                            <div class="r-drive-company">${escapeHtml(drive.company)}</div>
-                            <div class="r-drive-role">${escapeHtml(drive.role)}</div>
+                    <div class="post-card">
+                        <div class="post-header">
+                            <div class="post-user">
+                                <div class="u-avatar">${author.firstName[0]}</div>
+                                <div class="u-info">
+                                    <div class="u-name">${author.firstName} ${author.lastName}</div>
+                                    <div class="u-meta">${timeStr}</div>
+                                </div>
+                            </div>
+                            <span class="post-type-badge">${post.type}</span>
                         </div>
-                        <span class="r-drive-pill ${pillClass}">${escapeHtml(deadlineLabel(drive.deadline))}</span>
+                        
+                        <div class="post-content">${post.content}</div>
+                        
+                        ${driveHTML}
+
+                        <div class="post-footer">
+                            <button class="post-action ${isLiked ? 'liked' : ''}" onclick="likePost('${post._id}', this)">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="${isLiked ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:18px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                </svg>
+                                <span class="like-count">${post.likeCount || 0}</span>
+                            </button>
+                            <button class="post-action">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:18px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48L4.32 20.52a.45.45 0 00.67.54l1.902-1.27c1.31.29 2.69.46 4.108.46z" />
+                                </svg>
+                                Comment
+                            </button>
+                            <button class="post-action">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:18px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314" />
+                                </svg>
+                                Share
+                            </button>
+                        </div>
                     </div>
                 `;
             }).join('');
         }
 
-        async function loadLiveDrives() {
+        async function likePost(id, btn) {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/drives?limit=6`);
+                const response = await fetch(`${API_BASE}/api/posts/${id}/like`, {
+                    method: 'POST',
+                    headers: window.getAuthHeaders()
+                });
                 const data = await response.json();
-                if (!response.ok || !data.success) return;
+                if (data.success) {
+                    const countSpan = btn.querySelector('.like-count');
+                    const svg = btn.querySelector('svg');
+                    
+                    if (data.isLiked) {
+                        btn.classList.add('liked');
+                        svg.setAttribute('fill', 'currentColor');
+                    } else {
+                        btn.classList.remove('liked');
+                        svg.setAttribute('fill', 'none');
+                    }
+                    countSpan.textContent = data.likeCount;
+                }
+            } catch (err) { console.error('Like error:', err); }
+        }
 
-                const drives = Array.isArray(data.drives) ? data.drives : [];
-                renderDynamicDrivePosts(drives.slice(0, 2));
-                renderRightDrives(drives.slice(0, 3));
-            } catch (error) {
-                // Keep static UI if API is unavailable.
+        /* ── SIDEBAR WIDGETS ── */
+        async function loadSidebarDrives() {
+            try {
+                const res = await fetch(`${API_BASE}/api/drives`, {
+                    headers: window.getAuthHeaders()
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const sorted = data.drives.slice(0, 4);
+                    const container = document.getElementById('sideDrivesList');
+                    container.innerHTML = sorted.map(d => {
+                        const daysLeft = Math.ceil((new Date(d.deadline) - new Date()) / (1000 * 60 * 60 * 24));
+                        return `
+                            <div class="drive-item">
+                                <div class="co-badge">${d.company[0]}</div>
+                                <div class="di-info">
+                                    <div class="di-name">${d.company}</div>
+                                    <div class="di-role">${d.role}</div>
+                                </div>
+                                <div class="di-days">${daysLeft > 0 ? daysLeft + 'd' : 'Closed'}</div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            } catch (err) { console.error('Sidebar drives error:', err); }
+        }
+
+        function loadRoadmapSummary() {
+            const raw = localStorage.getItem('nextern_roadmap');
+            if (raw) {
+                const roadmap = JSON.parse(raw);
+                document.getElementById('rsTarget').textContent = roadmap.company || 'Dream Company';
+                
+                // Calculate total progress
+                const weeks = roadmap.weeks || [];
+                let totalTasks = 0;
+                let doneTasks = 0;
+                
+                // For logic demo, we look at nextern_task_states
+                const taskStates = JSON.parse(localStorage.getItem('nextern_task_states') || '{}');
+                
+                weeks.forEach((week, wi) => {
+                    totalTasks += week.tasks.length;
+                    week.tasks.forEach((t, ti) => {
+                        if (taskStates[`${wi}-${ti}`]) doneTasks++;
+                    });
+                });
+
+                const percentage = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
+                document.getElementById('rsBar').style.width = percentage + '%';
+                
+                // Update 4 dots (roughly divided)
+                const dots = document.querySelectorAll('.p-dot');
+                dots.forEach((dot, i) => {
+                    if (percentage >= (i + 1) * 25) dot.classList.add('done');
+                });
             }
         }
 
-        /* INIT */
-        setUserInfo();
-        animateMiniRing();
-        animateBars();
-        setupFeedSearch();
-        loadLiveDrives();
-        applyFeedFilters();
-    </script>
+        /* ── HELPERS ── */
+        function setupFilterTabs() {
+            document.querySelectorAll('.filter-tab').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentTab = btn.dataset.tab;
+                    loadFeed(); // Re-fetch or re-filter
+                });
+            });
+        }
 
+        function timeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            let interval = seconds / 31536000;
+            if (interval > 1) return Math.floor(interval) + "y";
+            interval = seconds / 2592000;
+            if (interval > 1) return Math.floor(interval) + "mo";
+            interval = seconds / 86400;
+            if (interval > 1) return Math.floor(interval) + "d";
+            interval = seconds / 3600;
+            if (interval > 1) return Math.floor(interval) + "h";
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + "m";
+            return "just now";
+        }
+
+        /* Theme Toggle (Visual only for now) */
+        document.getElementById('darkToggle').addEventListener('click', () => {
+            alert("Switching to Dark Mode... (Theme engine update coming soon!)");
+        });
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 
 </html>

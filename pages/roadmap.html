@@ -710,7 +710,10 @@
         <div class="nav-avatar" id="navAvatar">R</div>
     </nav>
 
-    <div class="page-wrap">
+    <div id="sidebar-mount"></div>
+    <script src="../js/sidebar.js"></script>
+
+    <div class="page-wrap" style="margin-left: 220px; max-width: calc(100% - 220px);">
 
         <div class="page-header">
             <h1>Prep Roadmap</h1>
@@ -807,6 +810,7 @@
 
     </div>
 
+    <script src="../js/config.js"></script>
     <script>
         /* ================================================================
            roadmap.js
@@ -818,7 +822,7 @@
            4. We render week cards + track progress locally
         ================================================================ */
 
-        const API_BASE = 'http://localhost:4000';
+        const API_BASE_URL = window.API_BASE || 'http://localhost:4000';
         let selectedLevel = 'Advanced';
         let currentSkills = [];
         let savedRoadmap = null;
@@ -829,12 +833,15 @@
             document.getElementById('navAvatar').textContent = name.charAt(0).toUpperCase();
 
             // Pre-fill skills from localStorage if available
-            const user = JSON.parse(localStorage.getItem('nextern_user') || '{}');
-            if (user.skills && user.skills.length) {
-                user.skills.forEach(s => addTag(s));
-            }
-            if (user.targetCompanies && user.targetCompanies[0]) {
-                document.getElementById('targetCompany').value = user.targetCompanies[0];
+            const userStr = localStorage.getItem('nextern_user');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                if (user.skills && user.skills.length) {
+                    user.skills.forEach(s => addTag(s));
+                }
+                if (user.targetCompanies && user.targetCompanies[0]) {
+                    document.getElementById('targetCompany').value = user.targetCompanies[0];
+                }
             }
 
             // Load saved roadmap if exists
@@ -884,6 +891,7 @@
         function renderTags() {
             const wrap = document.getElementById('skillTagWrap');
             const input = document.getElementById('skillInput');
+            if (!wrap || !input) return;
             wrap.querySelectorAll('.tag').forEach(t => t.remove());
             currentSkills.forEach(value => {
                 const tag = document.createElement('span');
@@ -920,9 +928,10 @@
             document.getElementById('outputTitle').textContent = `Your Roadmap for ${company} — ${role}`;
 
             document.getElementById('streamArea').innerHTML = `
-        <div class="loading-dots"><span></span><span></span><span></span></div>
-        <div id="streamText" class="stream-content" style="margin-top:12px">Building your roadmap...</div>
-      `;
+                <div class="loading-dots"><span></span><span></span><span></span></div>
+                <div id="streamText" class="stream-content" style="margin-top:12px">Building your personalized roadmap...</div>
+            `;
+            document.getElementById('streamArea').style.display = 'block';
 
             const btn = document.getElementById('generateBtn');
             btn.disabled = true;
@@ -930,15 +939,10 @@
 
             output.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-            const token = localStorage.getItem('nextern_token');
-
             try {
-                const response = await fetch(`${API_BASE}/api/roadmap/generate`, {
+                const response = await fetch(`${API_BASE_URL}/api/roadmap/generate`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
+                    headers: window.getAuthHeaders(),
                     body: JSON.stringify({ company, role, level: selectedLevel, skills })
                 });
 
@@ -958,9 +962,9 @@
 
             } catch (error) {
                 document.getElementById('streamArea').innerHTML = `
-          <p style="color:#EF4444;font-size:0.88rem">
-            ❌ ${error.message || 'Something went wrong. Make sure the server is running.'}
-          </p>`;
+                    <p style="color:#EF4444;font-size:0.88rem">
+                        ❌ ${error.message || 'Something went wrong.'}
+                    </p>`;
             } finally {
                 btn.disabled = false;
                 btn.textContent = 'Generate My Roadmap';
@@ -982,24 +986,24 @@
                 const weekEl = document.createElement('div');
                 weekEl.className = 'week-card' + (wi === 0 ? ' open' : '');
                 weekEl.innerHTML = `
-          <div class="week-header" onclick="toggleWeek(this)">
-            <span class="week-badge ${badgeClasses[wi % 4]}">Week ${week.week}</span>
-            <span class="week-title">${week.title}</span>
-            <span class="week-progress" id="wp-${wi}">0/${week.tasks.length} done</span>
-            <span class="week-chevron">▾</span>
-          </div>
-          <div class="week-body">
-            <div class="task-list" id="tl-${wi}">
-              ${week.tasks.map((task, ti) => `
-                <div class="task-item" id="task-${wi}-${ti}" onclick="toggleTask(${wi},${ti})">
-                  <div class="task-check"></div>
-                  <span class="task-text">${task.text}</span>
-                  ${task.tag ? `<span class="task-tag tag-${task.tag.toLowerCase().replace(' ', '-')}">${task.tag}</span>` : ''}
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
+                    <div class="week-header" onclick="toggleWeek(this)">
+                        <span class="week-badge ${badgeClasses[wi % 4]}">Week ${week.week || wi+1}</span>
+                        <span class="week-title">${week.title}</span>
+                        <span class="week-progress" id="wp-${wi}">0/${week.tasks.length} done</span>
+                        <span class="week-chevron">▾</span>
+                    </div>
+                    <div class="week-body">
+                        <div class="task-list" id="tl-${wi}">
+                            ${week.tasks.map((task, ti) => `
+                                <div class="task-item" id="task-${wi}-${ti}" onclick="toggleTask(${wi},${ti})">
+                                    <div class="task-check"></div>
+                                    <span class="task-text">${task.text}</span>
+                                    ${task.tag ? `<span class="task-tag tag-${task.tag.toLowerCase().replace(' ', '-')}">${task.tag}</span>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
                 container.appendChild(weekEl);
             });
 
@@ -1035,8 +1039,10 @@
             const all = document.querySelectorAll('.task-item').length;
             const done = document.querySelectorAll('.task-item.done').length;
             const pct = all ? Math.round((done / all) * 100) : 0;
-            document.getElementById('progressText').textContent = `${pct}%`;
-            document.getElementById('progressFill').style.width = `${pct}%`;
+            const textEl = document.getElementById('progressText');
+            const fillEl = document.getElementById('progressFill');
+            if (textEl) textEl.textContent = `${pct}%`;
+            if (fillEl) fillEl.style.width = `${pct}%`;
         }
 
         /* ── SAVE / LOAD PROGRESS ── */
@@ -1058,15 +1064,15 @@
 
         /* ── REGENERATE ── */
         function regenerate() {
+            if (!confirm('Are you sure you want to regenerate? This will reset your current progress.')) return;
             localStorage.removeItem('nextern_roadmap');
             localStorage.removeItem('nextern_roadmap_progress');
             document.getElementById('roadmapWeeks').innerHTML = '';
             document.getElementById('roadmapOutput').classList.remove('show');
-            document.getElementById('streamArea').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        init();
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 
 </body>

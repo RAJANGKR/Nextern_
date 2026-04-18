@@ -26,7 +26,7 @@
     }
 
     body {
-      font-family: 'DM Sans', sans-serif;
+      font-family: var(--font-body), sans-serif;
       background: radial-gradient(circle at top right, #e8ebff, #f8fafc 45%);
       color: var(--text);
       min-height: 100vh;
@@ -46,7 +46,7 @@
     }
 
     .logo {
-      font-family: 'Syne', sans-serif;
+      font-family: var(--font-head), sans-serif;
       font-size: 1.3rem;
       font-weight: 800;
       text-decoration: none;
@@ -73,7 +73,7 @@
     }
 
     h1 {
-      font-family: 'Syne', sans-serif;
+      font-family: var(--font-head), sans-serif;
       font-size: 1.7rem;
       margin-bottom: 6px;
     }
@@ -112,13 +112,20 @@
       font-size: 0.84rem;
     }
   </style>
+
+    <style>
+        :root {
+            --font-head: 'Syne', sans-serif !important;
+            --font-body: 'DM Sans', sans-serif !important;
+        }
+    </style>
 </head>
 
 <body>
   <div class="wrap">
     <div class="top">
-      <a class="logo" href="/index.html">Nex<span>tern</span></a>
-      <a class="back" href="/register.html">Back to Register</a>
+      <a href="index.html" class="logo">Nex<span>tern</span></a>
+      <a class="back" href="./register.html">Back to Register</a>
     </div>
 
     <main class="card">

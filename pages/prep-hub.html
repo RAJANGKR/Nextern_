@@ -1,708 +1,708 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prep Hub — Nextern</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;700&display=swap"
-        rel="stylesheet" />
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    
     <style>
-        :root {
-            --accent: #6C63FF;
-            --accent-light: #EEF2FF;
-            --accent-hover: #5A52E0;
-            --green: #22C55E;
-            --green-light: #F0FDF4;
-            --blue: #3B82F6;
-            --blue-light: #EFF6FF;
-            --amber: #F59E0B;
-            --amber-light: #FFF7ED;
-            --red: #EF4444;
-
-            --bg: #F3F4F8;
-            --bg-white: #FFFFFF;
-            --text: #0F172A;
-            --text-soft: #64748B;
-            --text-muted: #94A3B8;
-            --border: #E2E8F0;
-
-            --font-head: 'Syne', sans-serif;
-            --font-body: 'DM Sans', sans-serif;
-
-            --radius-sm: 6px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-pill: 100px;
-
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-        }
-
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        /* ── BASE STYLES ── */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
         body {
-            font-family: var(--font-body);
-            background: var(--bg);
-            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F9FA;
+            color: #0F172A;
+            display: grid;
+            grid-template-rows: 56px 1fr;
+            grid-template-columns: 220px 1fr 300px;
             min-height: 100vh;
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
+        /* ── TOPBAR ── */
         .topnav {
-            position: fixed;
+            grid-column: 1 / -1;
+            grid-row: 1;
+            position: sticky;
             top: 0;
-            left: 0;
-            right: 0;
+            z-index: 1000;
+            background: #FFFFFF;
+            border-bottom: 1px solid #E2E8F0;
             height: 56px;
-            background: var(--bg-white);
-            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
             display: flex;
             align-items: center;
             gap: 16px;
-            padding: 0 24px;
-            box-shadow: var(--shadow-sm);
-            z-index: 100;
         }
 
-        .nav-logo {
-            font-family: var(--font-head);
-            font-weight: 800;
-            font-size: 1.3rem;
-        }
+        .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.25rem; text-decoration: none; }
+        .logo-nex { color: #0F172A; }
+        .logo-tern { color: #6C63FF; }
 
-        .nav-logo span {
-            color: var(--accent);
-        }
+        .nav-links { display: flex; align-items: center; gap: 28px; margin-left: auto; }
+        .nav-link { font-weight: 500; font-size: 0.85rem; color: #64748B; text-decoration: none; padding: 17px 0; border-bottom: 2px solid transparent; }
+        .nav-link.active { color: #6C63FF; border-bottom-color: #6C63FF; }
+        .nav-avatar { width: 32px; height: 32px; background: linear-gradient(135deg, #6C63FF, #8E87FF); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; margin-left: 12px; }
 
-        .nav-search {
-            flex: 1;
-            max-width: 320px;
-        }
-
-        .nav-search input {
-            width: 100%;
-            padding: 8px 14px;
-            border-radius: var(--radius-pill);
-            border: 1.5px solid var(--border);
-            font-size: 0.84rem;
-            background: var(--bg);
-            outline: none;
-        }
-
-        .nav-search input:focus {
-            border-color: var(--accent);
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-left: auto;
-        }
-
-        .nav-link-item {
-            font-size: 0.76rem;
-            color: var(--text-muted);
-            padding: 8px 14px;
-            border-radius: var(--radius-sm);
-            transition: color 0.15s;
-        }
-
-        .nav-link-item:hover {
-            color: var(--text);
-        }
-
-        .nav-link-item.active {
-            color: var(--accent);
-            border-bottom: 2px solid var(--accent);
-        }
-
-        .nav-badge {
-            margin-left: 5px;
-            background: var(--red);
-            color: #fff;
-            padding: 1px 5px;
-            border-radius: var(--radius-pill);
-            font-size: 0.62rem;
-            font-weight: 700;
-        }
-
-        .nav-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #4C1D95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 700;
-            font-size: 0.78rem;
-            margin-left: 10px;
-        }
-
-        .page-layout {
-            max-width: 1120px;
-            margin: 0 auto;
-            padding: 76px 16px 40px;
-            display: grid;
-            grid-template-columns: 220px 1fr;
-            gap: 20px;
-            align-items: start;
-        }
-
-        .left-sidebar {
+        /* ── SIDEBAR ── */
+        .sidebar {
+            grid-column: 1;
+            grid-row: 2;
+            background: #FFFFFF;
+            border-right: 1px solid #E2E8F0;
             position: sticky;
-            top: 72px;
-        }
-
-        .sidebar-card,
-        .main-card,
-        .prep-card {
-            background: var(--bg-white);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .sidebar-card {
-            padding: 8px;
-        }
-
-        .sidebar-nav-link {
-            display: flex;
-            align-items: center;
-            padding: 9px 12px;
-            border-radius: var(--radius-sm);
-            font-size: 0.85rem;
-            color: var(--text-soft);
-            transition: background 0.15s, color 0.15s;
-        }
-
-        .sidebar-nav-link:hover {
-            background: var(--bg);
-            color: var(--text);
-        }
-
-        .sidebar-nav-link.active {
-            background: var(--accent-light);
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        .snav-badge {
-            margin-left: auto;
-            background: var(--accent);
-            color: #fff;
-            font-size: 0.62rem;
-            font-weight: 700;
-            border-radius: var(--radius-pill);
-            padding: 1px 6px;
-        }
-
-        .main-content {
+            top: 56px;
+            height: calc(100vh - 56px);
+            overflow-y: auto;
+            padding: 16px 12px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            min-width: 0;
         }
 
-        .main-card {
-            padding: 20px;
-        }
+        .side-nav { display: flex; flex-direction: column; gap: 4px; border-bottom: 1px solid #F1F5F9; padding-bottom: 16px; margin-bottom: 16px; }
+        .side-link { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; font-size: 0.86rem; color: #64748B; text-decoration: none; transition: 0.2s; }
+        .side-link:hover { background: #F5F6FA; color: #0F172A; }
+        .side-link.active { background: #EEF2FF; color: #6C63FF; font-weight: 500; }
 
-        .main-card h1 {
-            font-family: var(--font-head);
-            font-size: 1.45rem;
-            margin-bottom: 6px;
-            letter-spacing: -0.3px;
-        }
+        .sidebar-section-title { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #94A3B8; margin-bottom: 12px; padding-left: 12px; }
+        .side-progress-item { padding: 8px 12px; }
+        .side-p-label { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; color: #475569; margin-bottom: 6px; }
+        .side-p-bar { height: 6px; background: #EEF2FF; border-radius: 100px; overflow: hidden; }
+        .side-p-fill { height: 100%; background: #6C63FF; width: 0%; transition: width 0.4s ease; }
 
-        .main-card p {
-            font-size: 0.86rem;
-            color: var(--text-soft);
-            line-height: 1.5;
-        }
+        /* ── MAIN CONTENT ── */
+        .main-content { grid-column: 2; grid-row: 2; padding: 24px 32px; overflow-y: auto; }
 
-        .prep-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 12px;
-        }
-
-        .prep-card {
-            padding: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .prep-top {
+        .header-card {
+            background: linear-gradient(135deg, #6C63FF, #8E87FF);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 8px;
+            margin-bottom: 32px;
+            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.2);
         }
+        .header-left h1 { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
+        .header-stats { display: flex; gap: 32px; }
+        .stat-item { display: flex; flex-direction: column; }
+        .stat-val { font-size: 1.5rem; font-weight: 700; }
+        .stat-label { font-size: 0.75rem; opacity: 0.9; font-weight: 500; }
 
-        .prep-icon {
-            width: 34px;
-            height: 34px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-        }
+        .progress-ring-container { position: relative; width: 120px; height: 120px; }
+        .ring-svg { transform: rotate(-90deg); width: 120px; height: 120px; }
+        .ring-bg { fill: none; stroke: rgba(255,255,255,0.2); stroke-width: 8; }
+        .ring-fill { fill: none; stroke: white; stroke-width: 8; stroke-linecap: round; stroke-dasharray: 251.2; stroke-dashoffset: 251.2; transition: stroke-dashoffset 0.6s ease; }
+        .ring-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; }
+        .ring-pct { font-size: 1.5rem; font-weight: 800; }
+        .ring-ready { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8; }
 
-        .icon-dsa {
-            background: var(--accent-light);
-        }
+        /* Tabs */
+        .subject-tabs { display: flex; gap: 12px; margin-bottom: 32px; border-bottom: 1px solid #E2E8F0; padding-bottom: 1px; }
+        .tab-btn { padding: 12px 24px; border-bottom: 2px solid transparent; color: #64748B; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
+        .tab-btn:hover { color: #0F172A; }
+        .tab-btn.active { color: #6C63FF; border-bottom-color: #6C63FF; }
 
-        .icon-core {
-            background: var(--blue-light);
-        }
+        /* Subjects Section */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .section-title-group h2 { font-size: 1.5rem; font-weight: 700; color: #0F172A; margin-bottom: 4px; }
+        .section-title-group p { color: #64748B; font-size: 0.9rem; }
+        .btn-reset { padding: 8px 16px; border: 1.5px solid #E2E8F0; border-radius: 10px; font-weight: 600; font-size: 0.8rem; color: #EF4444; transition: 0.2s; }
+        .btn-reset:hover { border-color: #EF4444; background: #FEF2F2; }
 
-        .icon-mock {
-            background: var(--amber-light);
-        }
+        .subject-progress-banner { background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 20px; margin-bottom: 32px; }
+        .banner-label { font-size: 0.85rem; font-weight: 700; color: #475569; width: 140px; }
+        .banner-bar-container { flex: 1; height: 10px; background: #EEF2FF; border-radius: 5px; overflow: hidden; }
+        .banner-fill { height: 100%; background: #6C63FF; width: 0%; transition: width 0.4s ease; }
+        .banner-val { font-size: 0.85rem; font-weight: 700; color: #6C63FF; width: 100px; text-align: right; }
 
-        .prep-pill {
-            font-size: 0.66rem;
-            font-weight: 700;
-            padding: 3px 8px;
-            border-radius: var(--radius-pill);
-            border: 1px solid var(--border);
-            color: var(--text-soft);
-            background: var(--bg);
-        }
+        /* Topics List */
+        .topics-container { display: flex; flex-direction: column; gap: 16px; }
+        .topic-group { background: white; border: 1px solid #E2E8F0; border-radius: 16px; overflow: hidden; }
+        .group-header { padding: 14px 20px; background: #F8F9FF; display: flex; align-items: center; cursor: pointer; user-select: none; }
+        .group-header h3 { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748B; flex: 1; }
+        .group-count { font-size: 0.75rem; font-weight: 600; color: #94A3B8; }
 
-        .prep-title {
-            font-size: 0.92rem;
-            font-weight: 700;
-        }
+        .topics-list { padding: 8px 0; }
+        .topic-row { display: flex; align-items: center; padding: 12px 20px; border-bottom: 1px solid #F1F5F9; transition: 0.2s; cursor: pointer; }
+        .topic-row:last-child { border-bottom: none; }
+        .topic-row:hover { background: #FAFBFF; }
+        .topic-row.completed { opacity: 0.7; }
+        .topic-row.completed .topic-name { text-decoration: line-through; color: #94A3B8; }
 
-        .prep-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            font-size: 0.8rem;
-            color: var(--text-soft);
-            padding-left: 16px;
-        }
+        .check-box { width: 20px; height: 20px; border: 2px solid #E2E8F0; border-radius: 6px; margin-right: 16px; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; }
+        .topic-row.completed .check-box { background: #6C63FF; border-color: #6C63FF; }
+        .check-box svg { color: white; display: none; }
+        .topic-row.completed .check-box svg { display: block; }
 
-        .prep-btn {
-            margin-top: auto;
-            border: none;
-            border-radius: var(--radius-sm);
-            background: var(--accent);
-            color: #fff;
-            font-size: 0.76rem;
-            font-weight: 600;
-            padding: 8px 10px;
-            cursor: pointer;
-        }
+        .topic-name { font-size: 0.92rem; font-weight: 600; color: #0F172A; flex: 1; }
+        .topic-meta { display: flex; align-items: center; gap: 16px; }
+        .difficulty-tag { font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 100px; border: 1px solid transparent; }
+        .diff-easy { color: #16A34A; background: #F0FDF4; border-color: rgba(22,163,74,0.1); }
+        .diff-medium { color: #D97706; background: #FFFBEB; border-color: rgba(217,119,6,0.1); }
+        .diff-hard { color: #EF4444; background: #FEF2F2; border-color: rgba(239,68,68,0.1); }
 
-        .prep-btn:hover {
-            background: var(--accent-hover);
-        }
+        .priority-indicator { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 500; color: #64748B; padding-left: 12px; border-left: 1px solid #E2E8F0; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
 
-        .tracker-grid {
-            display: grid;
-            grid-template-columns: 1.2fr .8fr;
-            gap: 12px;
-        }
+        /* ── RIGHT PANEL ── */
+        .right-panel { grid-column: 3; grid-row: 2; background: #FFFFFF; border-left: 1px solid #E2E8F0; position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto; padding: 24px 20px; }
 
-        .tracker-card {
-            background: var(--bg-white);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
-            padding: 14px;
-        }
+        .panel-card { background: #FFFFFF; border: 1.5px solid #F1F5F9; border-radius: 16px; padding: 20px; margin-bottom: 24px; }
+        .panel-card h4 { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: #94A3B8; margin-bottom: 16px; }
 
-        .tracker-card h2 {
-            font-size: 1rem;
-            margin-bottom: 8px;
-        }
+        .overall-progress-mini { text-align: center; }
+        .status-badge { display: inline-block; padding: 6px 14px; background: #EEF2FF; color: #6C63FF; border-radius: 100px; font-weight: 700; font-size: 0.75rem; margin-top: 16px; }
 
-        .task-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 10px;
-        }
+        .study-next-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: #F8F9FF; margin-bottom: 12px; cursor: pointer; transition: 0.2s; }
+        .study-next-item:hover { transform: translateX(4px); background: #F0F4FF; }
+        .study-icon { width: 36px; height: 36px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #6C63FF; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .study-label { font-size: 0.8rem; font-weight: 600; color: #0F172A; }
+        .study-sub { font-size: 0.7rem; color: #64748B; }
 
-        .task-row {
-            display: flex;
-            gap: 8px;
-            align-items: flex-start;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 8px 10px;
-            background: #fcfcff;
-        }
-
-        .task-row input {
-            margin-top: 2px;
-            accent-color: var(--accent);
-        }
-
-        .task-title {
-            font-size: 0.84rem;
-            font-weight: 600;
-        }
-
-        .task-sub {
-            font-size: 0.75rem;
-            color: var(--text-soft);
-            margin-top: 1px;
-        }
-
-        .progress-bar {
-            height: 10px;
-            background: var(--bg);
-            border-radius: var(--radius-pill);
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--accent), #3b82f6);
-            transition: width .2s ease;
-        }
-
-        .tracker-meta {
-            margin-top: 8px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.78rem;
-            color: var(--text-soft);
-        }
-
-        .resource-links {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .resource-links a {
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 8px 10px;
-            font-size: 0.82rem;
-            color: var(--text);
-            background: #fff;
-        }
-
-        .resource-links a:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .mini-plan {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        .plan-item {
-            border: 1px dashed var(--border);
-            border-radius: var(--radius-md);
-            padding: 12px;
-            background: #FCFCFF;
-        }
-
-        .plan-item h3 {
-            font-size: 0.84rem;
-            margin-bottom: 4px;
-        }
-
-        .plan-item p {
-            font-size: 0.76rem;
-            color: var(--text-soft);
-            line-height: 1.45;
-        }
-
-        @media (max-width: 900px) {
-            .prep-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .tracker-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .mini-plan {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .page-layout {
-                grid-template-columns: 1fr;
-            }
-
-            .left-sidebar {
-                display: none;
-            }
-
-            .nav-search,
-            .nav-links {
-                display: none;
-            }
-        }
+        .resource-link { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #F1F5F9; color: #475569; font-size: 0.85rem; text-decoration: none; transition: 0.2s; }
+        .resource-link:hover { color: #6C63FF; }
+        .resource-link:last-child { border-bottom: none; }
     </style>
 </head>
-
 <body>
-    <nav class="topnav">
-        <a href="feed.html" class="nav-logo">Nex<span>tern</span></a>
 
-        <div class="nav-search">
-            <input type="text" placeholder="Search sheets, questions, topics..." />
+    <!-- ── TOPBAR ── -->
+    <header class="topnav">
+        <a href="feed.html" class="logo-text">
+            <span class="logo-nex">Nex</span><span class="logo-tern">tern</span>
+        </a>
+        <nav class="nav-links">
+            <a href="feed.html" class="nav-link">Home</a>
+            <a href="drives.html" class="nav-link">Drives</a>
+            <a href="roadmap.html" class="nav-link">Roadmap</a>
+            <a href="prep-hub.html" class="nav-link active">Prep Hub</a>
+            <a href="seniors.html" class="nav-link">Seniors</a>
+        </nav>
+        <div class="nav-avatar" id="navAvatar">U</div>
+    </header>
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+        <nav class="side-nav">
+            <a href="feed.html" class="side-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Feed
+            </a>
+            <a href="drives.html" class="side-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 010 8.49m-8.48-.01a6 6 0 010-8.49m11.31-2.82a10 10 0 010 14.14m-14.14 0a10 10 0 010-14.14"/></svg>
+                Drives
+            </a>
+            <a href="prep-hub.html" class="side-link active">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                Prep Hub
+            </a>
+            <a href="dashboard.html" class="side-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Dashboard
+            </a>
+        </nav>
+
+        <div class="sidebar-section-title">Preparation Progress</div>
+        <div id="sideSubjectsList">
+            <!-- Progress bars injected here -->
         </div>
+    </aside>
 
-        <div class="nav-links">
-            <a href="feed.html" class="nav-link-item">Home</a>
-            <a href="drives.html" class="nav-link-item">Drives <span class="nav-badge">3</span></a>
-            <a href="roadmap.html" class="nav-link-item">Roadmap</a>
-            <a href="prep-hub.html" class="nav-link-item active">Prep</a>
-            <a href="seniors.html" class="nav-link-item">Seniors</a>
-        </div>
-
-        <div class="nav-avatar" id="navAvatar">R</div>
-    </nav>
-
-    <div class="page-layout">
-        <aside class="left-sidebar">
-            <div class="sidebar-card">
-                <a href="feed.html" class="sidebar-nav-link">Feed</a>
-                <a href="drives.html" class="sidebar-nav-link">Drives <span class="snav-badge">3</span></a>
-                <a href="roadmap.html" class="sidebar-nav-link">Roadmap</a>
-                <a href="prep-hub.html" class="sidebar-nav-link active">Prep Hub</a>
-                <a href="seniors.html" class="sidebar-nav-link">Seniors</a>
-                <a href="dashboard.html" class="sidebar-nav-link">Dashboard</a>
+    <!-- ── MAIN CONTENT ── -->
+    <main class="main-content">
+        <header class="header-card">
+            <div class="header-left">
+                <h1>Placement Prep Tracker</h1>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span class="stat-val" id="totalDone">0</span>
+                        <span class="stat-label">Topics Done</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-val" id="totalLeft">0</span>
+                        <span class="stat-label">Topics Left</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-val" id="streakVal">0</span>
+                        <span class="stat-label">Day Streak</span>
+                    </div>
+                </div>
             </div>
-        </aside>
-
-        <main class="main-content">
-            <section class="main-card">
-                <h1>Prep Hub</h1>
-                <p>Simple prep blocks to keep your daily interview preparation structured and consistent.</p>
-            </section>
-
-            <section class="prep-grid">
-                <article class="prep-card">
-                    <div class="prep-top">
-                        <span class="prep-pill">Daily</span>
-                    </div>
-                    <h2 class="prep-title">DSA Block</h2>
-                    <ul class="prep-list">
-                        <li>2 medium problems</li>
-                        <li>1 revision problem</li>
-                        <li>15 min mistake review</li>
-                    </ul>
-                    <button onclick="window.open('https://leetcode.com/problemset/', '_blank')" class="prep-btn"
-                        type="button">Start DSA</button>
-                </article>
-
-                <article class="prep-card">
-                    <div class="prep-top">
-                        <span class="prep-pill">Core</span>
-                    </div>
-                    <h2 class="prep-title">CS Fundamentals</h2>
-                    <ul class="prep-list">
-                        <li>Pick 1 topic (OS/DBMS/CN)</li>
-                        <li>Read notes for 20 mins</li>
-                        <li>Solve 5 quick questions</li>
-                    </ul>
-                    <button onclick="window.open('https://www.geeksforgeeks.org/operating-systems/', '_blank')"
-                        class="prep-btn" type="button">Continue Core</button>
-                </article>
-
-                <article class="prep-card">
-                    <div class="prep-top">
-                        <span class="prep-pill">Practice</span>
-                    </div>
-                    <h2 class="prep-title">Mock Block</h2>
-                    <ul class="prep-list">
-                        <li>1 timed quiz or mock</li>
-                        <li>Track weak areas</li>
-                        <li>Add to roadmap backlog</li>
-                    </ul>
-                    <button onclick="window.open('https://www.interviewbit.com/courses/programming/', '_blank')"
-                        class="prep-btn" type="button">Take Mock</button>
-                </article>
-            </section>
-
-            <section class="tracker-grid">
-                <article class="tracker-card">
-                    <h2>Today's Checklist</h2>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
-                    </div>
-                    <div class="tracker-meta">
-                        <span id="progressText">0 / 0 done</span>
-                        <span id="progressPercent">0%</span>
-                    </div>
-                    <div class="task-list" id="taskList"></div>
-                </article>
-
-                <article class="tracker-card">
-                    <h2>Quick Resources</h2>
-                    <div class="resource-links">
-                        <a href="https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2/"
-                            target="_blank" rel="noopener">Striver DSA Sheet</a>
-                        <a href="https://www.geeksforgeeks.org/dbms/" target="_blank" rel="noopener">DBMS Notes +
-                            QnA</a>
-                        <a href="https://www.geeksforgeeks.org/computer-network-tutorials/" target="_blank"
-                            rel="noopener">Computer Networks Revision</a>
-                        <a href="https://nextstep.tcs.com/" target="_blank" rel="noopener">Company Portals (TCS
-                            NextStep)</a>
-                        <a href="https://careers.google.com/" target="_blank" rel="noopener">Company Portals (Google
-                            Careers)</a>
-                    </div>
-                    <div class="tracker-meta" style="margin-top:12px;">
-                        <span>Current streak</span>
-                        <strong id="streakText">0 day</strong>
-                    </div>
-                </article>
-            </section>
-
-            <section class="main-card mini-plan">
-                <div class="plan-item">
-                    <h3>Today</h3>
-                    <p>DSA + Core theory + one short mock.</p>
+            <div class="progress-ring-container">
+                <svg class="ring-svg" viewBox="0 0 100 100">
+                    <circle class="ring-bg" cx="50" cy="50" r="40"/>
+                    <circle class="ring-fill" id="overallFill" cx="50" cy="50" r="40"/>
+                </svg>
+                <div class="ring-text">
+                    <span class="ring-pct" id="overallPct">0%</span>
+                    <span class="ring-ready">Ready</span>
                 </div>
-                <div class="plan-item">
-                    <h3>This Week</h3>
-                    <p>Complete 5 DSA sessions and 2 full timed mock tests.</p>
+            </div>
+        </header>
+
+        <nav class="subject-tabs">
+            <div class="tab-btn active" onclick="switchSubject('DSA')">DSA</div>
+            <div class="tab-btn" onclick="switchSubject('DBMS')">DBMS</div>
+            <div class="tab-btn" onclick="switchSubject('OS')">OS</div>
+            <div class="tab-btn" onclick="switchSubject('CN')">CN</div>
+            <div class="tab-btn" onclick="switchSubject('OOPs')">OOPs</div>
+        </nav>
+
+        <section id="subjectView">
+            <div class="section-header">
+                <div class="section-title-group">
+                    <h2 id="viewTitle">Data Structures &amp; Algorithms</h2>
+                    <p id="viewSubtitle">Core coding patterns and algorithmic complexity.</p>
                 </div>
-            </section>
-        </main>
-    </div>
+                <button class="btn-reset" onclick="resetProgress()">Reset Progress</button>
+            </div>
+
+            <div class="subject-progress-banner">
+                <div class="banner-label">Subject Completion</div>
+                <div class="banner-bar-container"><div class="banner-fill" id="viewBar"></div></div>
+                <div class="banner-val" id="viewCount">0 of 0 topics</div>
+            </div>
+
+            <div class="topics-container" id="topicsContainer">
+                <!-- Topics groups injected here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- ── RIGHT PANEL ── -->
+    <aside class="right-panel">
+        <div class="panel-card overall-progress-mini">
+            <h4>Overall Progress</h4>
+            <div class="progress-ring-container" style="margin: 0 auto; width: 100px; height: 100px;">
+                <svg class="ring-svg" viewBox="0 0 100 100" style="width: 100px; height: 100px;">
+                    <circle class="ring-bg" cx="50" cy="50" r="40" style="stroke: #EEF2FF;"/>
+                    <circle class="ring-fill" id="miniOverallFill" cx="50" cy="50" r="40" style="stroke: #6C63FF;"/>
+                </svg>
+                <div class="ring-text">
+                    <span class="ring-pct" id="miniOverallPct" style="font-size: 1.25rem;">0%</span>
+                </div>
+            </div>
+            <div class="status-badge" id="statusText">Just Starting</div>
+        </div>
+
+        <div class="panel-card">
+            <h4>Study Next</h4>
+            <div id="studyNextList">
+                <!-- Recommendations -->
+            </div>
+        </div>
+
+        <div class="panel-card">
+            <h4>Quick Resources</h4>
+            <div class="resource-links">
+                <a href="https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2/" target="_blank" class="resource-link">
+                    <span>Striver DSA Sheet</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+                </a>
+                <a href="https://www.geeksforgeeks.org/dbms/" target="_blank" class="resource-link">
+                    <span>DBMS Notes + QnA</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+                </a>
+                <a href="https://www.geeksforgeeks.org/operating-systems/" target="_blank" class="resource-link">
+                    <span>OS Notes</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+                </a>
+                <a href="https://www.geeksforgeeks.org/computer-network-tutorials/" target="_blank" class="resource-link">
+                    <span>CN Notes</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+                </a>
+                <a href="https://careers.google.com/" target="_blank" class="resource-link">
+                    <span>Google Careers</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+                </a>
+            </div>
+        </div>
+    </aside>
 
     <script>
-        const name = localStorage.getItem('nextern_name') || 'Riya Sharma';
-        document.getElementById('navAvatar').textContent = name.charAt(0).toUpperCase();
-
-        const TASKS = [
-            { id: 'dsa2', title: 'Solve 2 DSA problems', sub: '1 medium + 1 revision' },
-            { id: 'core20', title: 'Study CS core for 20 mins', sub: 'OS / DBMS / CN' },
-            { id: 'aptitude', title: 'Practice 10 aptitude questions', sub: 'Speed + accuracy' },
-            { id: 'mock', title: 'Take one timed mock', sub: 'Track weak areas' },
-            { id: 'review', title: 'Review mistakes', sub: 'Write 3 key learnings' },
-        ];
-
-        const taskKey = 'nextern_prep_tasks_v1';
-        const historyKey = 'nextern_prep_history_v1';
-
-        function todayKey() {
-            return new Date().toISOString().slice(0, 10);
-        }
-
-        function loadTasksState() {
-            try {
-                return JSON.parse(localStorage.getItem(taskKey) || '{}');
-            } catch {
-                return {};
-            }
-        }
-
-        function saveTasksState(state) {
-            localStorage.setItem(taskKey, JSON.stringify(state));
-        }
-
-        function loadHistory() {
-            try {
-                return JSON.parse(localStorage.getItem(historyKey) || '{}');
-            } catch {
-                return {};
-            }
-        }
-
-        function saveHistory(history) {
-            localStorage.setItem(historyKey, JSON.stringify(history));
-        }
-
-        function calcStreak(history) {
-            let streak = 0;
-            const cursor = new Date();
-            while (true) {
-                const key = cursor.toISOString().slice(0, 10);
-                if ((history[key] || 0) > 0) {
-                    streak++;
-                    cursor.setDate(cursor.getDate() - 1);
-                } else {
-                    break;
+        // ── TOPIC DATA ──
+        const SUBJECTS = {
+            'DSA': {
+                title: 'Data Structures & Algorithms',
+                subtitle: 'Core coding patterns and algorithmic complexity.',
+                topics: {
+                    'BASICS': [
+                        { name: 'Arrays & Strings', diff: 'Easy', prio: 'High', subtopics: ["Kadane's Algorithm", "Moore's Voting Algorithm", "2D Matrix Rotations", "Pascal's Triangle"] },
+                        { name: 'Linked Lists', diff: 'Easy', prio: 'High', subtopics: ["Reverse a List", "Detect Cycle (Floyd's)", "Merge Sorted Lists", "List Middle Element"] },
+                        { name: 'Stacks & Queues', diff: 'Easy', prio: 'High', subtopics: ["Valid Parentheses", "Next Greater Element", "Implement Queue using Stacks", "LRU Cache (Basics)"] },
+                        { name: 'Two Pointers', diff: 'Easy', prio: 'High', subtopics: ["3Sum Problem", "Container With Most Water", "Remove Duplicates", "Intersection of Arrays"] },
+                        { name: 'Sliding Window', diff: 'Easy', prio: 'High', subtopics: ["Longest Substring without Repeating", "Max Sum Subarray of size K", "Smallest Subarray with sum > S"] }
+                    ],
+                    'INTERMEDIATE': [
+                        { name: 'Recursion & Backtracking', diff: 'Medium', prio: 'High', subtopics: ["Subset Sum", "N-Queens", "Rat in a Maze", "Palindrome Partitioning"] },
+                        { name: 'Hashing & Maps', diff: 'Easy', prio: 'High', subtopics: ["Group Anagrams", "Longest Consecutive Sequence", "Subarray with 0 Sum", "Count Frequency"] },
+                        { name: 'Trees & BST', diff: 'Medium', prio: 'Medium', subtopics: ["Level Order Traversal", "LCA of Binary Tree", "Validate BST", "ZigZag Traversal"] },
+                        { name: 'Heaps & Priority Queues', diff: 'Medium', prio: 'Medium', subtopics: ["K-th Largest Element", "Merge K Sorted Lists", "Median from Data Stream", "Task Scheduler"] },
+                        { name: 'Graphs', diff: 'Hard', prio: 'High', subtopics: ["BFS & DFS", "Dijkstra's Algorithm", "Topological Sort", "Detect Cycle (Union-Find)"] },
+                        { name: 'Tries', diff: 'Hard', prio: 'Low', subtopics: ["Implement Trie (Prefix Tree)", "Word Search II", "Check Palindrome Pairs"] }
+                    ],
+                    'ADVANCED': [
+                        { name: 'DP Patterns (1D/2D)', diff: 'Hard', prio: 'High', subtopics: ["0/1 Knapsack", "Coin Change", "Longest Common Subsequence", "Climbing Stairs"] },
+                        { name: 'DP on Trees & Grids', diff: 'Hard', prio: 'Medium', subtopics: ["Unique Paths", "House Robber III", "Minimum Path Sum", "Binary Tree Maximum Path Sum"] },
+                        { name: 'Bit Manipulation', diff: 'Medium', prio: 'Medium', subtopics: ["Single Number", "Count Set Bits", "Power of Two", "Bit Masking Patterns"] }
+                    ]
+                }
+            },
+            'DBMS': {
+                title: 'Database Management',
+                subtitle: 'Data modeling, SQL, and database internals.',
+                topics: {
+                    'BASICS': [
+                        { name: 'ER Diagrams', diff: 'Easy', prio: 'Low', subtopics: ["Entities & Attributes", "Relationship Cardinality", "Strong vs Weak Entities", "Mapping ER to Tables"] },
+                        { name: 'Relational Model', diff: 'Easy', prio: 'Medium', subtopics: ["Relational Algebra Basics", "Anomalies", "Integrity Rules", "Domain Constraints"] },
+                        { name: 'SQL Basics', diff: 'Easy', prio: 'High', subtopics: ["SELECT & WHERE", "GROUP BY & HAVING", "ORDER BY & LIMIT", "Aggregate Functions (SUM/AVG)"] },
+                        { name: 'Normalization', diff: 'Medium', prio: 'High', subtopics: ["1NF & 2NF", "3NF vs BCNF", "Decomposition Rules", "Multi-valued Dependency"] },
+                        { name: 'Keys & Constraints', diff: 'Easy', prio: 'High', subtopics: ["Primary vs Foreign Keys", "Unique & Not Null", "Default & Check", "Candidate Keys Identification"] }
+                    ],
+                    'INTERMEDIATE': [
+                        { name: 'Joins', diff: 'Medium', prio: 'High', subtopics: ["Inner vs Outer Joins", "Self Joins", "Cross Joins", "Equi Joins"] },
+                        { name: 'Transactions & ACID', diff: 'Medium', prio: 'High', subtopics: ["Atomicity & Consistency", "Isolation & Durability", "Commit & Rollback", "Savepoints"] },
+                        { name: 'Concurrency Control', diff: 'Hard', prio: 'Medium', subtopics: ["Strict 2PL", "Deadlock Detection", "Optimistic vs Pessimistic Locking", "Timestamp Ordering"] },
+                        { name: 'Indexing', diff: 'Hard', prio: 'Medium', subtopics: ["Clustered vs Non-Clustered", "B-Trees & B+ Trees", "Static vs Dynamic Hashing", "Dense vs Sparse Index"] },
+                        { name: 'SQL Window Functions', diff: 'Hard', prio: 'Medium', subtopics: ["RANK & DENSE_RANK", "ROW_NUMBER", "LEAD & LAG", "Over() Partition By"] }
+                    ],
+                    'ADVANCED': [
+                        { name: 'NoSQL vs SQL', diff: 'Easy', prio: 'Medium', subtopics: ["Document Store (MDB)", "Key-Value Store (Redis)", "Columnar Databases", "Graph Databases"] },
+                        { name: 'Systems Concepts', diff: 'Medium', prio: 'Low', subtopics: ["CAP Theorem", "Sharding & Partitioning", "Replication Strategies", "PACELC Theorem"] }
+                    ]
+                }
+            },
+            'OS': {
+                title: 'Operating Systems',
+                subtitle: 'Kernel, memory, and process management.',
+                topics: {
+                    'BASICS': [
+                        { name: 'Process vs Thread', diff: 'Easy', prio: 'High', subtopics: ["Context Switching", "PCB & TCB", "State Diagrams", "Spawning & Termination"] },
+                        { name: 'CPU Scheduling', diff: 'Medium', prio: 'High', subtopics: ["FCFS & SJF", "Round Robin", "Priority Scheduling", "Multilevel Feedback Queues"] },
+                        { name: 'Memory Management', diff: 'Medium', prio: 'High', subtopics: ["Fragmentation", "Paging", "Segmentation", "Dynamic Loading & Linking"] },
+                        { name: 'Deadlocks', diff: 'Medium', prio: 'High', subtopics: ["4 Necessary Conditions", "Banker's Algorithm", "Safe States", "Recovery Methods"] }
+                    ],
+                    'INTERMEDIATE': [
+                        { name: 'Virtual Memory', diff: 'Medium', prio: 'Medium', subtopics: ["Page Faults", "FIFO vs LRU vs Optimal Replacement", "Thrashing", "Translation Lookaside Buffer (TLB)"] },
+                        { name: 'File Systems & RAID', diff: 'Medium', prio: 'Low', subtopics: ["Index Allocation", "FAT vs NTFS", "RAID Level 0, 1, 5, 10", "Inode Structure"] },
+                        { name: 'Sync Primitives', diff: 'Hard', prio: 'High', subtopics: ["Mutex vs Semaphores", "Critical Section Problem", "Peterson's Solution", "Spinlocks"] },
+                        { name: 'IPC Mechanisms', diff: 'Hard', prio: 'Medium', subtopics: ["Shared Memory", "Message Passing", "Pipes & Sockets", "Signal Handling"] }
+                    ],
+                    'ADVANCED': [
+                        { name: 'Kernel', diff: 'Hard', prio: 'Low', subtopics: ["Monolithic vs Microkernel", "Bootstrapping", "System Calls Implementation", "Interupt Service Routines (ISRs)"] }
+                    ]
+                }
+            },
+            'CN': {
+                title: 'Computer Networks',
+                subtitle: 'Protocols, routing, and network security.',
+                topics: {
+                    'BASICS': [
+                        { name: 'Models', diff: 'Easy', prio: 'High', subtopics: ["OSI 7 Layers", "TCP/IP 4 Layers", "Encapsulation & Decapsulation", "Peer-to-Peer vs Client-Server"] },
+                        { name: 'Standard Protocols', diff: 'Medium', prio: 'High', subtopics: ["HTTP/HTTPS (1.1 vs 2.0)", "SSL/TLS Handshake", "FTP & SMTP", "DHCP Operations"] },
+                        { name: 'IP Addressing', diff: 'Easy', prio: 'High', subtopics: ["IPv4 Classes", "IPv6 Addressing", "Private vs Public IPs", "NAT (Network Address Translation)"] },
+                        { name: 'DNS', diff: 'Easy', prio: 'Medium', subtopics: ["Recursive vs Iterative Query", "Record Types (A, MX, CNAME)", "Root Servers", "TTL (Time to Live)"] }
+                    ],
+                    'INTERMEDIATE': [
+                        { name: 'Routing Protocols', diff: 'Hard', prio: 'Medium', subtopics: ["BGP (Path Vector)", "OSPF (Link State)", "RIP (Distance Vector)", "Static vs Dynamic Routing"] },
+                        { name: 'Subnetting', diff: 'Medium', prio: 'High', subtopics: ["CIDR Notation", "VLSM (Variable Length Subnet Masking)", "Broadcast vs Multicast IPs", "Subnet Mask Calculation"] },
+                        { name: 'Transport Layer', diff: 'Easy', prio: 'High', subtopics: ["TCP 3-Way Handshake", "UDP (User Datagram Protocol)", "Flow vs Error Control", "Congestion Control Algorithms"] }
+                    ],
+                    'ADVANCED': [
+                        { name: 'Network Security', diff: 'Hard', prio: 'Medium', subtopics: ["DDoS Attacks", "Firewalls", "Proxy vs VPN", "Hashing & Encryption (RSA/AES)"] }
+                    ]
+                }
+            },
+            'OOPs': {
+                title: 'OOPs Concepts',
+                subtitle: 'Object-oriented programming and design principles.',
+                topics: {
+                    'BASICS': [
+                        { name: 'Core Pillars', diff: 'Easy', prio: 'High', subtopics: ["Classes & Objects", "Inheritance Types", "Access Modifiers", "Constructors & Destructors"] },
+                        { name: 'Polymorphism', diff: 'Medium', prio: 'High', subtopics: ["Method Overloading", "Method Overriding", "Virtual Functions", "Abstract Classes"] },
+                        { name: 'Data Management', diff: 'Medium', prio: 'High', subtopics: ["Encapsulation", "Data Abstraction", "Final Keyword", "Static vs Dynamic Binding"] }
+                    ],
+                    'INTERMEDIATE': [
+                        { name: 'SOLID Principles', diff: 'Hard', prio: 'High', subtopics: ["Single Responsibility", "Open/Closed", "Liskov Substitution", "Interface Segregation", "Dependency Inversion"] },
+                        { name: 'Design Patterns', diff: 'Hard', prio: 'Medium', subtopics: ["Singleton", "Factory Method", "Observer Pattern", "Strategy Pattern"] },
+                        { name: 'Java/C++ Specific', diff: 'Medium', prio: 'High', subtopics: ["Multiple Inheritance (Diamond Problem)", "Friend Functions", "Interfaces vs Abstract Classes", "Exception Handling in OOPs"] }
+                    ]
                 }
             }
-            return streak;
+        };
+
+        // ── CORE LOGIC ──
+        let currentSubject = 'DSA';
+
+        function init() {
+            setUserInfo();
+            updateStreak();
+            renderSubjectBars();
+            switchSubject(currentSubject);
+            updateOverallProgress();
         }
 
-        function updateProgress() {
-            const checks = Array.from(document.querySelectorAll('.task-check'));
-            const total = checks.length;
-            const done = checks.filter(c => c.checked).length;
-            const percent = total ? Math.round((done / total) * 100) : 0;
-
-            document.getElementById('progressFill').style.width = `${percent}%`;
-            document.getElementById('progressText').textContent = `${done} / ${total} done`;
-            document.getElementById('progressPercent').textContent = `${percent}%`;
-
-            const history = loadHistory();
-            history[todayKey()] = done;
-            saveHistory(history);
-            const streak = calcStreak(history);
-            document.getElementById('streakText').textContent = `${streak} day${streak === 1 ? '' : 's'}`;
+        function setUserInfo() {
+            const name = localStorage.getItem('nextern_name') || 'Student';
+            document.getElementById('navAvatar').textContent = name.charAt(0).toUpperCase();
         }
 
-        function renderChecklist() {
-            const taskList = document.getElementById('taskList');
-            const state = loadTasksState();
-            const today = todayKey();
-            const todayState = state[today] || {};
+        function updateStreak() {
+            const lastActive = localStorage.getItem('nextern_prep_last_active');
+            let streak = parseInt(localStorage.getItem('nextern_prep_streak')) || 0;
+            const today = new Date().toDateString();
 
-            taskList.innerHTML = TASKS.map(task => `
-                <label class=\"task-row\">
-                    <input class=\"task-check\" type=\"checkbox\" data-task-id=\"${task.id}\" ${todayState[task.id] ? 'checked' : ''} />
-                    <div>
-                        <div class=\"task-title\">${task.title}</div>
-                        <div class=\"task-sub\">${task.sub}</div>
+            if (lastActive !== today) {
+                if (lastActive) {
+                    const yesterday = new Date();
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    if (lastActive === yesterday.toDateString()) {
+                        streak++;
+                    }
+                }
+                localStorage.setItem('nextern_prep_last_active', today);
+                localStorage.setItem('nextern_prep_streak', streak);
+            }
+            document.getElementById('streakVal').textContent = streak;
+        }
+
+        function switchSubject(key) {
+            currentSubject = key;
+            const sub = SUBJECTS[key];
+            
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.textContent === key));
+            document.getElementById('viewTitle').textContent = sub.title;
+            document.getElementById('viewSubtitle').textContent = sub.subtitle;
+
+            renderTopics();
+            updateSubjectViewStats();
+        }
+
+        function renderTopics() {
+            const container = document.getElementById('topicsContainer');
+            const sub = SUBJECTS[currentSubject];
+            
+            container.innerHTML = Object.entries(sub.topics).map(([group, topics]) => `
+                <div class="topic-group">
+                    <div class="group-header">
+                        <h3>${group}</h3>
+                        <span class="group-count">${topics.length} Topics</span>
                     </div>
-                </label>
+                    <div class="topics-list">
+                        ${topics.map(t => {
+                            const isTopicDone = isMainTopicDone(currentSubject, t);
+                            const prioColor = t.prio === 'High' ? '#EF4444' : t.prio === 'Medium' ? '#F59E0B' : '#22C55E';
+                            
+                            return `
+                                <div class="topic-row ${isTopicDone ? 'completed' : ''}" id="topic-${currentSubject}-${t.name.replace(/\s+/g, '')}">
+                                    <div class="check-box" onclick="toggleMainTopic('${t.name}', event)">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><polyline points="20 6 9 17 4 12"/></svg>
+                                    </div>
+                                    <div class="topic-info" style="flex:1" onclick="toggleSubtopicList('${currentSubject}', '${t.name}')">
+                                        <div class="topic-name-row" style="display:flex; align-items:center; gap:8px">
+                                            <span class="topic-name">${t.name}</span>
+                                            <svg class="chevron" id="chevron-${currentSubject}-${t.name.replace(/\s+/g, '')}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+                                        </div>
+                                    </div>
+                                    <div class="topic-meta">
+                                        <span class="difficulty-tag diff-${t.diff.toLowerCase()}">${t.diff}</span>
+                                        <div class="priority-indicator">
+                                            <div class="dot" style="background: ${prioColor}"></div>
+                                            <span>${t.prio} Priority</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="subtopics-container" id="sub-${currentSubject}-${t.name.replace(/\s+/g, '')}" style="display:none; background: #FCFCFF; padding: 0 20px 0 54px;">
+                                    ${t.subtopics.map(st => {
+                                        const isSubDone = localStorage.getItem(`nextern_prep_${currentSubject}_${t.name}_${st}`) === 'true';
+                                        return `
+                                            <div class="subtopic-row" style="display:flex; align-items:center; padding: 10px 0; border-bottom: 1px solid #F1F5F9;" onclick="toggleSubtopic('${t.name.replace(/'/g, "\\'")}', '${st.replace(/'/g, "\\'")}')">
+                                                <div class="check-box" style="width: 16px; height: 16px; margin-right: 12px; border-radius: 4px; ${isSubDone ? 'background:#6C63FF; border-color:#6C63FF' : ''}">
+                                                    ${isSubDone ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+                                                </div>
+                                                <span style="font-size: 0.85rem; color: ${isSubDone ? '#94A3B8' : '#475569'}; text-decoration: ${isSubDone ? 'line-through' : 'none'}">${st}</span>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
             `).join('');
+        }
 
-            document.querySelectorAll('.task-check').forEach(input => {
-                input.addEventListener('change', () => {
-                    const freshState = loadTasksState();
-                    freshState[today] = freshState[today] || {};
-                    freshState[today][input.dataset.taskId] = input.checked;
-                    saveTasksState(freshState);
-                    updateProgress();
+        // ── LOGIC HELPERS ──
+        function isMainTopicDone(subKey, topic) {
+            return topic.subtopics.every(st => localStorage.getItem(`nextern_prep_${subKey}_${topic.name}_${st}`) === 'true');
+        }
+
+        function toggleSubtopicList(subKey, topicName) {
+            const id = `sub-${subKey}-${topicName.replace(/\s+/g, '')}`;
+            const chevId = `chevron-${subKey}-${topicName.replace(/\s+/g, '')}`;
+            const el = document.getElementById(id);
+            const chev = document.getElementById(chevId);
+            if (el) {
+                const isOpen = el.style.display === 'block';
+                el.style.display = isOpen ? 'none' : 'block';
+                chev.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+            }
+        }
+
+        function toggleSubtopic(topicName, subName) {
+            const key = `nextern_prep_${currentSubject}_${topicName}_${subName}`;
+            const current = localStorage.getItem(key) === 'true';
+            localStorage.setItem(key, !current);
+            syncUI();
+        }
+
+        function toggleMainTopic(topicName, event) {
+            event.stopPropagation();
+            const topics = SUBJECTS[currentSubject].topics;
+            let targetTopic = null;
+            Object.values(topics).flat().forEach(t => { if(t.name === topicName) targetTopic = t; });
+
+            if (targetTopic) {
+                const alreadyDone = isMainTopicDone(currentSubject, targetTopic);
+                targetTopic.subtopics.forEach(st => {
+                    localStorage.setItem(`nextern_prep_${currentSubject}_${topicName}_${st}`, !alreadyDone);
+                });
+            }
+            syncUI();
+        }
+
+        function syncUI() {
+            // Check streak first interaction
+            const streak = parseInt(localStorage.getItem('nextern_prep_streak')) || 0;
+            if (streak === 0) {
+                localStorage.setItem('nextern_prep_streak', 1);
+                document.getElementById('streakVal').textContent = 1;
+            }
+
+            renderTopics();
+            updateSubjectViewStats();
+            renderSubjectBars();
+            updateOverallProgress();
+            renderStudyNext();
+        }
+
+        function updateSubjectViewStats() {
+            const sub = SUBJECTS[currentSubject];
+            let totalSubtopics = 0;
+            let doneSubtopics = 0;
+
+            Object.values(sub.topics).flat().forEach(t => {
+                t.subtopics.forEach(st => {
+                    totalSubtopics++;
+                    if (localStorage.getItem(`nextern_prep_${currentSubject}_${t.name}_${st}`) === 'true') doneSubtopics++;
                 });
             });
 
-            updateProgress();
+            const pct = totalSubtopics ? Math.round((doneSubtopics / totalSubtopics) * 100) : 0;
+            document.getElementById('viewBar').style.width = `${pct}%`;
+            document.getElementById('viewCount').textContent = `${doneSubtopics} of ${totalSubtopics} sub-tasks`;
         }
 
-        renderChecklist();
+        function renderSubjectBars() {
+            const list = document.getElementById('sideSubjectsList');
+            const subProgressList = Object.entries(SUBJECTS).map(([key, data]) => {
+                let total = 0;
+                let done = 0;
+                Object.values(data.topics).flat().forEach(t => { total++; if (localStorage.getItem(`nextern_prep_${key}_${t.name}`) === 'true') done++; });
+                const pct = Math.round((done / total) * 100);
+                return { key, pct };
+            });
+
+            list.innerHTML = subProgressList.map(s => `
+                <div class="side-progress-item">
+                    <div class="side-p-label">
+                        <span>${s.key}</span>
+                        <span>${s.pct}%</span>
+                    </div>
+                    <div class="side-p-bar"><div class="side-p-fill" style="width: ${s.pct}%"></div></div>
+                </div>
+            `).join('');
+        }
+
+        function updateOverallProgress() {
+            let totalTopics = 0;
+            let doneTopics = 0;
+
+            Object.entries(SUBJECTS).forEach(([key, data]) => {
+                Object.values(data.topics).flat().forEach(t => {
+                    totalTopics++;
+                    if (localStorage.getItem(`nextern_prep_${key}_${t.name}`) === 'true') doneTopics++;
+                });
+            });
+
+            const pct = Math.round((doneTopics / totalTopics) * 100);
+            const offset = 251.2 - (251.2 * pct) / 100;
+
+            document.getElementById('totalDone').textContent = doneTopics;
+            document.getElementById('totalLeft').textContent = totalTopics - doneTopics;
+            
+            // Rings
+            document.getElementById('overallFill').style.strokeDashoffset = offset;
+            document.getElementById('overallPct').textContent = `${pct}%`;
+            document.getElementById('miniOverallFill').style.strokeDashoffset = offset;
+            document.getElementById('miniOverallPct').textContent = `${pct}%`;
+
+            // Status Text
+            let status = "Just Starting";
+            if (pct >= 80) status = "Interview Ready!";
+            else if (pct >= 60) status = "Almost Ready";
+            else if (pct >= 40) status = "Halfway There";
+            else if (pct >= 20) status = "Building Foundation";
+            
+            document.getElementById('statusText').textContent = status;
+
+            renderStudyNext();
+        }
+
+        function renderStudyNext() {
+            const list = document.getElementById('studyNextList');
+            let recommendations = [];
+
+            Object.entries(SUBJECTS).forEach(([key, data]) => {
+                Object.values(data.topics).flat().forEach(t => {
+                    const topicIsDone = isMainTopicDone(key, t);
+                    if (!topicIsDone && t.prio === 'High') {
+                        recommendations.push({ sub: key, ...t });
+                    }
+                });
+            });
+
+            // Limit to 3 and display
+            list.innerHTML = recommendations.slice(0, 3).map(rec => `
+                <div class="study-next-item" onclick="switchSubject('${rec.sub}')">
+                    <div class="study-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    </div>
+                    <div>
+                        <div class="study-label">${rec.name}</div>
+                        <div class="study-sub">${rec.sub} • ${rec.diff}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            if (recommendations.length === 0) {
+                list.innerHTML = '<p style="font-size:0.75rem;color:#94A3B8;text-align:center;padding:20px;">You are all caught up on high priority topics!</p>';
+            }
+        }
+
+        function resetProgress() {
+            if (confirm(`Are you sure you want to reset all progress for ${currentSubject}?`)) {
+                Object.values(SUBJECTS[currentSubject].topics).flat().forEach(t => {
+                    localStorage.removeItem(`nextern_prep_${currentSubject}_${t.name}`);
+                });
+                init();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
-
 </html>

@@ -1,14 +1,12 @@
 /* ================================================================
    scraper/index.js
-   Runs all scrapers, merges with seed data, saves to drives.json
+   Runs all scrapers, merges with seed data, upserts into MongoDB.
 
-   Run manually:   node scraper/index.js
+   Run manually:   cd server && node scraper/index.js
    Auto via cron:  runs every 24hrs via schedule.js
 ================================================================ */
 
-const fs = require('fs');
 const path = require('path');
-
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const scrapeAdzuna = require('./adzuna');
@@ -16,7 +14,12 @@ const scrapeGoogle = require('./google');
 const scrapeMicrosoft = require('./microsoft');
 const seedDrives = require('./seedDrives');
 
-const OUTPUT_PATH = path.join(__dirname, '../../data/drives.json');
+// Lazy-require to avoid circular-dep issues when loaded from schedule.js
+let Drive;
+function getDriveModel() {
+    if (!Drive) Drive = require('../models/Drive');
+    return Drive;
+}
 
 async function runScraper() {
     console.log('\n🚀 Nextern Drive Scraper starting...');
@@ -64,39 +67,69 @@ async function runScraper() {
         return true;
     });
 
-    // 6. Add IDs
-    const final = unique.map((drive, index) => ({
-        id: `drive_${Date.now()}_${index}`,
-        ...drive,
-    }));
+    // 6. Upsert each drive into MongoDB (instead of writing JSON)
+    const DriveModel = getDriveModel();
+    let inserted = 0;
+    let updated = 0;
 
-    // 7. Save to JSON
-    const output = {
-        lastUpdated: new Date().toISOString(),
-        totalDrives: final.length,
-        drives: final,
-    };
+    for (const drive of unique) {
+        const driveId = drive.id || `drive_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+        try {
+            const result = await DriveModel.findOneAndUpdate(
+                // Match on company + role to avoid duplicates
+                { company: drive.company, role: drive.role },
+                {
+                    $set: {
+                        id:          driveId,
+                        company:     drive.company,
+                        role:        drive.role,
+                        location:    drive.location,
+                        package:     drive.package,
+                        cgpaCutoff:  drive.cgpaCutoff ?? 0,
+                        deadline:    drive.deadline ? new Date(drive.deadline) : null,
+                        type:        drive.type || 'Full Time',
+                        companyType: drive.companyType || 'product',
+                        applyUrl:    drive.applyUrl,
+                        status:      drive.status || 'open',
+                        logo:        drive.logo,
+                        color:       drive.color,
+                        source:      drive.source,
+                        scrapedAt:   drive.scrapedAt ? new Date(drive.scrapedAt) : new Date(),
+                        postedAt:    drive.postedAt ? new Date(drive.postedAt) : undefined,
+                    },
+                    $setOnInsert: { createdAt: new Date() },
+                },
+                { upsert: true, new: true }
+            );
 
-    // Make sure data directory exists
-    const dataDir = path.dirname(OUTPUT_PATH);
-    if (!fs.existsSync(dataDir)) {
-        fs.mkdirSync(dataDir, { recursive: true });
+            if (result.createdAt && (new Date() - result.createdAt) < 5000) {
+                inserted++;
+            } else {
+                updated++;
+            }
+        } catch (err) {
+            console.error(`⚠️ Failed to upsert ${drive.company} – ${drive.role}:`, err.message);
+        }
     }
 
-    fs.writeFileSync(OUTPUT_PATH, JSON.stringify(output, null, 2));
-
     console.log('─'.repeat(40));
-    console.log(`✅ Total: ${final.length} drives saved to drives.json`);
-    console.log(`📁 Output: ${OUTPUT_PATH}`);
-    console.log(`🕐 Last updated: ${output.lastUpdated}`);
+    console.log(`✅ Total: ${unique.length} drives processed (${inserted} new, ${updated} updated)`);
+    console.log(`🕐 Last updated: ${new Date().toISOString()}`);
     console.log('─'.repeat(40));
 
-    return final;
+    return unique;
 }
 
-// Run if called directly
+// Run if called directly (standalone mode — needs its own DB connection)
 if (require.main === module) {
-    runScraper().catch(console.error);
+    const connectDB = require('../config/db');
+    connectDB()
+        .then(() => runScraper())
+        .then(() => process.exit(0))
+        .catch(err => {
+            console.error(err);
+            process.exit(1);
+        });
 }
 
 module.exports = runScraper;
