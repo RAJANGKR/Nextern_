@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Analytics — Nextern</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@800&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Theme & Global Styles -->
+    <link rel="stylesheet" href="../css/dark-mode.css">
+    <script src="../js/theme.js"></script>
+    <style>
+        :root {
+            --accent: #6C63FF;
+            --accent-soft: #EEF2FF;
+            --bg-body: #F5F6FA;
+            --bg-white: #FFFFFF;
+            --border: #E2E8F0;
+            --text-dark: #0F172A;
+            --text-gray: #64748B;
+            --radius: 16px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-body); color: var(--text-dark); min-height: 100vh; }
+
+        /* --- LAYOUT --- */
+        .analytics-container { display: flex; min-height: 100vh; }
+        .main-content { flex: 1; padding: 32px 40px; }
+
+        /* --- HEADER --- */
+        .page-header { margin-bottom: 32px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .header-left h1 { font-family: 'Syne', sans-serif; font-size: 2rem; margin-bottom: 4px; }
+        .header-left p { color: var(--text-gray); font-size: 0.95rem; }
+
+        /* --- STAT CARDS --- */
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 32px; }
+        .stat-card { background: var(--bg-white); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); }
+        .stat-card h3 { font-size: 0.8rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+        .stat-val { font-size: 1.8rem; font-weight: 700; color: var(--text-dark); }
+        .stat-trend { font-size: 0.75rem; margin-top: 8px; font-weight: 500; }
+        .trend-up { color: #10B981; }
+
+        /* --- CHARTS GRID --- */
+        .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 32px; }
+        .chart-card { background: var(--bg-white); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); min-height: 350px; }
+        .chart-card h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; }
+        
+        /* --- BATCH COMPARISON --- */
+        .batch-card { background: linear-gradient(135deg, #6C63FF, #5A52E5); color: white; padding: 24px; border-radius: var(--radius); box-shadow: 0 10px 15px -3px rgba(108, 99, 255, 0.3); border: none; min-height: 350px; }
+        .batch-card h2 { border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 12px; }
+        .comparison-item { margin-bottom: 24px; }
+        .comp-label { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px; opacity: 0.9; }
+        .comp-bar { height: 8px; background: rgba(255,255,255,0.2); border-radius: 4px; overflow: hidden; }
+        .comp-fill { height: 100%; background: white; border-radius: 4px; }
+        .percentile-text { font-size: 0.9rem; font-weight: 600; margin-top: 6px; }
+
+        /* --- INSIGHTS --- */
+        .insights-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .insight-card { background: var(--bg-white); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); }
+        .insight-list { list-style: none; margin-top: 16px; }
+        .insight-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+        .insight-item:last-child { border-bottom: none; }
+        .insight-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; }
+
+        /* Skeleton States */
+        .loading { font-size: 0.9rem; color: var(--text-gray); }
+
+        @media (max-width: 1024px) {
+            .charts-grid { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOPNAV (Standard across all pages) -->
+    <nav style="height: 60px; background: var(--bg-white); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 24px; position: sticky; top: 0; z-index: 100;">
+        <div style="font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--accent); cursor: pointer;" onclick="window.location.href='../index.html'">NEXTERN</div>
+        <div id="sidebar-mount-btn" style="margin-left: 16px;"></div>
+        <div style="display: flex; align-items: center; gap: 16px; margin-left: auto;">
+            <button class="theme-toggle-btn" id="themeToggleBtn" onclick="window.toggleTheme()" style="background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+            <a href="profile.html" id="navAvatar" style="width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; text-decoration: none;">U</a>
+        </div>
+    </nav>
+
+    <div class="analytics-container">
+        <!-- SIDEBAR -->
+        <div id="sidebar-mount"></div>
+
+        <main class="main-content">
+            <header class="page-header">
+                <div class="header-left">
+                    <h1>Placement Analytics</h1>
+                    <p>Real-time insights into your career journey and batch trends.</p>
+                </div>
+                <div class="header-right">
+                    <button class="primary" style="padding: 10px 20px; background: var(--accent); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;" onclick="refreshData()">Refresh Live Data</button>
+                </div>
+            </header>
+
+            <!-- SECTION 1: YOUR STATS -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <h3>Applications</h3>
+                    <div class="stat-val" id="statApps">--</div>
+                    <div class="stat-trend trend-up">↑ Active Phase</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Interviews</h3>
+                    <div class="stat-val" id="statInterviews">--</div>
+                    <div class="stat-trend" style="color:var(--accent)">Keep preparing!</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Match Score</h3>
+                    <div class="stat-val" id="statMatch">--%</div>
+                    <div class="stat-trend">Avg. across analyses</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Offers</h3>
+                    <div class="stat-val" id="statOffers">--</div>
+                    <div class="stat-trend trend-up">Sky is the limit!</div>
+                </div>
+            </div>
+
+            <!-- SECTION 2 & 3: BATCH & COLLEGE -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h2>Placement Distribution by Branch</h2>
+                    <canvas id="branchChart"></canvas>
+                </div>
+                <div class="batch-card">
+                    <h2>Batch Benchmarks</h2>
+                    <div class="comparison-item" style="margin-top: 30px;">
+                        <div class="comp-label"><span>Prep Progress</span><span id="labelPrep">--%</span></div>
+                        <div class="comp-bar"><div class="comp-fill" id="barPrep" style="width: 0%"></div></div>
+                        <div class="percentile-text" id="textPrep">You're in the loading...</div>
+                    </div>
+                    <div class="comparison-item">
+                        <div class="comp-label"><span>Academic CGPA</span><span id="labelCgpa">--</span></div>
+                        <div class="comp-bar"><div class="comp-fill" id="barCgpa" style="width: 0%"></div></div>
+                        <div class="percentile-text" id="textCgpa">Calculating percentile...</div>
+                    </div>
+                    <div class="comparison-item">
+                        <div class="comp-label"><span>Interview Conversions</span><span>Top 15%</span></div>
+                        <div class="comp-bar"><div class="comp-fill" style="width: 85%"></div></div>
+                        <div class="percentile-text">Maintaining good momentum</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-grid" style="grid-template-columns: 1fr 2fr;">
+                <div class="chart-card">
+                    <h2>Hiring Distribution</h2>
+                    <canvas id="typeChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h2>Drive Activity (Monthly)</h2>
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+
+            <!-- SECTION 4: DRIVE INSIGHTS -->
+            <div class="insights-row">
+                <div class="insight-card">
+                    <h2>Drive Competitiveness</h2>
+                    <p style="font-size: 0.85rem; color: var(--text-gray); margin-bottom: 12px;">Applications per seat ratio across companies.</p>
+                    <div class="insight-list" id="compList">
+                        <div class="loading">Fetching competitive data...</div>
+                    </div>
+                </div>
+                <div class="insight-card">
+                    <h2>Match Optimized Opportunities</h2>
+                    <p style="font-size: 0.85rem; color: var(--text-gray); margin-bottom: 12px;">Drives that align best with your skills.</p>
+                    <div class="insight-list" id="matchList">
+                        <div class="loading">Finding your best matches...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="../js/config.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script>
+        const API_BASE = window.API_BASE || 'http://localhost:4000';
+        const HEADERS = window.getAuthHeaders();
+
+        async function init() {
+            setNavAvatar();
+            await fetchPersonalStats();
+            await fetchCollegeStats();
+            await fetchDriveInsights();
+        }
+
+        function setNavAvatar() {
+            const name = localStorage.getItem('nextern_name') || 'Student';
+            document.getElementById('navAvatar').textContent = name.charAt(0).toUpperCase();
+        }
+
+        async function fetchPersonalStats() {
+            try {
+                const res = await fetch(`${API_BASE}/api/analytics/personal`, { headers: HEADERS });
+                const { success, personal } = await res.json();
+                if (!success) return;
+
+                // Update Counters
+                const apps = personal.applications.find(a => a._id === 'applied')?.count || 0;
+                const ints = personal.applications.find(a => a._id === 'interview')?.count || 0;
+                const offers = personal.applications.find(a => a._id === 'offered')?.count || 0;
+                
+                document.getElementById('statApps').textContent = apps;
+                document.getElementById('statInterviews').textContent = ints;
+                document.getElementById('statOffers').textContent = offers;
+
+                // Match Score Avg
+                if (personal.matchHistory.length > 0) {
+                    const avg = personal.matchHistory.reduce((acc, curr) => acc + curr.matchScore, 0) / personal.matchHistory.length;
+                    document.getElementById('statMatch').textContent = Math.round(avg);
+                }
+
+                // Benchmarks
+                document.getElementById('labelPrep').textContent = `${Math.round(personal.prepPercent)}%`;
+                document.getElementById('barPrep').style.width = `${personal.prepPercent}%`;
+                document.getElementById('textPrep').textContent = personal.prepPercent > 70 ? `Top 10% of your batch!` : personal.prepPercent > 40 ? `Top 40% of your batch` : `Keep up the preparation!`;
+
+                document.getElementById('labelCgpa').textContent = personal.cgpa;
+                document.getElementById('barCgpa').style.width = `${(personal.cgpa/10)*100}%`;
+                document.getElementById('textCgpa').textContent = `Better than ${Math.round(personal.cgpaPercentile)}% of students`;
+
+            } catch (err) { console.error('Personal Stats Error:', err); }
+        }
+
+        async function fetchCollegeStats() {
+            try {
+                const res = await fetch(`${API_BASE}/api/analytics/placement`, { headers: HEADERS });
+                const { success, stats } = await res.json();
+                if (!success) return;
+
+                renderBranchChart(stats.branchPackages);
+                renderTypeChart(stats.companyTypes);
+                renderTrendChart(stats.monthlyActivity);
+
+            } catch (err) { console.error('College Stats Error:', err); }
+        }
+
+        async function fetchDriveInsights() {
+            // Mocking for now as it needs complex logic
+            const compList = document.getElementById('compList');
+            const companies = [
+                { name: 'Google', ratio: '240:1', trend: 'High' },
+                { name: 'Microsoft', ratio: '180:1', trend: 'High' },
+                { name: 'TCS', ratio: '12:1', trend: 'Low' },
+                { name: 'Zomato', ratio: '45:1', trend: 'Med' }
+            ];
+            compList.innerHTML = companies.map(c => `
+                <div class="insight-item">
+                    <div class="insight-icon">🏢</div>
+                    <div style="flex:1">
+                        <div style="font-weight:600; font-size: 0.9rem;">${c.name}</div>
+                        <div style="font-size:0.75rem; color:var(--text-gray)">Competition Ratio</div>
+                    </div>
+                    <div style="font-weight:700; color:var(--accent)">${c.ratio}</div>
+                </div>
+            `).join('');
+
+            const matchList = document.getElementById('matchList');
+            matchList.innerHTML = `
+                <div class="insight-item">
+                    <div class="insight-icon" style="background:#dcfce7; color:#16a34a">🎯</div>
+                    <div style="flex:1">
+                        <div style="font-weight:600; font-size: 0.9rem;">Senior Frontend Engineer</div>
+                        <div style="font-size:0.75rem; color:var(--text-gray)">92% Match with your React skills</div>
+                    </div>
+                    <a href="drives.html" style="font-size:0.75rem; color:var(--accent); font-weight:700">Apply</a>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-icon" style="background:#dcfce7; color:#16a34a">🎯</div>
+                    <div style="flex:1">
+                        <div style="font-weight:600; font-size: 0.9rem;">Fullstack Developer</div>
+                        <div style="font-size:0.75rem; color:var(--text-gray)">85% Match - Node.js specialized</div>
+                    </div>
+                    <a href="drives.html" style="font-size:0.75rem; color:var(--accent); font-weight:700">Apply</a>
+                </div>
+            `;
+        }
+
+        // --- CHARTING FUNCTIONS ---
+
+        function renderBranchChart(data) {
+            const ctx = document.getElementById('branchChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d._id || 'Unknown'),
+                    datasets: [{
+                        label: 'Average Package (LPA)',
+                        data: data.map(d => d.avgPackage || 0),
+                        backgroundColor: '#6C63FF',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, grid: { display: false } }, x: { grid: { display: false } } }
+                }
+            });
+        }
+
+        function renderTypeChart(data) {
+            const ctx = document.getElementById('typeChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.map(d => d._id),
+                    datasets: [{
+                        data: data.map(d => d.count),
+                        backgroundColor: ['#6C63FF', '#4C43FF', '#8C83FF', '#ACA3FF'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } } },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        function renderTrendChart(data) {
+            const ctx = document.getElementById('trendChart').getContext('2d');
+            const monthNames = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => monthNames[d._id]),
+                    datasets: [{
+                        label: 'Drives Posted',
+                        data: data.map(d => d.count),
+                        borderColor: '#6C63FF',
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: 'rgba(108, 99, 255, 0.1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true }, x: { grid: { display: false } } }
+                }
+            });
+        }
+
+        function refreshData() {
+            window.location.reload();
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
