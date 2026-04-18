@@ -167,7 +167,7 @@
                     headers: window.getAuthHeaders()
                 });
                 const data = await res.json();
-                if (!data.success || data.data.role !== 'admin') {
+                if (!data.success || data.user.role !== 'admin') {
                     alert('Admin access required.');
                     window.location.href = 'feed.html';
                 }

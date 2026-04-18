@@ -42,7 +42,7 @@ router.get('/me', protect, async (req, res) => {
                 linkedin: user.linkedin,
                 github: user.github,
                 avatar: user.avatar,
-                isAdmin: user.isAdmin,
+                role: user.role,
                 createdAt: user.createdAt,
             },
         });
