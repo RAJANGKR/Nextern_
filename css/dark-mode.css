@@ -1,110 +1,186 @@
-/* ================================================================
-   GLOBAL DARK THEME OVERRIDES
-   Applied to body.dark-theme
-================================================================ */
+/**
+ * dark-mode.css — Nextern Dark Theme
+ * Applied when <html data-theme="dark"> is set.
+ * Uses CSS variable overrides — no JS needed for styling.
+ */
 
-body.dark-theme {
-    /* SAAS THEME (DARK BLUE SLATE) */
-    --bg: #0B1120;             /* Navy slate bg */
-    --bg-white: #111827;       /* Navy slate panels */
-    --bg-hover: #1F2937;       /* Slightly lighter hover */
-    
-    --text: #F9FAFB;           /* Extremely light text */
-    --text-soft: #9CA3AF;
-    --text-muted: #6B7280;
-    
-    --border: #374151;         /* Subtly visible dark borders */
-    --border-lit: #4B5563;
-    
-    --accent: #3B82F6;         /* Bright blue - highly visible on dark */
-    --accent-hover: #60A5FA;   /* Lighter blue */
-    --accent-light: rgba(59, 130, 246, 0.15);
-    
-    /* Utilities */
-    --green: #10B981;
-    --green-light: rgba(16, 185, 129, 0.15);
-    
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+[data-theme="dark"] {
+    /* ── Core Palette ── */
+    --bg:          #0f1117;
+    --bg-card:     #1a1d27;
+    --bg-hover:    #22263a;
+    --border:      #2d3148;
+    --border-lit:  #383d5c;
+
+    --text:        #e2e8f0;
+    --muted:       #94a3b8;
+    --subtle:      #64748b;
+
+    --accent:      #818cf8;
+    --accent-dim:  rgba(129, 140, 248, 0.12);
+    --green:       #34d399;
+    --green-dim:   rgba(52, 211, 153, 0.12);
+    --amber:       #fbbf24;
+    --blue:        #60a5fa;
+    --rose:        #fb7185;
 }
 
-/* Specific overrides for hardcoded backgrounds in dark mode */
-body.dark-theme .story-card,
-body.dark-theme .comments-section,
-body.dark-theme .comment-bubble,
-body.dark-theme .peer-row,
-body.dark-theme .drive-highlight,
-body.dark-theme .r-card,
-body.dark-theme .sidebar-profile-card,
-body.dark-theme .sidebar-nav-card,
-body.dark-theme .create-post,
-body.dark-theme .feed-tabs {
-    background: var(--bg-card);
+/* ── App Shell (pages that use the 2-col grid) ── */
+[data-theme="dark"] body {
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+/* ── Topnav ── */
+[data-theme="dark"] .topnav,
+[data-theme="dark"] .navbar {
+    background: #13161f !important;
+    border-bottom-color: var(--border) !important;
+}
+
+[data-theme="dark"] .nav-search input {
+    background: #1e2235;
     border-color: var(--border);
     color: var(--text);
 }
 
-body.dark-theme .feed-post,
-body.dark-theme .post-card {
+[data-theme="dark"] .nav-link { color: var(--muted); }
+[data-theme="dark"] .nav-link.active { color: var(--accent); border-bottom-color: var(--accent); }
+[data-theme="dark"] .nav-link:hover { color: var(--text); }
+
+/* ── Sidebar ── */
+[data-theme="dark"] .sidebar,
+[data-theme="dark"] .usb-container {
+    background: #13161f !important;
+    border-right-color: var(--border) !important;
+}
+
+[data-theme="dark"] .usb-link { color: var(--muted); }
+[data-theme="dark"] .usb-link:hover { background: var(--bg-hover) !important; color: var(--text); }
+[data-theme="dark"] .usb-link.active { background: rgba(129,140,248,0.12) !important; color: var(--accent); }
+[data-theme="dark"] .usb-footer { border-top-color: var(--border); }
+[data-theme="dark"] .usb-r-bar-bg { background: var(--border); }
+
+[data-theme="dark"] .side-link { color: var(--muted); }
+[data-theme="dark"] .side-link:hover { background: var(--bg-hover); color: var(--text); }
+[data-theme="dark"] .side-link.active { background: rgba(129,140,248,0.12); color: var(--accent); }
+[data-theme="dark"] .user-mini-card { background: #1e2235; }
+[data-theme="dark"] .side-footer { border-top-color: var(--border); }
+
+/* ── Cards ── */
+[data-theme="dark"] .card-front,
+[data-theme="dark"] .card-back,
+[data-theme="dark"] .list-card,
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .upload-card,
+[data-theme="dark"] .analysis-card,
+[data-theme="dark"] .topic-card,
+[data-theme="dark"] .preview-card,
+[data-theme="dark"] .feature-card {
     background: var(--bg-card) !important;
     border-color: var(--border) !important;
+    color: var(--text) !important;
 }
 
-body.dark-theme .comment-input,
-body.dark-theme .create-post-btn,
-body.dark-theme input {
-    background: var(--bg);
-    color: var(--text);
-    border-color: var(--border);
+[data-theme="dark"] .card-front:hover { border-color: var(--accent) !important; }
+[data-theme="dark"] .card-back { background: #171b2e !important; }
+
+/* ── Drive Cards (drives.html) ── */
+[data-theme="dark"] .drive-title { color: var(--text) !important; }
+[data-theme="dark"] .meta-item { color: var(--muted) !important; }
+[data-theme="dark"] .upload-area { background: #1e2235 !important; border-color: var(--border) !important; }
+[data-theme="dark"] .upload-area:hover { background: var(--bg-hover) !important; border-color: var(--accent) !important; }
+
+/* ── Inputs & Selects ── */
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+    background: #1e2235 !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
 }
 
-body.dark-theme .top-nav,
-body.dark-theme .navbar,
-body.dark-theme .topnav {
-    background: rgba(30, 41, 59, 0.85);
-    /* Frosty dark 800 */
-    border-bottom: 1px solid var(--border);
-}
+[data-theme="dark"] input:focus,
+[data-theme="dark"] select:focus { border-color: var(--accent) !important; }
+[data-theme="dark"] input::placeholder { color: var(--subtle) !important; }
 
-body.dark-theme .hero-bg .bg-grid {
-    background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
-}
+/* ── Search bars ── */
+[data-theme="dark"] .search-main input { background: #1e2235; border-color: var(--border); color: var(--text); }
+[data-theme="dark"] .sort-select { background: #1e2235; border-color: var(--border); color: var(--text); }
 
-body.dark-theme .rpd-todo {
-    border-color: var(--border);
-    background: var(--bg);
-    color: var(--text-muted);
-}
+/* ── Main Content Areas ── */
+[data-theme="dark"] .main-content { background: var(--bg); }
+[data-theme="dark"] .page-header h1 { color: var(--text); }
+[data-theme="dark"] .page-header p { color: var(--muted); }
+[data-theme="dark"] .results-meta { color: var(--muted); }
 
-/* Theme Toggle Button Styles */
-.theme-btn {
+/* ── Buttons ── */
+[data-theme="dark"] .btn-analyze { background: transparent; color: var(--accent); border-color: var(--accent); }
+[data-theme="dark"] .btn-analyze:hover { background: rgba(129,140,248,0.1); }
+
+/* ── Filter section ── */
+[data-theme="dark"] .filter-title { color: var(--muted); }
+[data-theme="dark"] .filter-check { color: var(--muted); }
+[data-theme="dark"] .filter-label { color: var(--subtle); }
+[data-theme="dark"] .btn-reset-text { color: var(--accent); }
+[data-theme="dark"] .progress-bar { background: var(--border); }
+
+/* ── Dashboard specific ── */
+[data-theme="dark"] .dash-sidebar { background: #090c14 !important; }
+[data-theme="dark"] .grid-header h3 { color: var(--text); }
+[data-theme="dark"] .drive-company { color: var(--text); }
+[data-theme="dark"] .drive-meta { color: var(--muted); }
+[data-theme="dark"] .drive-row { border-bottom-color: var(--border) !important; }
+[data-theme="dark"] .drive-row:hover { background: var(--bg-hover) !important; }
+
+/* ── Modal ── */
+[data-theme="dark"] .modal-content { background: #13161f !important; }
+[data-theme="dark"] .modal-body { background: #13161f; }
+[data-theme="dark"] .feedback-box { background: #1e2235 !important; }
+[data-theme="dark"] .skill-pill.have { background: rgba(52,211,153,0.15); color: #34d399; }
+[data-theme="dark"] .skill-pill.miss { background: rgba(251,113,133,0.15); color: #fb7185; }
+[data-theme="dark"] .score-text .score-val { color: var(--text); }
+
+/* ── Prep Hub ── */
+[data-theme="dark"] .subject-card { background: var(--bg-card) !important; border-color: var(--border) !important; }
+[data-theme="dark"] .topic-item { background: var(--bg-card) !important; border-color: var(--border) !important; color: var(--text) !important; }
+[data-theme="dark"] .topic-item:hover { background: var(--bg-hover) !important; }
+[data-theme="dark"] .sub-topic { color: var(--muted) !important; }
+
+/* ── roadmap ── */
+[data-theme="dark"] .phase-card { background: var(--bg-card) !important; border-color: var(--border) !important; }
+[data-theme="dark"] .resource-link { color: var(--accent) !important; }
+
+/* ── Theme toggle button ── */
+.theme-toggle-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    border-radius: 100px;
-    background: var(--bg-hover);
-    color: var(--text);
+    justify-content: center;
     cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 500;
-    transition: background 0.2s;
-    border: 1px solid var(--border);
-    font-family: inherit;
-}
-
-.theme-btn:hover {
-    background: var(--bg-card);
-}
-
-.theme-toggle-icon {
-    font-size: 1rem;
-    cursor: pointer;
-    background: none;
+    color: #64748b;
+    transition: background 0.2s, color 0.2s;
     border: none;
-    transition: transform 0.2s;
+    background: none;
 }
 
-.theme-toggle-icon:hover {
-    transform: scale(1.1);
-}
+.theme-toggle-btn:hover { background: #f1f5f9; color: #0f172a; }
+[data-theme="dark"] .theme-toggle-btn { color: #94a3b8; }
+[data-theme="dark"] .theme-toggle-btn:hover { background: #1e2235; color: #e2e8f0; }
+
+/* ── Feed ── */
+[data-theme="dark"] .post-card,
+[data-theme="dark"] .feed-post { background: var(--bg-card) !important; border-color: var(--border) !important; }
+[data-theme="dark"] .post-content { color: var(--text) !important; }
+[data-theme="dark"] .post-meta { color: var(--muted) !important; }
+
+/* ── Readiness hero card ── */
+[data-theme="dark"] .readiness-card { background: linear-gradient(135deg, #1a1d27, #1e2235) !important; }
+[data-theme="dark"] .stat-card { background: var(--bg-card) !important; border-color: var(--border) !important; }
+
+/* ── Background on landing page ── */
+[data-theme="dark"] .bg-blob { opacity: 0.06; }
+[data-theme="dark"] .bg-grid { opacity: 0.4; }
+[data-theme="dark"] .navbar { background: rgba(13, 16, 23, 0.9) !important; }

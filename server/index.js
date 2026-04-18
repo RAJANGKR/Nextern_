@@ -81,6 +81,7 @@ app.use('/api/analyze', require('./routes/analyze.routes'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/posts', require('./routes/posts'));
 app.use('/api/applications', require('./routes/applications.routes'));
+app.use('/api/progress', require('./routes/progress.routes'));
 
 /* ── Health check route — visit http://localhost:5000/api/health ── */
 app.get('/api/health', (req, res) => {

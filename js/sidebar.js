@@ -21,7 +21,44 @@
     }
 
     const driveCount = localStorage.getItem('nextern_drive_count') || '0';
-    const readiness = 68;
+    let readiness = parseInt(localStorage.getItem('nextern_readiness') || '0', 10);
+
+    // Async fetch live data after sidebar mounts
+    async function refreshLiveData() {
+        const token = localStorage.getItem('nextern_token');
+        if (!token) return;
+        const API_BASE = 'http://localhost:4000';
+        try {
+            // Drive badge count
+            const dr = await fetch(`${API_BASE}/api/drives`, { headers: { Authorization: `Bearer ${token}` } });
+            const dd = await dr.json();
+            if (dd.success && dd.drives) {
+                localStorage.setItem('nextern_drive_count', dd.drives.length);
+                const badge = document.querySelector('.usb-badge');
+                if (badge) badge.textContent = dd.drives.length;
+            }
+        } catch (_) {}
+        try {
+            // User readiness
+            const ur = await fetch(`${API_BASE}/api/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+            const ud = await ur.json();
+            if (ud.user) {
+                const hasResume = !!ud.user.resumeUrl;
+                // Calc simple readiness
+                let total = 0, done = 0;
+                for (let i = 0; i < localStorage.length; i++) {
+                    const k = localStorage.key(i);
+                    if (k && k.startsWith('nextern_prep_')) { total++; if (localStorage.getItem(k) === 'true') done++; }
+                }
+                readiness = Math.round((hasResume ? 30 : 0) + (total > 0 ? (done / total) * 40 : 0));
+                localStorage.setItem('nextern_readiness', readiness);
+                const fill = document.querySelector('.usb-r-bar-fill');
+                const label = document.querySelector('.usb-r-label span:last-child');
+                if (fill) fill.style.width = `${readiness}%`;
+                if (label) label.textContent = `${readiness}%`;
+            }
+        } catch (_) {}
+    }
 
     // 2. PATH DETECTION
     const isRoot = !window.location.pathname.includes('/pages/');
@@ -280,5 +317,6 @@
     if (mount) {
         mount.innerHTML = sidebarHTML;
         updateSidebarState(); // Initial sync
+        refreshLiveData();    // Fetch live counts
     }
 })();

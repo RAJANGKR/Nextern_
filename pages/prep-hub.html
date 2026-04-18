@@ -166,6 +166,8 @@
         .resource-link:hover { color: #6C63FF; }
         .resource-link:last-child { border-bottom: none; }
     </style>
+    <script src="../js/theme.js"></script>
+    <link rel="stylesheet" href="../css/dark-mode.css">
 </head>
 <body>
 
@@ -181,7 +183,15 @@
             <a href="prep-hub.html" class="nav-link active">Prep Hub</a>
             <a href="seniors.html" class="nav-link">Seniors</a>
         </nav>
-        <div class="nav-avatar" id="navAvatar">U</div>
+        
+        <div style="display: flex; align-items: center; gap: 12px; margin-left: auto;">
+            <button class="theme-toggle-btn" id="themeToggleBtn" onclick="window.toggleTheme()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+            <a href="../profile.html" style="text-decoration:none;">
+                <div class="nav-avatar" id="navAvatar">U</div>
+            </a>
+        </div>
     </header>
 
     <!-- ── SIDEBAR ── -->
@@ -437,7 +447,23 @@
         // ── CORE LOGIC ──
         let currentSubject = 'DSA';
 
-        function init() {
+        async function init() {
+            const token = localStorage.getItem('nextern_token');
+            if (token) {
+                try {
+                    const u = JSON.parse(localStorage.getItem('nextern_user'));
+                    if (u && u._id) {
+                        const res = await fetch(`http://localhost:4000/api/progress/${u._id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+                        const data = await res.json();
+                        if (data.success && data.completedTopics) {
+                            data.completedTopics.forEach(t => {
+                                if (t.startsWith('nextern_prep_')) localStorage.setItem(t, 'true');
+                            });
+                        }
+                    }
+                } catch(e) {}
+            }
+
             setUserInfo();
             updateStreak();
             renderSubjectBars();
@@ -552,14 +578,25 @@
             }
         }
 
-        function toggleSubtopic(topicName, subName) {
+        async function toggleSubtopic(topicName, subName) {
             const key = `nextern_prep_${currentSubject}_${topicName}_${subName}`;
             const current = localStorage.getItem(key) === 'true';
             localStorage.setItem(key, !current);
             syncUI();
+
+            const token = localStorage.getItem('nextern_token');
+            if (token) {
+                try {
+                    await fetch('http://localhost:4000/api/progress/toggle', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                        body: JSON.stringify({ topicCode: key })
+                    });
+                } catch(e) {}
+            }
         }
 
-        function toggleMainTopic(topicName, event) {
+        async function toggleMainTopic(topicName, event) {
             event.stopPropagation();
             const topics = SUBJECTS[currentSubject].topics;
             let targetTopic = null;
@@ -567,9 +604,23 @@
 
             if (targetTopic) {
                 const alreadyDone = isMainTopicDone(currentSubject, targetTopic);
-                targetTopic.subtopics.forEach(st => {
-                    localStorage.setItem(`nextern_prep_${currentSubject}_${topicName}_${st}`, !alreadyDone);
-                });
+                const token = localStorage.getItem('nextern_token');
+                
+                for (const st of targetTopic.subtopics) {
+                    const key = `nextern_prep_${currentSubject}_${topicName}_${st}`;
+                    localStorage.setItem(key, !alreadyDone);
+                    
+                    if (token) {
+                        try {
+                            // Sync silently
+                            fetch('http://localhost:4000/api/progress/toggle', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                                body: JSON.stringify({ topicCode: key })
+                            });
+                        } catch(e) {}
+                    }
+                }
             }
             syncUI();
         }
