@@ -430,7 +430,7 @@
 
 <body>
     <nav class="topnav">
-        <a href="pages/feed.html" class="nav-logo">Nex<span>tern</span></a>
+        <a href="/pages/feed.html" class="nav-logo">Nex<span>tern</span></a>
 
         <div class="nav-search">
             <input type="text" placeholder="Search profile fields..." />
@@ -776,7 +776,7 @@
             document.getElementById('saveBtn').addEventListener('click', saveProfile);
             document.getElementById('resetBtn').addEventListener('click', resetForm);
 
-            window.handleLogout = function() {
+            window.handleLogout = function () {
                 window.clearLocalSession();
                 window.location.href = 'login.html';
             };

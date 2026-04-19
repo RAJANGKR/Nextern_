@@ -20,10 +20,10 @@
     <div class="admin-shell">
         <!-- FIXED SIDEBAR -->
         <aside class="aside">
-            <div class="aside-logo">
+            <a href="feed.html" class="aside-logo" style="text-decoration:none; color:inherit;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color:var(--brand)"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
                 NEXTERN<span>.PRO</span>
-            </div>
+            </a>
 
             <nav class="aside-nav">
                 <a href="#" class="nav-item active" data-view="dashboard">
@@ -96,13 +96,31 @@
     <!-- SCRIPTS -->
     <script src="../js/config.js"></script>
     <script>
-        // Ensure only admins can see this
-        const user = JSON.parse(localStorage.getItem('nextern_user') || '{}');
-        if (user.role !== 'admin') {
-            alert('Restricted Access');
-            window.location.href = 'feed.html';
-        }
-        document.getElementById('adminName').textContent = `${user.firstName || 'Admin'} ${user.lastName || ''}`;
+        (async function ensureAdminAccess() {
+            const token = localStorage.getItem('nextern_token');
+            if (!token) {
+                window.location.href = '../login.html';
+                return;
+            }
+
+            try {
+                const res = await fetch((window.API_BASE || 'http://localhost:4000') + '/api/user/me', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (!res.ok || !data.success || !data.user || data.user.role !== 'admin') {
+                    alert('Restricted Access');
+                    window.location.href = 'feed.html';
+                    return;
+                }
+
+                localStorage.setItem('nextern_user', JSON.stringify(data.user));
+                document.getElementById('adminName').textContent =
+                    `${data.user.firstName || 'Admin'} ${data.user.lastName || ''}`;
+            } catch (_) {
+                window.location.href = '../login.html';
+            }
+        })();
     </script>
     <script src="../js/admin-saas.js"></script>
 </body>

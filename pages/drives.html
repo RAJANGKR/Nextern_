@@ -1,18 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Placement Drives — Nextern</title>
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap"
+        rel="stylesheet">
+
     <style>
         /* ── RESET ── */
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
-        a { text-decoration: none; color: inherit; }
-        button { cursor: pointer; border: none; background: none; font-family: inherit; transition: all 0.2s; }
-        input, select { font-family: inherit; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        input,
+        select {
+            font-family: inherit;
+        }
 
         /* ── DESIGN TOKENS ── */
         :root {
@@ -103,6 +126,7 @@
             display: flex;
             flex-direction: column;
         }
+
         .user-mini-card {
             background: #f8f9ff;
             border-radius: 10px;
@@ -112,42 +136,178 @@
             gap: 10px;
             margin-bottom: 16px;
         }
-        .side-avatar {
-            width: 36px; height: 36px;
-            background: linear-gradient(135deg, #6366f1, #818cf8);
-            color: white; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
-        }
-        .user-info { overflow: hidden; }
-        .user-name { font-weight: 600; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .user-sub { font-size: 0.72rem; color: var(--text-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .side-nav { display: flex; flex-direction: column; gap: 2px; }
+        .side-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #6366f1, #818cf8);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            overflow: hidden;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-sub {
+            font-size: 0.72rem;
+            color: var(--text-soft);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .side-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
         .side-link {
-            display: flex; align-items: center; gap: 10px;
-            padding: 9px 12px; border-radius: 8px;
-            font-size: 0.86rem; color: var(--text-soft);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 8px;
+            font-size: 0.86rem;
+            color: var(--text-soft);
             transition: all 0.2s;
         }
-        .side-link:hover { background: #f5f6fa; color: var(--text-main); }
-        .side-link.active { background: #eef2ff; color: var(--primary); font-weight: 600; }
-        .side-badge { margin-left: auto; background: var(--primary); color: white; font-size: 0.62rem; font-weight: 700; padding: 1px 6px; border-radius: 100px; }
 
-        .filter-label { font-size: 0.63rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #94a3b8; margin: 20px 0 8px 12px; }
-        .filter-section { padding: 0 8px; display: flex; flex-direction: column; gap: 14px; }
-        .filter-group { display: flex; flex-direction: column; gap: 8px; }
-        .filter-title { font-size: 0.78rem; font-weight: 600; color: #475569; display: flex; justify-content: space-between; }
-        .filter-check { display: flex; align-items: center; gap: 10px; font-size: 0.82rem; color: var(--text-soft); cursor: pointer; }
-        .filter-check input { accent-color: var(--primary); cursor: pointer; }
-        .cgpa-slider { width: 100%; accent-color: var(--primary); margin-top: 4px; }
-        .btn-reset-text { color: var(--primary); font-size: 0.78rem; font-weight: 600; cursor: pointer; align-self: flex-start; margin-top: 4px; background: none; border: none; }
+        .side-link:hover {
+            background: #f5f6fa;
+            color: var(--text-main);
+        }
 
-        .side-footer { margin-top: auto; padding: 16px 8px 8px; border-top: 1px solid var(--border); }
-        .readiness-row { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; color: var(--text-soft); margin-bottom: 6px; }
-        .progress-bar { height: 4px; background: #e2e8f0; border-radius: 100px; overflow: hidden; margin-bottom: 14px; }
-        .progress-fill { height: 100%; background: var(--primary); width: 68%; }
-        .logout-link { display: flex; align-items: center; gap: 10px; color: #ef4444; font-size: 0.85rem; font-weight: 500; cursor: pointer; }
+        .side-link.active {
+            background: #eef2ff;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .side-badge {
+            margin-left: auto;
+            background: var(--primary);
+            color: white;
+            font-size: 0.62rem;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 100px;
+        }
+
+        .filter-label {
+            font-size: 0.63rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+            margin: 20px 0 8px 12px;
+        }
+
+        .filter-section {
+            padding: 0 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-title {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #475569;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .filter-check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.82rem;
+            color: var(--text-soft);
+            cursor: pointer;
+        }
+
+        .filter-check input {
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .cgpa-slider {
+            width: 100%;
+            accent-color: var(--primary);
+            margin-top: 4px;
+        }
+
+        .btn-reset-text {
+            color: var(--primary);
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            align-self: flex-start;
+            margin-top: 4px;
+            background: none;
+            border: none;
+        }
+
+        .side-footer {
+            margin-top: auto;
+            padding: 16px 8px 8px;
+            border-top: 1px solid var(--border);
+        }
+
+        .readiness-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-soft);
+            margin-bottom: 6px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 100px;
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 68%;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ef4444;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
 
         /* ── MAIN CONTENT ── */
         .main-content {
@@ -156,23 +316,76 @@
             overflow-y: auto;
             padding: 28px 32px;
         }
-        .page-header { margin-bottom: 4px; }
-        .page-header h1 { font-size: 26px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
-        .page-header p  { font-size: 0.9rem; color: var(--text-soft); }
 
-        .content-bar { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
-        .search-main { flex: 1; position: relative; }
+        .page-header {
+            margin-bottom: 4px;
+        }
+
+        .page-header h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .page-header p {
+            font-size: 0.9rem;
+            color: var(--text-soft);
+        }
+
+        .content-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .search-main {
+            flex: 1;
+            position: relative;
+        }
+
         .search-main input {
-            width: 100%; background: #fff; border: 1.5px solid var(--border);
-            padding: 10px 14px 10px 40px; border-radius: 10px; outline: none; font-size: 0.87rem; transition: 0.2s;
+            width: 100%;
+            background: #fff;
+            border: 1.5px solid var(--border);
+            padding: 10px 14px 10px 40px;
+            border-radius: 10px;
+            outline: none;
+            font-size: 0.87rem;
+            transition: 0.2s;
         }
-        .search-main input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
-        .search-main svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+
+        .search-main input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-main svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
         .sort-select {
-            padding: 10px 28px 10px 12px; border: 1.5px solid var(--border); border-radius: 10px;
-            outline: none; font-size: 0.87rem; font-weight: 500; color: #475569; background: #fff; cursor: pointer;
+            padding: 10px 28px 10px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            outline: none;
+            font-size: 0.87rem;
+            font-weight: 500;
+            color: #475569;
+            background: #fff;
+            cursor: pointer;
         }
-        .results-meta { font-size: 0.83rem; color: var(--text-soft); margin-bottom: 20px; }
+
+        .results-meta {
+            font-size: 0.83rem;
+            color: var(--text-soft);
+            margin-bottom: 20px;
+        }
 
         /* ── DRIVE CARD: 3D FLIP ── */
         .drives-grid {
@@ -202,7 +415,8 @@
             transform: rotateY(180deg);
         }
 
-        .card-front, .card-back {
+        .card-front,
+        .card-back {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -210,7 +424,7 @@
             backface-visibility: hidden;
             border-radius: 20px;
             background: white;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
             border: 1px solid #e2e8f0;
             padding: 28px;
             display: flex;
@@ -218,7 +432,7 @@
         }
 
         .card-front:hover {
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
             transform: translateY(-4px);
             border-color: var(--primary-light);
         }
@@ -241,21 +455,75 @@
             font-weight: 800;
             font-size: 1.2rem;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .drive-title { font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
-        .drive-subtitle { font-size: 0.9rem; font-weight: 600; color: var(--primary); margin-bottom: 12px; }
-        
-        .meta-list { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
-        .meta-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--text-soft); }
-        .meta-item svg { width: 16px; height: 16px; color: #94a3b8; }
+        .drive-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
 
-        .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 16px; }
-        .tag { font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .tag-blue { background: #eff6ff; color: #1d4ed8; }
-        .tag-green { background: #ecfdf5; color: #047857; }
-        .tag-purple { background: #f5f3ff; color: #6d28d9; }
+        .drive-subtitle {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .meta-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 16px 0;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--text-soft);
+        }
+
+        .meta-item svg {
+            width: 16px;
+            height: 16px;
+            color: #94a3b8;
+        }
+
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: auto;
+            padding-top: 16px;
+        }
+
+        .tag {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag-blue {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .tag-green {
+            background: #ecfdf5;
+            color: #047857;
+        }
+
+        .tag-purple {
+            background: #f5f3ff;
+            color: #6d28d9;
+        }
 
         .btn-apply {
             margin-top: 20px;
@@ -268,8 +536,17 @@
             font-size: 0.9rem;
             transition: 0.2s;
         }
-        .btn-apply:hover { background: #4f46e5; transform: scale(1.02); }
-        .btn-apply:disabled { background: #94A3B8; cursor: not-allowed; transform: none; }
+
+        .btn-apply:hover {
+            background: #4f46e5;
+            transform: scale(1.02);
+        }
+
+        .btn-apply:disabled {
+            background: #94A3B8;
+            cursor: not-allowed;
+            transform: none;
+        }
 
         .btn-analyze {
             margin-top: 10px;
@@ -283,12 +560,24 @@
             border: 2px solid var(--primary);
             transition: 0.2s;
         }
-        .btn-analyze:hover { background: #f5f3ff; }
+
+        .btn-analyze:hover {
+            background: #f5f3ff;
+        }
 
         /* Back Face Details */
-        .back-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
-        .back-header h3 { font-size: 1.1rem; font-weight: 700; }
-        
+        .back-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .back-header h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
         .upload-area {
             flex: 1;
             border: 2px dashed #d1d5db;
@@ -302,10 +591,30 @@
             transition: 0.2s;
             background: white;
         }
-        .upload-area:hover { border-color: var(--primary); background: #f5f3ff; }
-        .upload-area svg { width: 40px; height: 40px; color: var(--primary); margin-bottom: 12px; }
-        .upload-area p { font-size: 0.85rem; font-weight: 600; color: var(--text-main); }
-        .upload-area span { font-size: 0.75rem; color: var(--text-soft); margin-top: 4px; }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: #f5f3ff;
+        }
+
+        .upload-area svg {
+            width: 40px;
+            height: 40px;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .upload-area p {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .upload-area span {
+            font-size: 0.75rem;
+            color: var(--text-soft);
+            margin-top: 4px;
+        }
 
         /* ── INSIGHTS HUB MODAL ── */
         .modal-overlay {
@@ -319,6 +628,7 @@
             justify-content: center;
             padding: 20px;
         }
+
         .modal-content {
             background: white;
             width: 100%;
@@ -332,10 +642,19 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             animation: modalSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         @keyframes modalSlide {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
+
         .modal-header {
             padding: 24px 32px;
             background: linear-gradient(135deg, #6366f1, #818cf8);
@@ -344,36 +663,152 @@
             justify-content: space-between;
             align-items: center;
         }
-        .close-btn { color: white; cursor: pointer; opacity: 0.8; transition: 0.2s; }
-        .close-btn:hover { opacity: 1; transform: rotate(90deg); }
 
-        .modal-body { padding: 32px; overflow-y: auto; }
-        
-        .insights-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 32px; }
-        .score-circle-container { position: relative; width: 180px; height: 180px; margin: 0 auto 24px; }
-        .score-circle-svg { transform: rotate(-90deg); }
-        .score-circle-bg { fill: none; stroke: #f1f5f9; stroke-width: 8; }
-        .score-circle-fill { fill: none; stroke: var(--primary); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1.5s ease; stroke-dasharray: 440; stroke-dashoffset: 440; }
-        .score-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 800; }
-        .score-val { font-size: 2.5rem; color: var(--text-main); }
-        .score-label { font-size: 0.75rem; color: var(--text-soft); text-transform: uppercase; letter-spacing: 1px; }
+        .close-btn {
+            color: white;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: 0.2s;
+        }
 
-        .skill-section h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .skill-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
-        .skill-pill { padding: 6px 14px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; }
-        .skill-pill.have { background: #dcfce7; color: #15803d; }
-        .skill-pill.miss { background: #fee2e2; color: #b91c1c; }
+        .close-btn:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
 
-        .feedback-box { background: #f8fafc; border-radius: 16px; padding: 20px; border-left: 4px solid var(--primary); margin-bottom: 24px; }
-        .feedback-box h5 { font-size: 0.8rem; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 8px; }
-        .feedback-box p { font-size: 0.9rem; color: #475569; line-height: 1.6; }
+        .modal-body {
+            padding: 32px;
+            overflow-y: auto;
+        }
 
-        .tip-item { display: flex; gap: 12px; margin-bottom: 12px; font-size: 0.88rem; color: #334155; }
-        .tip-icon { color: var(--primary); flex-shrink: 0; margin-top: 2px; }
+        .insights-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 32px;
+        }
+
+        .score-circle-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 24px;
+        }
+
+        .score-circle-svg {
+            transform: rotate(-90deg);
+        }
+
+        .score-circle-bg {
+            fill: none;
+            stroke: #f1f5f9;
+            stroke-width: 8;
+        }
+
+        .score-circle-fill {
+            fill: none;
+            stroke: var(--primary);
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1.5s ease;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+        }
+
+        .score-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+
+        .score-val {
+            font-size: 2.5rem;
+            color: var(--text-main);
+        }
+
+        .score-label {
+            font-size: 0.75rem;
+            color: var(--text-soft);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .skill-section h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skill-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .skill-pill {
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .skill-pill.have {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .skill-pill.miss {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .feedback-box {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            border-left: 4px solid var(--primary);
+            margin-bottom: 24px;
+        }
+
+        .feedback-box h5 {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .feedback-box p {
+            font-size: 0.9rem;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .tip-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 0.88rem;
+            color: #334155;
+        }
+
+        .tip-icon {
+            color: var(--primary);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
     </style>
     <script src="../js/theme.js"></script>
     <link rel="stylesheet" href="../css/dark-mode.css">
 </head>
+
 <body>
 
     <!-- ── TOPBAR ── -->
@@ -397,7 +832,8 @@
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                 </svg>
             </button>
-            <a href="../profile.html" id="navAvatar" style="width:32px; height:32px; border-radius:50%; background:#6C63FF; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; text-decoration:none;">
+            <a href="../profile.html" id="navAvatar"
+                style="width:32px; height:32px; border-radius:50%; background:#6C63FF; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; text-decoration:none;">
                 U
             </a>
         </div>
@@ -405,38 +841,54 @@
 
     <!-- ── SIDEBAR ── -->
     <aside class="sidebar">
-        <div class="user-mini-card">
-            <div class="side-avatar" id="sideAvatar">U</div>
-            <div class="user-info">
-                <div class="user-name" id="sideUserName">Loading...</div>
-                <div class="user-sub" id="sideUserSub">Student</div>
-            </div>
-        </div>
+
 
         <nav class="side-nav">
             <a href="feed.html" class="side-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
                 Feed
             </a>
             <a href="drives.html" class="side-link active">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 010 8.49m-8.48-.01a6 6 0 010-8.49m11.31-2.82a10 10 0 010 14.14m-14.14 0a10 10 0 010-14.14"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="2" />
+                    <path
+                        d="M16.24 7.76a6 6 0 010 8.49m-8.48-.01a6 6 0 010-8.49m11.31-2.82a10 10 0 010 14.14m-14.14 0a10 10 0 010-14.14" />
+                </svg>
                 Drives
                 <span class="side-badge" id="driveBadge">0</span>
             </a>
             <a href="roadmap.html" class="side-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="3 11 22 2 13 21 11 13 3 11" />
+                </svg>
                 Roadmap
             </a>
             <a href="prep-hub.html" class="side-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" />
+                    <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
+                </svg>
                 Prep Hub
             </a>
             <a href="seniors.html" class="side-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 00-3-3.87" />
+                    <path d="M16 3.13a4 4 0 010 7.75" />
+                </svg>
                 Seniors
             </a>
             <a href="dashboard.html" class="side-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7" />
+                    <rect x="14" y="3" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" />
+                </svg>
                 Dashboard
             </a>
         </nav>
@@ -445,21 +897,28 @@
         <div class="filter-section">
             <div class="filter-group">
                 <div class="filter-title">Min CGPA <span id="cgpaVal">0.0</span></div>
-                <input type="range" min="0" max="10" step="0.1" value="0" class="cgpa-slider" id="cgpaSlider" oninput="document.getElementById('cgpaVal').textContent = this.value; filterDrives();">
+                <input type="range" min="0" max="10" step="0.1" value="0" class="cgpa-slider" id="cgpaSlider"
+                    oninput="document.getElementById('cgpaVal').textContent = this.value; filterDrives();">
             </div>
 
             <div class="filter-group">
                 <div class="filter-title">Company Type</div>
-                <label class="filter-check"><input type="checkbox" data-company="product" checked onclick="filterDrives()"> Product</label>
-                <label class="filter-check"><input type="checkbox" data-company="service" checked onclick="filterDrives()"> Service</label>
-                <label class="filter-check"><input type="checkbox" data-company="startup" checked onclick="filterDrives()"> Startup</label>
-                <label class="filter-check"><input type="checkbox" data-company="finance" checked onclick="filterDrives()"> Finance</label>
+                <label class="filter-check"><input type="checkbox" data-company="product" checked
+                        onclick="filterDrives()"> Product</label>
+                <label class="filter-check"><input type="checkbox" data-company="service" checked
+                        onclick="filterDrives()"> Service</label>
+                <label class="filter-check"><input type="checkbox" data-company="startup" checked
+                        onclick="filterDrives()"> Startup</label>
+                <label class="filter-check"><input type="checkbox" data-company="finance" checked
+                        onclick="filterDrives()"> Finance</label>
             </div>
 
             <div class="filter-group">
                 <div class="filter-title">Role Type</div>
-                <label class="filter-check"><input type="checkbox" data-type="Full Time" checked onclick="filterDrives()"> Full Time</label>
-                <label class="filter-check"><input type="checkbox" data-type="Internship" checked onclick="filterDrives()"> Internship</label>
+                <label class="filter-check"><input type="checkbox" data-type="Full Time" checked
+                        onclick="filterDrives()"> Full Time</label>
+                <label class="filter-check"><input type="checkbox" data-type="Internship" checked
+                        onclick="filterDrives()"> Internship</label>
             </div>
 
             <button class="btn-reset-text" onclick="resetFilters()">Reset All</button>
@@ -470,9 +929,15 @@
                 <span>Readiness</span>
                 <span>68%</span>
             </div>
-            <div class="progress-bar"><div class="progress-fill"></div></div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
             <a href="#" class="logout-link" onclick="handleLogout()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
                 Logout
             </a>
         </div>
@@ -487,8 +952,12 @@
 
         <div class="content-bar">
             <div class="search-main">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="text" placeholder="Search by company, role, or skills..." id="searchInput" oninput="filterDrives()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input type="text" placeholder="Search by company, role, or skills..." id="searchInput"
+                    oninput="filterDrives()">
             </div>
             <select class="sort-select" id="sortSelect" onchange="filterDrives()">
                 <option value="deadline">Sort: Deadline</option>
@@ -513,7 +982,11 @@
                     <p id="modalRole" style="font-size: 0.85rem; opacity: 0.9;">Software Engineer Intern</p>
                 </div>
                 <div class="close-btn" onclick="closeModal()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
                 </div>
             </header>
             <div class="modal-body">
@@ -534,7 +1007,7 @@
                         <div class="skill-section">
                             <h4>Found Skills</h4>
                             <div class="skill-pills" id="modalSkillsHave"></div>
-                            
+
                             <h4>Missing Skills</h4>
                             <div class="skill-pills" id="modalSkillsMiss"></div>
                         </div>
@@ -544,7 +1017,8 @@
                     <div>
                         <div class="feedback-box">
                             <h5>AI Analysis Summary</h5>
-                            <p id="modalAnalysisSum">Your resume shows strong alignment with the technical requirements. Focus on projects involving cloud architecture to boost your score.</p>
+                            <p id="modalAnalysisSum">Your resume shows strong alignment with the technical requirements.
+                                Focus on projects involving cloud architecture to boost your score.</p>
                         </div>
 
                         <div class="feedback-box" style="border-left-color: #f59e0b;">
@@ -553,8 +1027,10 @@
                         </div>
 
                         <div style="margin-top: 32px; display: flex; gap: 12px;">
-                            <button class="btn-apply" style="flex: 1; text-align:center" onclick="window.location.href='prep-hub.html'">Start Prep Hub</button>
-                            <button class="btn-analyze" style="flex: 1; border-color: #e2e8f0; color: #64748b" onclick="closeModal()">Close</button>
+                            <button class="btn-apply" style="flex: 1; text-align:center"
+                                onclick="window.location.href='prep-hub.html'">Start Prep Hub</button>
+                            <button class="btn-analyze" style="flex: 1; border-color: #e2e8f0; color: #64748b"
+                                onclick="closeModal()">Close</button>
                         </div>
                     </div>
                 </div>
@@ -562,37 +1038,74 @@
         </div>
     </div>
 
+    <script src="../js/config.js"></script>
     <script>
-        const API_BASE = 'http://localhost:4000';
+        const API_BASE = window.API_BASE || 'http://localhost:4000';
+        let authToken = null;
         let allDrives = [];
         let appliedDriveIds = new Set();
         let userCGPA = 0;
 
+        function hydrateAuthFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const tokenFromUrl = params.get('token');
+            const nameFromUrl = params.get('name');
+            if (tokenFromUrl) {
+                localStorage.setItem('nextern_token', tokenFromUrl);
+            }
+            if (nameFromUrl) {
+                localStorage.setItem('nextern_name', decodeURIComponent(nameFromUrl));
+            }
+            if (tokenFromUrl || nameFromUrl) {
+                window.history.replaceState({}, '', window.location.pathname);
+            }
+        }
+
+        function getToken() {
+            if (window.getAuthToken) return window.getAuthToken();
+            const t = localStorage.getItem('nextern_token');
+            return (t && t !== 'null' && t !== 'undefined') ? t : null;
+        }
+
+        function authHeaders(extra = {}) {
+            return {
+                'Authorization': `Bearer ${authToken}`,
+                ...extra
+            };
+        }
+
         async function init() {
             console.log('Nextern Initializing...');
-            const token = localStorage.getItem('nextern_token');
-            if (!token) { 
+            hydrateAuthFromUrl();
+            authToken = getToken();
+            if (!authToken) {
                 console.warn('No token found, redirecting to login');
-                window.location.href = '../login.html'; 
-                return; 
+                window.location.href = '../login.html';
+                return;
             }
-            
+
             // Set user info in sidebar
             const name = localStorage.getItem('nextern_name') || 'User';
             const userStr = localStorage.getItem('nextern_user');
             let user = {};
             if (userStr) {
-                try { user = JSON.parse(userStr); } catch(e) { console.error('User parse error', e); }
+                try { user = JSON.parse(userStr); } catch (e) { console.error('User parse error', e); }
             }
             userCGPA = user.cgpa || 0;
-            
-            document.getElementById('sideUserName').textContent = name;
-            document.getElementById('sideUserSub').textContent = 
-                (user.branch || 'Engineering') + ' · ' + (user.year || '');
-            
+
+            const sideUserName = document.getElementById('sideUserName');
+            const sideUserSub = document.getElementById('sideUserSub');
+            if (sideUserName) sideUserName.textContent = name;
+            if (sideUserSub) {
+                sideUserSub.textContent =
+                    (user.branch || 'Engineering') + ' · ' + (user.year || '');
+            }
+
             const initial = name.charAt(0).toUpperCase();
-            document.getElementById('navAvatar').textContent = initial;
-            document.getElementById('sideAvatar').textContent = initial;
+            const navAvatar = document.getElementById('navAvatar');
+            const sideAvatar = document.getElementById('sideAvatar');
+            if (navAvatar) navAvatar.textContent = initial;
+            if (sideAvatar) sideAvatar.textContent = initial;
 
             await loadApplications();
             await loadDrives();
@@ -605,31 +1118,35 @@
         }
 
         async function loadDrives() {
-            const token = localStorage.getItem('nextern_token');
+            authToken = getToken();
+            if (!authToken) {
+                window.location.href = '../login.html';
+                return;
+            }
             const grid = document.getElementById('drivesGrid');
-            
+
             grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:100px;color:#94A3B8"><p style="font-size:2rem;margin-bottom:10px">📡</p>Loading drives...</div>';
             document.getElementById('resultsMeta').textContent = 'Loading...';
-            
+
             try {
                 console.log('Fetching drives from:', API_BASE + '/api/drives');
                 const response = await fetch(API_BASE + '/api/drives', {
-                    headers: { 'Authorization': 'Bearer ' + token }
+                    headers: authHeaders()
                 });
-                
+
                 if (!response.ok) throw new Error('API error: ' + response.status);
-                
+
                 const data = await response.json();
                 console.log('Drives API response:', data);
-                
+
                 if (!data.success) throw new Error(data.message || 'Failed to load');
-                
+
                 allDrives = data.drives || [];
                 console.log('Loaded drives count:', allDrives.length);
-                
+
                 renderDrives(allDrives);
                 document.getElementById('driveBadge').textContent = allDrives.length;
-                
+
             } catch (error) {
                 console.error('Drive fetch error:', error);
                 grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:80px 20px">' +
@@ -643,10 +1160,11 @@
         }
 
         async function loadApplications() {
-            const token = localStorage.getItem('nextern_token');
+            authToken = getToken();
+            if (!authToken) return;
             try {
                 const res = await fetch(`${API_BASE}/api/applications/me`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: authHeaders()
                 });
                 const data = await res.json();
                 if (data.success) {
@@ -658,7 +1176,7 @@
         function renderDrives(drives) {
             const grid = document.getElementById('drivesGrid');
             const meta = document.getElementById('resultsMeta');
-            
+
             if (!drives || drives.length === 0) {
                 grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:100px 20px">' +
                     '<p style="font-size:3rem;margin-bottom:12px">🔍</p>' +
@@ -668,19 +1186,19 @@
                 meta.textContent = 'Showing 0 drives';
                 return;
             }
-            
+
             meta.innerHTML = 'Showing <strong>' + drives.length + '</strong> drives matching your profile';
-            
-            grid.innerHTML = drives.map(function(drive, index) {
+
+            grid.innerHTML = drives.map(function (drive, index) {
                 var driveId = drive.id || drive._id;
                 var isEligible = userCGPA === 0 || (drive.cgpaCutoff || 0) <= userCGPA;
                 var hasApplied = appliedDriveIds.has(driveId);
                 var companyInitial = (drive.company || 'N').substring(0, 2).toUpperCase();
                 var bgColor = drive.color || '#6C63FF';
                 var deadlineDate = drive.deadline ? new Date(drive.deadline) : null;
-                var deadline = deadlineDate ? deadlineDate.toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'}) : 'TBD';
+                var deadline = deadlineDate ? deadlineDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'TBD';
                 var daysLeft = deadlineDate ? Math.ceil((deadlineDate - new Date()) / 86400000) : null;
-                
+
                 var deadlineText = 'TBD';
                 if (daysLeft !== null) {
                     if (daysLeft < 0) deadlineText = 'Expired';
@@ -772,7 +1290,11 @@
         }
 
         async function applyDrive(btn, driveId) {
-            const token = localStorage.getItem('nextern_token');
+            authToken = getToken();
+            if (!authToken) {
+                window.location.href = '../login.html';
+                return;
+            }
             if (btn.disabled) return;
 
             btn.disabled = true;
@@ -781,7 +1303,7 @@
             try {
                 const res = await fetch(`${API_BASE}/api/applications/${driveId}`, {
                     method: 'POST',
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: authHeaders()
                 });
                 const data = await res.json();
                 if (data.success) {
@@ -839,11 +1361,11 @@
             try {
                 const res = await fetch(`${API_BASE}/api/analyze/resume`, {
                     method: 'POST',
-                    headers: { 'Authorization': `Bearer ${localStorage.getItem('nextern_token')}` },
+                    headers: authHeaders(),
                     body: formData
                 });
                 const data = await res.json();
-                
+
                 if (data.success) {
                     loadingView.style.display = 'none';
                     initView.style.display = 'flex'; // Reset back face for next time
@@ -880,7 +1402,7 @@
             // Pills have
             document.getElementById('modalSkillsHave').innerHTML = (data.presentSkills || [])
                 .map(s => `<span class="skill-pill have">${s}</span>`).join('');
-            
+
             // Pills miss
             document.getElementById('modalSkillsMiss').innerHTML = (data.missingSkills || [])
                 .map(s => `<span class="skill-pill miss">${s}</span>`).join('');
@@ -901,26 +1423,26 @@
         function filterDrives() {
             var search = document.getElementById('searchInput').value.toLowerCase();
             var cgpaMin = parseFloat(document.getElementById('cgpaSlider').value) || 0;
-            
-            var typeChecks = ['Full Time', 'Internship'].filter(function(t) {
+
+            var typeChecks = ['Full Time', 'Internship'].filter(function (t) {
                 return document.querySelector('[data-type="' + t + '"]').checked;
             });
-            var companyChecks = ['product','service','startup','finance'].filter(function(t) {
+            var companyChecks = ['product', 'service', 'startup', 'finance'].filter(function (t) {
                 return document.querySelector('[data-company="' + t + '"]').checked;
             });
-            
-            var filtered = allDrives.filter(function(d) {
-                var matchSearch = !search || 
-                    (d.company || '').toLowerCase().includes(search) || 
+
+            var filtered = allDrives.filter(function (d) {
+                var matchSearch = !search ||
+                    (d.company || '').toLowerCase().includes(search) ||
                     (d.role || '').toLowerCase().includes(search);
                 var matchCGPA = cgpaMin === 0 || (d.cgpaCutoff || 0) <= (userCGPA || 10);
                 var matchType = typeChecks.length === 0 || typeChecks.includes(d.type);
                 var matchCompany = companyChecks.length === 0 || companyChecks.includes(d.companyType);
                 return matchSearch && matchCGPA && matchType && matchCompany;
             });
-            
+
             var sort = document.getElementById('sortSelect').value;
-            filtered.sort(function(a, b) {
+            filtered.sort(function (a, b) {
                 if (sort === 'deadline') return new Date(a.deadline || 0) - new Date(b.deadline || 0);
                 if (sort === 'package') {
                     var pkgA = a.package ? parseFloat(a.package.replace(/[^0-9.]/g, '')) || 0 : 0;
@@ -930,7 +1452,7 @@
                 if (sort === 'company') return (a.company || '').localeCompare(b.company || '');
                 return 0;
             });
-            
+
             renderDrives(filtered);
         }
 
@@ -939,14 +1461,14 @@
             document.getElementById('topSearch').value = '';
             document.getElementById('cgpaSlider').value = 0;
             document.getElementById('cgpaVal').textContent = '0.0';
-            document.querySelectorAll('.filter-check input').forEach(function(i) {
+            document.querySelectorAll('.filter-check input').forEach(function (i) {
                 i.checked = true;
             });
             filterDrives();
         }
 
         function handleLogout() {
-            ['nextern_token','nextern_name','nextern_user'].forEach(function(k) {
+            ['nextern_token', 'nextern_name', 'nextern_user'].forEach(function (k) {
                 localStorage.removeItem(k);
             });
             window.location.href = '../login.html';
@@ -955,4 +1477,5 @@
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
+
 </html>

@@ -10,14 +10,14 @@
     let branch = 'Student';
     let year = '';
     let isAdmin = false;
-    
+
     if (userStr) {
         try {
             const user = JSON.parse(userStr);
             branch = user.branch || 'CSE';
             year = user.year || '3rd Year';
             isAdmin = user.role === 'admin';
-        } catch (e) {}
+        } catch (e) { }
     }
 
     const driveCount = localStorage.getItem('nextern_drive_count') || '0';
@@ -37,7 +37,7 @@
                 const badge = document.querySelector('.usb-badge');
                 if (badge) badge.textContent = dd.drives.length;
             }
-        } catch (_) {}
+        } catch (_) { }
         try {
             // User readiness
             const ur = await fetch(`${API_BASE}/api/user/me`, { headers: { Authorization: `Bearer ${token}` } });
@@ -57,12 +57,13 @@
                 if (fill) fill.style.width = `${readiness}%`;
                 if (label) label.textContent = `${readiness}%`;
             }
-        } catch (_) {}
+        } catch (_) { }
     }
 
     // 2. PATH DETECTION
     const isRoot = !window.location.pathname.includes('/pages/');
-    const prefix = isRoot ? 'pages/' : '';
+    const pagesBase = '/pages';
+    const toPageHref = (file) => `${pagesBase}/${file}`;
     const currentFile = window.location.pathname.split('/').pop() || 'index.html';
 
     // 3. ICONS
@@ -85,7 +86,7 @@
     const navbar = document.querySelector('.topnav') || document.querySelector('.navbar');
     const tb = document.querySelector('.topbar');
     const tr = document.querySelector('.top-row');
-    
+
     if (navbar) {
         topOffset = navbar.offsetHeight || 60;
     } else if (tb) {
@@ -230,11 +231,11 @@
 
     // 6. TOGGLE LOGIC
     let isCollapsed = localStorage.getItem('nextern_sidebar_collapsed') === 'true';
-    
+
     function updateSidebarState() {
         const mount = document.getElementById('sidebar-mount');
         const container = mount?.querySelector('.usb-container');
-        
+
         if (isCollapsed) {
             container?.classList.add('usb-collapsed');
             document.body.classList.add('usb-is-collapsed');
@@ -263,7 +264,7 @@
             toggleBtn.className = 'usb-toggle-btn';
             toggleBtn.innerHTML = icons.toggle;
             toggleBtn.onclick = toggleSidebar;
-            
+
             const logo = navbar.querySelector('.nav-logo') || navbar.firstChild;
             navbar.insertBefore(toggleBtn, logo);
         }
@@ -290,7 +291,7 @@
         <div class="usb-container ${isCollapsed ? 'usb-collapsed' : ''}">
             <nav class="usb-nav">
                 ${menuItems.map(item => `
-                    <a href="${prefix}${item.file}" class="usb-link ${currentFile === item.file ? 'active' : ''}">
+                    <a href="${toPageHref(item.file)}" class="usb-link ${currentFile === item.file ? 'active' : ''}">
                         ${item.icon}
                         <span>${item.name}</span>
                         ${item.badge ? `<span class="usb-badge">${item.badge}</span>` : ''}
@@ -306,7 +307,7 @@
                     </div>
                     <div class="usb-r-bar-bg"><div class="usb-r-bar-fill" style="width: ${readiness}%"></div></div>
                 </div>
-                <a href="#" onclick="if(window.handleLogout) { window.handleLogout() } else { localStorage.clear(); window.location.href='${isRoot ? '' : '../'}login.html' }" class="usb-link usb-logout">
+                <a href="#" onclick="if(window.handleLogout) { window.handleLogout() } else { localStorage.clear(); window.location.href='/login.html' }" class="usb-link usb-logout">
                     ${icons.logout}
                     <span>Logout</span>
                 </a>

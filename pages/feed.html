@@ -8,8 +8,9 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@800&display=swap" rel="stylesheet" />
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@800&display=swap"
+        rel="stylesheet" />
+
     <style>
         :root {
             /* Palette */
@@ -23,14 +24,14 @@
             --text-muted: #94A3B8;
             --red: #EF4444;
             --green: #22C55E;
-            
+
             /* Sizing & Radius */
             --radius-md: 12px;
             --radius-pill: 100px;
             --nav-height: 60px;
             --sidebar-w: 220px;
             --right-panel-w: 280px;
-            
+
             /* Shadow */
             --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -143,7 +144,7 @@
         .layout-grid {
             display: grid;
             grid-template-columns: var(--sidebar-width, 220px) 1fr 280px;
-            gap: 24px;
+            gap: 28px;
             max-width: 1400px;
             margin: calc(var(--nav-height) + 24px) auto 40px;
             padding: 0 24px;
@@ -153,8 +154,8 @@
 
         /* Sidebar mount */
         .sidebar-container {
-            position: sticky;
-            top: calc(var(--nav-height) + 24px);
+            position: relative;
+            min-width: 0;
         }
 
         /* ── CENTRE FEED ── */
@@ -165,11 +166,18 @@
             min-width: 0;
         }
 
+        #feedList {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
         /* Create Post */
         .create-post {
             background: var(--bg-white);
             border-radius: var(--radius-md);
             padding: 20px;
+            border: 1px solid var(--border);
             box-shadow: var(--shadow-sm);
         }
 
@@ -264,10 +272,18 @@
             background: var(--bg-white);
             border-radius: var(--radius-md);
             padding: 20px;
-            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
             display: flex;
             flex-direction: column;
             gap: 14px;
+            transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-1px);
+            border-color: #d7ddea;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
         }
 
         .post-header {
@@ -309,8 +325,9 @@
             font-size: 0.65rem;
             font-weight: 800;
             text-transform: uppercase;
-            padding: 2px 8px;
-            border-radius: 4px;
+            letter-spacing: 0.4px;
+            padding: 4px 10px;
+            border-radius: 999px;
             background: var(--accent-soft);
             color: var(--accent);
         }
@@ -379,6 +396,11 @@
             color: var(--accent);
         }
 
+        .post-action:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
         .post-action.liked {
             color: var(--red);
         }
@@ -393,8 +415,13 @@
         }
 
         @keyframes skeleton-pulse {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
         }
 
         .skeleton-card {
@@ -413,13 +440,14 @@
             flex-direction: column;
             gap: 20px;
             position: sticky;
-            top: calc(var(--nav-height) + 24px);
+            top: calc(var(--nav-height) + 20px);
         }
 
         .widget-card {
             background: var(--bg-white);
             border-radius: var(--radius-md);
             padding: 20px;
+            border: 1px solid var(--border);
             box-shadow: var(--shadow-sm);
         }
 
@@ -555,7 +583,9 @@
             border-radius: var(--radius-pill);
         }
 
-        .is-hidden { display: none; }
+        .is-hidden {
+            display: none;
+        }
     </style>
     <script src="../js/theme.js"></script>
     <link rel="stylesheet" href="../css/dark-mode.css">
@@ -583,7 +613,8 @@
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                 </svg>
             </button>
-            <a href="../profile.html" id="navAvatar" style="width:32px; height:32px; border-radius:50%; background:#6C63FF; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; text-decoration:none;">
+            <a href="../profile.html" id="navAvatar"
+                style="width:32px; height:32px; border-radius:50%; background:#6C63FF; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; text-decoration:none;">
                 U
             </a>
         </div>
@@ -606,20 +637,26 @@
                 <div class="cp-bottom">
                     <div class="cp-actions">
                         <button class="cp-btn-action">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:18px;">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" style="width:18px;">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.25 15.75l5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                             </svg>
                             Media
                         </button>
                         <button class="cp-btn-action">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:18px;">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" style="width:18px;">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
                             </svg>
                             Event
                         </button>
                         <button class="cp-btn-action">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:18px;">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" style="width:18px;">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
                             </svg>
                             Feeling
                         </button>
@@ -639,17 +676,27 @@
             <!-- Feed Content Area -->
             <div id="feedList">
                 <!-- Skeletons show initially -->
-                <div class="skeleton-card"><div class="skeleton" style="width: 40%; height: 16px;"></div><div class="skeleton" style="width: 100%; height: 80px;"></div></div>
-                <div class="skeleton-card"><div class="skeleton" style="width: 40%; height: 16px;"></div><div class="skeleton" style="width: 100%; height: 80px;"></div></div>
-                <div class="skeleton-card"><div class="skeleton" style="width: 40%; height: 16px;"></div><div class="skeleton" style="width: 100%; height: 80px;"></div></div>
+                <div class="skeleton-card">
+                    <div class="skeleton" style="width: 40%; height: 16px;"></div>
+                    <div class="skeleton" style="width: 100%; height: 80px;"></div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton" style="width: 40%; height: 16px;"></div>
+                    <div class="skeleton" style="width: 100%; height: 80px;"></div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton" style="width: 40%; height: 16px;"></div>
+                    <div class="skeleton" style="width: 100%; height: 80px;"></div>
+                </div>
             </div>
 
             <!-- Empty State -->
             <div id="emptyState" class="is-hidden" style="text-align:center; padding: 60px 20px;">
-                <img src="https://cdni.iconscout.com/illustration/premium/thumb/no-data-found-8867280-7265556.png" style="width: 180px; opacity: 0.6; margin-bottom: 20px;">
+                <img src="https://cdni.iconscout.com/illustration/premium/thumb/no-data-found-8867280-7265556.png"
+                    style="width: 180px; opacity: 0.6; margin-bottom: 20px;">
                 <p style="color: var(--text-gray); font-weight: 500;">No posts found. Start a conversation!</p>
             </div>
-            
+
             <!-- Error State -->
             <div id="errorState" class="error-state is-hidden">
                 <p style="color: var(--red); font-weight: 600;">Failed to load the feed.</p>
@@ -699,6 +746,7 @@
     <script>
         const API_BASE = window.API_BASE || 'http://localhost:4000';
         let currentTab = 'all';
+        let allPosts = [];
 
         /* ── INITIALIZE ── */
         function init() {
@@ -732,17 +780,24 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    if (data.posts.length === 0) {
+                    const apiPosts = Array.isArray(data.posts) ? data.posts : [];
+                    allPosts = withDiverseDemoPosts(apiPosts);
+                    if (allPosts.length === 0) {
                         feedList.innerHTML = '';
                         emptyState.classList.remove('is-hidden');
                     } else {
-                        renderPosts(data.posts);
+                        renderPosts(allPosts);
                     }
                 } else {
                     throw new Error(data.message);
                 }
             } catch (err) {
                 console.error('Feed error:', err);
+                allPosts = withDiverseDemoPosts([]);
+                if (allPosts.length) {
+                    renderPosts(allPosts);
+                    return;
+                }
                 feedList.innerHTML = '';
                 errorState.classList.remove('is-hidden');
             }
@@ -750,60 +805,74 @@
 
         function renderPosts(posts) {
             const container = document.getElementById('feedList');
-            
-            const filtered = posts.filter(p => currentTab === 'all' || p.type === currentTab);
-            
+            const emptyState = document.getElementById('emptyState');
+            if (!container) return;
+
+            const filtered = posts.filter((p) => {
+                if (currentTab === 'all') return true;
+                if (currentTab === 'peer') return p.type === 'general' || p.type === 'announcement';
+                return p.type === currentTab;
+            });
+
             if (filtered.length === 0) {
                 container.innerHTML = '';
-                document.getElementById('emptyState').classList.remove('is-hidden');
+                if (emptyState) emptyState.classList.remove('is-hidden');
                 return;
             } else {
-                document.getElementById('emptyState').classList.add('is-hidden');
+                if (emptyState) emptyState.classList.add('is-hidden');
             }
 
             container.innerHTML = filtered.map(post => {
                 const author = post.author || { firstName: 'Nextern', lastName: 'Admin' };
                 const timeStr = timeAgo(new Date(post.createdAt));
-                const isLiked = post.likes && post.likes.includes(window.getUserId());
-                
+                const likes = Array.isArray(post.likes) ? post.likes : [];
+                const currentUserId = window.getUserId ? window.getUserId() : null;
+                const isLiked = currentUserId ? likes.some(id => String(id) === String(currentUserId)) : false;
+                const postId = post._id || post.id || '';
+                const isDemoPost = String(postId).startsWith('demo-');
+                const firstName = author.firstName || 'Nextern';
+                const lastName = author.lastName || 'Team';
+                const type = post.type || 'general';
+
                 let driveHTML = '';
-                if (post.type === 'drive' && post.driveDetails) {
-                    const d = post.driveDetails;
+                const driveDetails = post.driveDetails || post.meta;
+                if (type === 'drive' && driveDetails && driveDetails.company) {
+                    const d = driveDetails;
                     driveHTML = `
                         <div class="drive-highlight">
                             <div class="dh-info">
-                                <div class="dh-company">${d.company}</div>
-                                <div class="dh-role">${d.role}</div>
+                                <div class="dh-company">${escapeHtml(d.company || '')}</div>
+                                <div class="dh-role">${escapeHtml(d.role || 'Role details available')}</div>
                             </div>
-                            <div class="dh-pkg">${d.package ? d.package + ' LPA' : ''}</div>
+                            <div class="dh-pkg">${d.package ? escapeHtml(d.package) : ''}</div>
                             <a href="drives.html" class="btn-apply-small">Apply</a>
                         </div>
                     `;
                 }
 
                 return `
-                    <div class="post-card">
+                    <article class="post-card post-type-${type}">
                         <div class="post-header">
                             <div class="post-user">
-                                <div class="u-avatar">${author.firstName[0]}</div>
+                                <div class="u-avatar">${firstName.charAt(0).toUpperCase()}</div>
                                 <div class="u-info">
-                                    <div class="u-name">${author.firstName} ${author.lastName}</div>
+                                    <div class="u-name">${escapeHtml(firstName)} ${escapeHtml(lastName)}</div>
                                     <div class="u-meta">${timeStr}</div>
                                 </div>
                             </div>
-                            <span class="post-type-badge">${post.type}</span>
+                            <span class="post-type-badge">${escapeHtml(type)}</span>
                         </div>
                         
-                        <div class="post-content">${post.content}</div>
+                        <div class="post-content">${escapeHtml(post.content || '')}</div>
                         
                         ${driveHTML}
 
                         <div class="post-footer">
-                            <button class="post-action ${isLiked ? 'liked' : ''}" onclick="likePost('${post._id}', this)">
+                            <button class="post-action ${isLiked ? 'liked' : ''}" ${isDemoPost ? 'disabled title="Demo post"' : `onclick="likePost('${postId}', this)"`}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="${isLiked ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:18px;">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                                 </svg>
-                                <span class="like-count">${post.likeCount || 0}</span>
+                                <span class="like-count">${typeof post.likeCount === 'number' ? post.likeCount : likes.length}</span>
                             </button>
                             <button class="post-action">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:18px;">
@@ -818,7 +887,7 @@
                                 Share
                             </button>
                         </div>
-                    </div>
+                    </article>
                 `;
             }).join('');
         }
@@ -833,15 +902,16 @@
                 if (data.success) {
                     const countSpan = btn.querySelector('.like-count');
                     const svg = btn.querySelector('svg');
-                    
-                    if (data.isLiked) {
+                    const likedNow = data.liked ?? data.isLiked;
+                    const likeCount = data.likes ?? data.likeCount ?? 0;
+                    if (likedNow) {
                         btn.classList.add('liked');
                         svg.setAttribute('fill', 'currentColor');
                     } else {
                         btn.classList.remove('liked');
                         svg.setAttribute('fill', 'none');
                     }
-                    countSpan.textContent = data.likeCount;
+                    countSpan.textContent = likeCount;
                 }
             } catch (err) { console.error('Like error:', err); }
         }
@@ -878,15 +948,15 @@
             if (raw) {
                 const roadmap = JSON.parse(raw);
                 document.getElementById('rsTarget').textContent = roadmap.company || 'Dream Company';
-                
+
                 // Calculate total progress
                 const weeks = roadmap.weeks || [];
                 let totalTasks = 0;
                 let doneTasks = 0;
-                
+
                 // For logic demo, we look at nextern_task_states
                 const taskStates = JSON.parse(localStorage.getItem('nextern_task_states') || '{}');
-                
+
                 weeks.forEach((week, wi) => {
                     totalTasks += week.tasks.length;
                     week.tasks.forEach((t, ti) => {
@@ -896,7 +966,7 @@
 
                 const percentage = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
                 document.getElementById('rsBar').style.width = percentage + '%';
-                
+
                 // Update 4 dots (roughly divided)
                 const dots = document.querySelectorAll('.p-dot');
                 dots.forEach((dot, i) => {
@@ -912,9 +982,86 @@
                     document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     currentTab = btn.dataset.tab;
-                    loadFeed(); // Re-fetch or re-filter
+                    renderPosts(allPosts);
                 });
             });
+        }
+
+        function withDiverseDemoPosts(apiPosts) {
+            const existing = Array.isArray(apiPosts) ? [...apiPosts] : [];
+            const contentKeys = new Set(existing.map((p) => (p.content || '').toLowerCase().trim()).filter(Boolean));
+            const targetCount = 5;
+            if (existing.length >= targetCount && contentKeys.size >= 4) return existing;
+
+            const demoAuthors = [
+                { firstName: 'Aditi', lastName: 'Sharma' },
+                { firstName: 'Rohan', lastName: 'Mehta' },
+                { firstName: 'Priya', lastName: 'Nair' },
+                { firstName: 'Kabir', lastName: 'Singh' },
+                { firstName: 'Neha', lastName: 'Verma' },
+            ];
+            const now = Date.now();
+            const demoPosts = [
+                {
+                    _id: 'demo-1',
+                    type: 'drive',
+                    author: demoAuthors[0],
+                    createdAt: new Date(now - 1000 * 60 * 15).toISOString(),
+                    content: 'Google opened SDE Intern applications for 2026 batch. Keep your resume ATS-friendly and apply early.',
+                    meta: { company: 'Google', role: 'SDE Intern', package: '₹80K/month' },
+                    likes: []
+                },
+                {
+                    _id: 'demo-2',
+                    type: 'tip',
+                    author: demoAuthors[1],
+                    createdAt: new Date(now - 1000 * 60 * 45).toISOString(),
+                    content: 'Interview tip: answer behavioral questions in STAR format. Prepare 4 stories and reuse them with different angles.',
+                    likes: []
+                },
+                {
+                    _id: 'demo-3',
+                    type: 'progress',
+                    author: demoAuthors[2],
+                    createdAt: new Date(now - 1000 * 60 * 90).toISOString(),
+                    content: 'Roadmap update: completed Arrays + Binary Search this week and solved 26 medium questions.',
+                    likes: []
+                },
+                {
+                    _id: 'demo-4',
+                    type: 'announcement',
+                    author: demoAuthors[3],
+                    createdAt: new Date(now - 1000 * 60 * 150).toISOString(),
+                    content: 'Mock interview room opens at 7:00 PM today. Bring one project explanation and one CS fundamental topic.',
+                    likes: []
+                },
+                {
+                    _id: 'demo-5',
+                    type: 'general',
+                    author: demoAuthors[4],
+                    createdAt: new Date(now - 1000 * 60 * 210).toISOString(),
+                    content: 'Resume tip: quantify impact in every bullet, e.g. "reduced API latency by 35%" instead of generic wording.',
+                    likes: []
+                },
+            ];
+
+            for (const demo of demoPosts) {
+                if ((existing.length >= targetCount && contentKeys.size >= 4)) break;
+                const key = (demo.content || '').toLowerCase().trim();
+                if (contentKeys.has(key)) continue;
+                existing.push(demo);
+                contentKeys.add(key);
+            }
+            return existing;
+        }
+
+        function escapeHtml(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
         }
 
         function timeAgo(date) {
@@ -933,9 +1080,12 @@
         }
 
         /* Theme Toggle (Visual only for now) */
-        document.getElementById('darkToggle').addEventListener('click', () => {
-            alert("Switching to Dark Mode... (Theme engine update coming soon!)");
-        });
+        const darkToggle = document.getElementById('darkToggle');
+        if (darkToggle) {
+            darkToggle.addEventListener('click', () => {
+                alert("Switching to Dark Mode... (Theme engine update coming soon!)");
+            });
+        }
 
         document.addEventListener('DOMContentLoaded', init);
     </script>

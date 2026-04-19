@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,10 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap"
+        rel="stylesheet">
+
     <style>
         /* ── BASE & VARIABLES ── */
         :root {
@@ -25,7 +28,13 @@
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--main-bg);
@@ -55,18 +64,39 @@
             color: white;
             text-decoration: none;
         }
-        .logo span { color: var(--accent); }
+
+        .logo span {
+            color: var(--accent);
+        }
 
         .user-block {
             margin-bottom: 32px;
             padding-bottom: 24px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .user-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; display: block; }
-        .user-meta { font-size: 0.75rem; color: var(--sidebar-text); font-weight: 500; }
 
-        .nav-list { list-style: none; flex: 1; }
-        .nav-item { margin-bottom: 4px; }
+        .user-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .user-meta {
+            font-size: 0.75rem;
+            color: var(--sidebar-text);
+            font-weight: 500;
+        }
+
+        .nav-list {
+            list-style: none;
+            flex: 1;
+        }
+
+        .nav-item {
+            margin-bottom: 4px;
+        }
+
         .nav-link {
             display: flex;
             align-items: center;
@@ -79,12 +109,35 @@
             font-weight: 500;
             transition: 0.2s;
         }
-        .nav-link:hover { color: white; background: rgba(255,255,255,0.05); }
-        .nav-link.active { background: var(--sidebar-active); color: white; }
-        .nav-badge { margin-left: auto; background: var(--accent); color: white; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
 
-        .logout-link { color: #EF4444 !important; margin-top: auto; }
-        .logout-link:hover { background: rgba(239, 68, 68, 0.1) !important; }
+        .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link.active {
+            background: var(--sidebar-active);
+            color: white;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--accent);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 100px;
+        }
+
+        .logout-link {
+            color: #EF4444 !important;
+            margin-top: auto;
+        }
+
+        .logout-link:hover {
+            background: rgba(239, 68, 68, 0.1) !important;
+        }
 
         /* ── MAIN CONTENT ── */
         .main-content {
@@ -100,13 +153,55 @@
             align-items: flex-start;
             margin-bottom: 32px;
         }
-        .greeting h1 { font-size: 1.75rem; font-weight: 800; color: var(--text-dark); margin-bottom: 4px; }
-        .greeting p { font-size: 0.95rem; color: var(--text-soft); }
 
-        .header-right { display: flex; align-items: center; gap: 20px; }
-        .icon-btn { width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--border); background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; position: relative; }
-        .icon-btn:hover { background: #f8fafc; }
-        .btn-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #6C63FF, #A78BFA); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; }
+        .greeting h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .greeting p {
+            font-size: 0.95rem;
+            color: var(--text-soft);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .icon-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            background: #f8fafc;
+        }
+
+        .btn-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6C63FF, #A78BFA);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+        }
 
         /* ── READINESS CARD ── */
         .readiness-card {
@@ -121,79 +216,362 @@
             margin-bottom: 32px;
             position: relative;
         }
-        .card-tag { position: absolute; top: 20px; right: 24px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #10B981; background: #ECFDF5; padding: 4px 12px; border-radius: 100px; }
 
-        .ring-container { position: relative; width: 140px; height: 140px; }
-        .ring-svg { transform: rotate(-90deg); width: 140px; height: 140px; }
-        .ring-track { fill: none; stroke: #F1F5F9; stroke-width: 10; }
-        .ring-fill { fill: none; stroke: var(--accent); stroke-width: 10; stroke-linecap: round; stroke-dasharray: 339; stroke-dashoffset: 339; transition: stroke-dashoffset 1s ease; }
-        .ring-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .ring-score { font-size: 2.25rem; font-weight: 800; line-height: 1; color: var(--text-dark); }
-        .ring-label { font-size: 0.75rem; color: var(--text-soft); font-weight: 600; margin-top: 2px; }
+        .card-tag {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #10B981;
+            background: #ECFDF5;
+            padding: 4px 12px;
+            border-radius: 100px;
+        }
 
-        .readiness-info h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; }
-        .readiness-info p { font-size: 0.9rem; color: var(--text-soft); margin-bottom: 24px; line-height: 1.5; }
+        .ring-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+        }
 
-        .sub-bars { display: flex; flex-direction: column; gap: 14px; }
-        .bar-item { display: flex; align-items: center; gap: 12px; }
-        .bar-label { width: 90px; font-size: 0.75rem; font-weight: 600; color: var(--text-soft); }
-        .bar-bg { flex: 1; height: 6px; background: #F1F5F9; border-radius: 100px; overflow: hidden; }
-        .bar-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.8s ease; }
-        .bar-val { width: 32px; font-size: 0.75rem; font-weight: 700; color: var(--text-dark); text-align: right; }
+        .ring-svg {
+            transform: rotate(-90deg);
+            width: 140px;
+            height: 140px;
+        }
 
-        .readiness-stats { display: flex; flex-direction: column; gap: 12px; }
-        .stat-mini { background: #F8FAFC; border: 1px solid #F1F5F9; padding: 16px; border-radius: 12px; }
-        .stat-m-val { font-size: 1.15rem; font-weight: 800; color: var(--text-dark); }
-        .stat-m-label { font-size: 0.7rem; color: var(--text-soft); font-weight: 600; margin-top: 2px; }
+        .ring-track {
+            fill: none;
+            stroke: #F1F5F9;
+            stroke-width: 10;
+        }
+
+        .ring-fill {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 10;
+            stroke-linecap: round;
+            stroke-dasharray: 339;
+            stroke-dashoffset: 339;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .ring-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ring-score {
+            font-size: 2.25rem;
+            font-weight: 800;
+            line-height: 1;
+            color: var(--text-dark);
+        }
+
+        .ring-label {
+            font-size: 0.75rem;
+            color: var(--text-soft);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .readiness-info h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .readiness-info p {
+            font-size: 0.9rem;
+            color: var(--text-soft);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .sub-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .bar-label {
+            width: 90px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-soft);
+        }
+
+        .bar-bg {
+            flex: 1;
+            height: 6px;
+            background: #F1F5F9;
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.8s ease;
+        }
+
+        .bar-val {
+            width: 32px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: right;
+        }
+
+        .readiness-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .stat-mini {
+            background: #F8FAFC;
+            border: 1px solid #F1F5F9;
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        .stat-m-val {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .stat-m-label {
+            font-size: 0.7rem;
+            color: var(--text-soft);
+            font-weight: 600;
+            margin-top: 2px;
+        }
 
         /* ── BOTTOM GRID ── */
-        .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-        .grid-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .grid-header h3 { font-size: 1.1rem; font-weight: 700; }
-        .view-all { font-size: 0.8rem; color: var(--accent); font-weight: 600; text-decoration: none; }
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
 
-        .list-card { background: white; border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow); }
+        .grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-        .drive-row { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid #F1F5F9; cursor: pointer; transition: 0.2s; }
-        .drive-row:hover { background: #FAFBFF; padding-left: 8px; margin-left: -8px; padding-right: 8px; margin-right: -8px; border-radius: 10px; }
-        .drive-row:last-child { border-bottom: none; }
-        
-        .drive-company { font-size: 0.9rem; font-weight: 700; color: var(--text-dark); }
-        .drive-meta { font-size: 0.75rem; color: var(--text-soft); margin-top: 2px; }
-        .drive-right { margin-left: auto; text-align: right; }
-        .status-pill { font-size: 0.65rem; font-weight: 700; padding: 4px 10px; border-radius: 100px; display: inline-block; margin-bottom: 4px; text-transform: capitalize; }
-        .pill-applied { background: #ECFDF5; color: #059669; }
-        .pill-shortlisted { background: #F3E8FF; color: #9333EA; }
-        .pill-interview { background: #E0F2FE; color: #0284C7; }
-        .pill-rejected { background: #FEF2F2; color: #DC2626; }
-        .pill-offered { background: #FFFBEB; color: #D97706; }
-        .pill-closing { background: #FFF7ED; color: #D97706; }
-        .pill-soon { background: #EFF6FF; color: #2563EB; }
-        .days-left { font-size: 0.65rem; color: var(--text-soft); font-weight: 500; }
+        .grid-header h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .view-all {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .list-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .drive-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid #F1F5F9;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .drive-row:hover {
+            background: #FAFBFF;
+            padding-left: 8px;
+            margin-left: -8px;
+            padding-right: 8px;
+            margin-right: -8px;
+            border-radius: 10px;
+        }
+
+        .drive-row:last-child {
+            border-bottom: none;
+        }
+
+        .drive-company {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .drive-meta {
+            font-size: 0.75rem;
+            color: var(--text-soft);
+            margin-top: 2px;
+        }
+
+        .drive-right {
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .status-pill {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 100px;
+            display: inline-block;
+            margin-bottom: 4px;
+            text-transform: capitalize;
+        }
+
+        .pill-applied {
+            background: #ECFDF5;
+            color: #059669;
+        }
+
+        .pill-shortlisted {
+            background: #F3E8FF;
+            color: #9333EA;
+        }
+
+        .pill-interview {
+            background: #E0F2FE;
+            color: #0284C7;
+        }
+
+        .pill-rejected {
+            background: #FEF2F2;
+            color: #DC2626;
+        }
+
+        .pill-offered {
+            background: #FFFBEB;
+            color: #D97706;
+        }
+
+        .pill-closing {
+            background: #FFF7ED;
+            color: #D97706;
+        }
+
+        .pill-soon {
+            background: #EFF6FF;
+            color: #2563EB;
+        }
+
+        .days-left {
+            font-size: 0.65rem;
+            color: var(--text-soft);
+            font-weight: 500;
+        }
 
         /* Roadmap List */
-        .phase-row { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid #F1F5F9; }
-        .phase-row:last-child { border-bottom: none; }
-        .phase-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
-        .circle-done { background: #10B981; color: white; }
-        .circle-active { background: #6C63FF; color: white; }
-        .circle-todo { background: #F1F5F9; color: #94A3B8; border: 1px solid #E2E8F0; }
-        .phase-text { flex: 1; }
-        .phase-name { font-size: 0.85rem; font-weight: 600; color: var(--text-dark); }
-        .phase-val { font-size: 0.75rem; font-weight: 700; color: var(--text-soft); }
+        .phase-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 0;
+            border-bottom: 1px solid #F1F5F9;
+        }
 
-        .btn-full { display: block; text-align: center; width: 100%; padding: 12px; background: #F8FAFC; color: var(--accent); border-radius: 10px; text-decoration: none; font-size: 0.85rem; font-weight: 700; margin-top: 20px; transition: 0.2s; }
-        .btn-full:hover { background: #F1F5F9; }
+        .phase-row:last-child {
+            border-bottom: none;
+        }
+
+        .phase-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .circle-done {
+            background: #10B981;
+            color: white;
+        }
+
+        .circle-active {
+            background: #6C63FF;
+            color: white;
+        }
+
+        .circle-todo {
+            background: #F1F5F9;
+            color: #94A3B8;
+            border: 1px solid #E2E8F0;
+        }
+
+        .phase-text {
+            flex: 1;
+        }
+
+        .phase-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .phase-val {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-soft);
+        }
+
+        .btn-full {
+            display: block;
+            text-align: center;
+            width: 100%;
+            padding: 12px;
+            background: #F8FAFC;
+            color: var(--accent);
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-top: 20px;
+            transition: 0.2s;
+        }
+
+        .btn-full:hover {
+            background: #F1F5F9;
+        }
     </style>
     <script src="../js/theme.js"></script>
     <link rel="stylesheet" href="../css/dark-mode.css">
 </head>
+
 <body>
 
     <!-- ── SIDEBAR ── -->
     <aside class="sidebar">
-        <a href="dashboard.html" class="logo">Nex<span>tern</span></a>
-        
+        <a href="feed.html" class="logo">Nex<span>tern</span></a>
+
         <div class="user-block">
             <span class="user-name" id="sideUserName">Loading...</span>
             <span class="user-meta" id="sideUserMeta">Loading Profile...</span>
@@ -201,13 +579,15 @@
 
         <ul class="nav-list">
             <li class="nav-item"><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
-            <li class="nav-item"><a href="drives.html" class="nav-link">Placement Drives <span class="nav-badge" id="driveBadge">0</span></a></li>
+            <li class="nav-item"><a href="drives.html" class="nav-link">Placement Drives <span class="nav-badge"
+                        id="driveBadge">0</span></a></li>
             <li class="nav-item"><a href="roadmap.html" class="nav-link">My Roadmap</a></li>
             <li class="nav-item"><a href="prep-hub.html" class="nav-link">Prep Hub</a></li>
             <li class="nav-item"><a href="seniors.html" class="nav-link">Senior Connect</a></li>
             <li class="nav-item"><a href="profile.html" class="nav-link">My Profile</a></li>
             <li class="nav-item"><a href="resume-analyzer.html" class="nav-link">Resume Analyzer</a></li>
-            <li class="nav-item" style="margin-top: 32px;"><a href="#" onclick="handleLogout()" class="nav-link logout-link">Logout</a></li>
+            <li class="nav-item" style="margin-top: 32px;"><a href="#" onclick="handleLogout()"
+                    class="nav-link logout-link">Logout</a></li>
         </ul>
     </aside>
 
@@ -220,10 +600,15 @@
             </div>
             <div class="header-right" style="display: flex; align-items: center; gap: 12px;">
                 <button class="theme-toggle-btn" id="themeToggleBtn" onclick="window.toggleTheme()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
                 </button>
                 <button class="icon-btn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                    </svg>
                 </button>
                 <a href="profile.html" style="text-decoration:none;">
                     <div class="btn-avatar" id="headerAvatar">U</div>
@@ -234,11 +619,11 @@
         <!-- READINESS CARD -->
         <section class="readiness-card">
             <span class="card-tag">Updated Today</span>
-            
+
             <div class="ring-container">
                 <svg class="ring-svg" viewBox="0 0 120 120">
-                    <circle class="ring-track" cx="60" cy="60" r="54"/>
-                    <circle class="ring-fill" id="scoreRing" cx="60" cy="60" r="54"/>
+                    <circle class="ring-track" cx="60" cy="60" r="54" />
+                    <circle class="ring-fill" id="scoreRing" cx="60" cy="60" r="54" />
                 </svg>
                 <div class="ring-content">
                     <span class="ring-score" id="scoreText">0</span>
@@ -249,21 +634,27 @@
             <div class="readiness-info">
                 <h2 id="statusTitle">Calculating...</h2>
                 <p>Complete your roadmap and analyze your resume to improve your placement readiness score.</p>
-                
+
                 <div class="sub-bars">
                     <div class="bar-item">
-                        <span class="bar-label">Resume</span>
-                        <div class="bar-bg"><div class="bar-fill" id="resumeBar"></div></div>
-                        <span class="bar-val" id="resumeVal">0%</span>
+                        <span class="bar-label">Profile</span>
+                        <div class="bar-bg">
+                            <div class="bar-fill" id="profileBar"></div>
+                        </div>
+                        <span class="bar-val" id="profileVal">0%</span>
                     </div>
                     <div class="bar-item">
                         <span class="bar-label">Roadmap</span>
-                        <div class="bar-bg"><div class="bar-fill" id="roadmapBar"></div></div>
+                        <div class="bar-bg">
+                            <div class="bar-fill" id="roadmapBar"></div>
+                        </div>
                         <span class="bar-val" id="roadmapVal">0%</span>
                     </div>
                     <div class="bar-item">
                         <span class="bar-label">Applications</span>
-                        <div class="bar-bg"><div class="bar-fill" id="appsBar"></div></div>
+                        <div class="bar-bg">
+                            <div class="bar-fill" id="appsBar"></div>
+                        </div>
                         <span class="bar-val" id="appsVal">0%</span>
                     </div>
                 </div>
@@ -306,47 +697,15 @@
                     <a href="roadmap.html" class="view-all">Full view →</a>
                 </div>
                 <div class="list-card">
-                    <div style="background: #EEF2FF; padding: 12px 16px; border-radius: 10px; margin-bottom: 20px; font-size: 0.85rem;">
+                    <div
+                        style="background: #EEF2FF; padding: 12px 16px; border-radius: 10px; margin-bottom: 20px; font-size: 0.85rem;">
                         <span style="color: #64748B; font-weight: 500;">Target:</span>
-                        <span style="color: #6C63FF; font-weight: 700; margin-left: 6px;">Google — SDE</span>
+                        <span id="roadmapTarget" style="color: #6C63FF; font-weight: 700; margin-left: 6px;">Not
+                            selected</span>
                     </div>
 
                     <div id="roadmapList">
-                        <div class="phase-row">
-                            <div class="phase-circle circle-done">✓</div>
-                            <div class="phase-text">
-                                <div class="phase-name">Arrays & Strings</div>
-                            </div>
-                            <span class="phase-val">100%</span>
-                        </div>
-                        <div class="phase-row">
-                            <div class="phase-circle circle-done">✓</div>
-                            <div class="phase-text">
-                                <div class="phase-name">Trees & Graphs</div>
-                            </div>
-                            <span class="phase-val">100%</span>
-                        </div>
-                        <div class="phase-row">
-                            <div class="phase-circle circle-active">3</div>
-                            <div class="phase-text">
-                                <div class="phase-name">Dynamic Programming</div>
-                            </div>
-                            <span class="phase-val">40%</span>
-                        </div>
-                        <div class="phase-row">
-                            <div class="phase-circle circle-todo">4</div>
-                            <div class="phase-text">
-                                <div class="phase-name">System Design</div>
-                            </div>
-                            <span class="phase-val">0%</span>
-                        </div>
-                        <div class="phase-row">
-                            <div class="phase-circle circle-todo">5</div>
-                            <div class="phase-text">
-                                <div class="phase-name">Behavioural Round</div>
-                            </div>
-                            <span class="phase-val">0%</span>
-                        </div>
+                        <p style="padding: 16px 4px; color:#94A3B8; font-size:0.85rem;">Loading roadmap...</p>
                     </div>
 
                     <a href="roadmap.html" class="btn-full">Continue Roadmap →</a>
@@ -355,179 +714,384 @@
         </div>
     </main>
 
+    <script src="../js/config.js"></script>
     <script>
-        const API_BASE = 'http://localhost:4000';
-        const token = localStorage.getItem('nextern_token');
+        const API_BASE = window.API_BASE || 'http://localhost:4000';
+        let token = null;
+        const state = {
+            user: null,
+            drives: [],
+            applications: [],
+            eligibleDrives: [],
+            completedTopics: [],
+            roadmap: null,
+        };
+
+        function hydrateAuthFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const tokenFromUrl = params.get('token');
+            const nameFromUrl = params.get('name');
+            if (tokenFromUrl) {
+                localStorage.setItem('nextern_token', tokenFromUrl);
+            }
+            if (nameFromUrl) {
+                localStorage.setItem('nextern_name', decodeURIComponent(nameFromUrl));
+            }
+            if (tokenFromUrl || nameFromUrl) {
+                window.history.replaceState({}, '', window.location.pathname);
+            }
+        }
+
+        function getToken() {
+            if (window.getAuthToken) return window.getAuthToken();
+            const t = localStorage.getItem('nextern_token');
+            return (t && t !== 'null' && t !== 'undefined') ? t : null;
+        }
 
         async function initDashboard() {
+            hydrateAuthFromUrl();
+            token = getToken();
             if (!token) {
                 window.location.href = '../login.html';
                 return;
             }
 
             setGreeting();
-            await fetchUserData();
-            await fetchApplications();
+
+            const user = await fetchUserData();
+            if (!user) return;
+
+            await Promise.all([
+                fetchApplications(),
+                fetchDrives(),
+                fetchProgress(user.id || user._id),
+                resolveRoadmap(user),
+            ]);
+
+            computeAndRenderReadiness();
+            renderRoadmapCard();
+            renderDrivesCard();
         }
 
         function setGreeting() {
             const now = new Date();
             const hour = now.getHours();
-            let g = "Good evening";
-            if (hour < 12) g = "Good morning";
-            else if (hour < 17) g = "Good afternoon";
+            let greeting = 'Good evening';
+            if (hour < 12) greeting = 'Good morning';
+            else if (hour < 17) greeting = 'Good afternoon';
 
             const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
             document.getElementById('currentDate').textContent = now.toLocaleDateString('en-IN', options);
-            window.timeGreeting = g;
+            window.timeGreeting = greeting;
+        }
+
+        async function apiFetch(path, options = {}) {
+            token = getToken();
+            if (!token) {
+                window.location.href = '../login.html';
+                return null;
+            }
+            const response = await fetch(`${API_BASE}${path}`, {
+                ...options,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                    ...(options.headers || {})
+                }
+            });
+
+            if (response.status === 401) {
+                handleLogout();
+                return null;
+            }
+            return response.json();
         }
 
         async function fetchUserData() {
             try {
-                const res = await fetch(`${API_BASE}/api/user/me`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const user = await res.json();
-                
-                if (user) {
-                    const firstName = user.name.split(' ')[0];
-                    document.getElementById('greetingText').textContent = `${window.timeGreeting}, ${firstName} 👋`;
-                    document.getElementById('sideUserName').textContent = user.name;
-                    document.getElementById('sideUserMeta').textContent = `${user.branch} • ${user.year}nd Year`;
-                    document.getElementById('headerAvatar').textContent = user.name.charAt(0).toUpperCase();
+                const data = await apiFetch('/api/user/me');
+                if (!data || !data.success || !data.user) return null;
 
-                    calculateReadiness(user);
-                }
-            } catch (e) { console.error('Error fetching user:', e); }
-        }
+                const user = data.user;
+                state.user = user;
 
-        function calculateReadiness(user) {
-            // Logic based on localStorage and user data
-            let resumeScore = user.resumeUrl ? 100 : 0;
-            
-            // Calc roadmap from localStorage
-            let totalT = 0; let doneT = 0;
-            for (let i = 0; i < localStorage.length; i++) {
-                const k = localStorage.key(i);
-                if (k.startsWith('nextern_prep_')) {
-                    totalT++;
-                    if (localStorage.getItem(k) === 'true') doneT++;
-                }
+                const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Student';
+                const firstName = user.firstName || fullName.split(' ')[0] || 'Student';
+                const yearText = user.year ? `${user.year}` : 'Year not set';
+                const meta = [user.branch || 'Branch not set', yearText].join(' • ');
+                const initial = firstName.charAt(0).toUpperCase();
+
+                document.getElementById('greetingText').textContent = `${window.timeGreeting}, ${firstName}`;
+                document.getElementById('sideUserName').textContent = fullName;
+                document.getElementById('sideUserMeta').textContent = meta;
+                document.getElementById('headerAvatar').textContent = initial;
+
+                localStorage.setItem('nextern_name', fullName);
+                localStorage.setItem('nextern_user', JSON.stringify(user));
+                return user;
+            } catch (error) {
+                console.error('Error fetching user profile:', error);
+                return null;
             }
-            // If nothing in localStorage, use mock data or 0
-            let roadmapScore = totalT > 0 ? Math.round((doneT / totalT) * 100) : 42; 
-            
-            // Apps Score based on count (max 10 apps for 100%)
-            const appCount = window.appliedCount || 0;
-            let appsScore = Math.min(100, Math.round((appCount / 5) * 100));
-
-            const overall = Math.round((resumeScore * 0.3) + (roadmapScore * 0.4) + (appsScore * 0.3));
-
-            // Update UI
-            document.getElementById('scoreText').textContent = overall;
-            document.getElementById('resumeVal').textContent = `${resumeScore}%`;
-            document.getElementById('roadmapVal').textContent = `${roadmapScore}%`;
-            document.getElementById('appsVal').textContent = `${appsScore}%`;
-            document.getElementById('roadmapCmp').textContent = `${roadmapScore}%`;
-            
-            document.getElementById('resumeBar').style.width = `${resumeScore}%`;
-            document.getElementById('roadmapBar').style.width = `${roadmapScore}%`;
-            document.getElementById('appsBar').style.width = `${appsScore}%`;
-
-            // Ring
-            const offset = 339 - (339 * overall) / 100;
-            document.getElementById('scoreRing').style.strokeDashoffset = offset;
-
-            let status = "Getting stronger 💪";
-            if (overall >= 70) status = "Looking good! 🚀";
-            else if (overall >= 90) status = "Placement ready! 🎉";
-            document.getElementById('statusTitle').textContent = status;
         }
 
         async function fetchApplications() {
             try {
-                const res = await fetch(`${API_BASE}/api/applications/me`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const data = await res.json();
-                
-                const listEl = document.getElementById('drivesList');
-                if (data.success && data.applications && data.applications.length > 0) {
-                    window.appliedCount = data.applications.length;
-                    document.getElementById('appliedCount').textContent = data.applications.length;
-                    document.getElementById('driveBadge').textContent = data.applications.length;
-
-                    listEl.innerHTML = data.applications.slice(0, 5).map(app => {
-                        const d = app.drive;
-                        const statusPill = app.status || 'applied';
-                        
-                        return `
-                            <div class="drive-row" onclick="window.location.href='drives.html'">
-                                <div class="drive-text">
-                                    <div class="drive-company">${d.company}</div>
-                                    <div class="drive-meta">${d.role} • ${d.location}</div>
-                                </div>
-                                <div class="drive-right">
-                                    <span class="status-pill pill-${statusPill}">${statusPill}</span>
-                                    <div class="days-left">${new Date(app.createdAt).toLocaleDateString()}</div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-                    
-                    // Trigger readiness update now that we have app count
-                    fetchUserData(); 
-                } else {
-                    // Fallback to eligible drives
-                    await fetchEligibleDrives();
+                const data = await apiFetch('/api/applications/me');
+                if (data && data.success && Array.isArray(data.applications)) {
+                    state.applications = data.applications.filter(a => a && a.drive);
                 }
-            } catch (e) { 
-                console.error('Error fetching apps:', e);
-                await fetchEligibleDrives();
+            } catch (error) {
+                console.error('Error fetching applications:', error);
             }
         }
 
-        async function fetchEligibleDrives() {
+        async function fetchDrives() {
             try {
-                const res = await fetch(`${API_BASE}/api/drives`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const data = await res.json();
-                const listEl = document.getElementById('drivesList');
-                
-                if (data.success && data.drives) {
-                    document.getElementById('drivesSectionTitle').textContent = 'Eligible Drives for You';
-                    listEl.innerHTML = data.drives.slice(0, 5).map(d => {
-                        const deadline = new Date(d.deadline);
-                        const diff = Math.ceil((deadline - new Date()) / (1000*60*60*24));
-                        return `
-                            <div class="drive-row" onclick="window.location.href='drives.html'">
-                                <div class="drive-text">
-                                    <div class="drive-company">${d.company}</div>
-                                    <div class="drive-meta">${d.role} • ${d.location}</div>
-                                </div>
-                                <div class="drive-right">
-                                    <span class="status-pill pill-soon">Eligible</span>
-                                    <div class="days-left">${diff > 0 ? diff + ' days left' : 'Closing'}</div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-                } else {
-                    listEl.innerHTML = '<p style="padding:20px; text-align:center; color:#94A3B8;">No drives available yet.</p>';
+                const data = await apiFetch('/api/drives');
+                if (data && data.success && Array.isArray(data.drives)) {
+                    state.drives = data.drives;
+                    state.eligibleDrives = data.drives.filter(d => {
+                        if (typeof d.isEligible === 'boolean') return d.isEligible;
+                        const cutoff = Number(d.cgpaCutoff || 0);
+                        const userCgpa = Number(state.user?.cgpa || 0);
+                        return !cutoff || (userCgpa && userCgpa >= cutoff);
+                    });
                 }
-            } catch (e) {
-                console.error('Error fetching eligible drives:', e);
+            } catch (error) {
+                console.error('Error fetching drives:', error);
             }
+        }
+
+        async function fetchProgress(studentId) {
+            if (!studentId) return;
+            try {
+                const data = await apiFetch(`/api/progress/${studentId}`);
+                if (data && data.success && Array.isArray(data.completedTopics)) {
+                    state.completedTopics = data.completedTopics;
+                }
+            } catch (error) {
+                console.error('Error fetching progress:', error);
+            }
+        }
+
+        async function resolveRoadmap(user) {
+            const raw = localStorage.getItem('nextern_roadmap');
+            if (raw) {
+                try {
+                    state.roadmap = JSON.parse(raw);
+                    return;
+                } catch (_) { }
+            }
+
+            const company = (user.targetCompanies && user.targetCompanies[0]) || '';
+            if (!company) return;
+
+            try {
+                const level = user.year && String(user.year).includes('1') ? 'Beginner' : 'Intermediate';
+                const data = await apiFetch('/api/roadmap/generate', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        company,
+                        role: 'SDE',
+                        level,
+                        skills: Array.isArray(user.skills) ? user.skills : [],
+                    })
+                });
+                if (data && data.success && data.roadmap) {
+                    state.roadmap = data.roadmap;
+                    localStorage.setItem('nextern_roadmap', JSON.stringify(data.roadmap));
+                }
+            } catch (error) {
+                console.error('Error generating roadmap:', error);
+            }
+        }
+
+        function computeProfileScore(user) {
+            let done = 0;
+            const checks = [
+                !!(user.college && user.college.trim()),
+                !!(user.branch && user.branch.trim()),
+                !!(user.year && String(user.year).trim()),
+                Number(user.cgpa) > 0,
+                Array.isArray(user.skills) && user.skills.length > 0,
+                !!(user.linkedin && user.linkedin.trim()),
+                !!(user.github && user.github.trim()),
+                Array.isArray(user.targetCompanies) && user.targetCompanies.length > 0,
+            ];
+            checks.forEach(v => { if (v) done += 1; });
+            return Math.round((done / checks.length) * 100);
+        }
+
+        function computeRoadmapScore() {
+            if (!state.roadmap || !Array.isArray(state.roadmap.weeks) || state.roadmap.weeks.length === 0) return 0;
+
+            const totalTasks = state.roadmap.weeks.reduce((acc, w) => acc + (Array.isArray(w.tasks) ? w.tasks.length : 0), 0);
+            if (!totalTasks) return 0;
+
+            const fromTopics = state.completedTopics.length
+                ? Math.min(100, Math.round((state.completedTopics.length / totalTasks) * 100))
+                : 0;
+
+            const taskStates = JSON.parse(localStorage.getItem('nextern_task_states') || '{}');
+            const doneLocal = Object.values(taskStates).filter(Boolean).length;
+            const fromLocal = doneLocal ? Math.min(100, Math.round((doneLocal / totalTasks) * 100)) : 0;
+
+            return Math.max(fromTopics, fromLocal);
+        }
+
+        function computeAndRenderReadiness() {
+            const profileScore = computeProfileScore(state.user || {});
+            const roadmapScore = computeRoadmapScore();
+            const appsScore = Math.min(100, Math.round((state.applications.length / 5) * 100));
+            const overall = Math.round((profileScore * 0.3) + (roadmapScore * 0.4) + (appsScore * 0.3));
+
+            document.getElementById('scoreText').textContent = overall;
+            document.getElementById('profileVal').textContent = `${profileScore}%`;
+            document.getElementById('roadmapVal').textContent = `${roadmapScore}%`;
+            document.getElementById('appsVal').textContent = `${appsScore}%`;
+            document.getElementById('roadmapCmp').textContent = `${roadmapScore}%`;
+
+            document.getElementById('profileBar').style.width = `${profileScore}%`;
+            document.getElementById('roadmapBar').style.width = `${roadmapScore}%`;
+            document.getElementById('appsBar').style.width = `${appsScore}%`;
+
+            document.getElementById('eligibleCount').textContent = state.eligibleDrives.length;
+            document.getElementById('appliedCount').textContent = state.applications.length;
+            document.getElementById('driveBadge').textContent = state.eligibleDrives.length;
+
+            const offset = 339 - (339 * overall) / 100;
+            const ring = document.getElementById('scoreRing');
+            ring.style.strokeDashoffset = offset;
+            ring.style.stroke = overall >= 75 ? '#22C55E' : overall >= 45 ? '#6C63FF' : '#F59E0B';
+
+            let status = 'Getting stronger';
+            if (overall >= 85) status = 'Placement ready';
+            else if (overall >= 65) status = 'Looking good';
+            else if (overall >= 40) status = 'Building momentum';
+            document.getElementById('statusTitle').textContent = status;
+        }
+
+        function renderRoadmapCard() {
+            const targetEl = document.getElementById('roadmapTarget');
+            const listEl = document.getElementById('roadmapList');
+            if (!listEl || !targetEl) return;
+
+            const company = (state.user?.targetCompanies && state.user.targetCompanies[0]) || 'Not selected';
+            targetEl.textContent = company === 'Not selected' ? company : `${company} — SDE`;
+
+            if (!state.roadmap || !Array.isArray(state.roadmap.weeks) || state.roadmap.weeks.length === 0) {
+                listEl.innerHTML = '<p style="padding: 16px 4px; color:#94A3B8; font-size:0.85rem;">Generate a roadmap from the roadmap page to track progress here.</p>';
+                return;
+            }
+
+            const weeks = state.roadmap.weeks.slice(0, 5);
+            const totalWeeks = state.roadmap.weeks.length;
+            const roadmapScore = computeRoadmapScore();
+            const doneCount = Math.round((roadmapScore / 100) * totalWeeks);
+
+            listEl.innerHTML = weeks.map((w, idx) => {
+                const weekNo = idx + 1;
+                const isDone = weekNo <= doneCount;
+                const isActive = !isDone && weekNo === Math.min(doneCount + 1, totalWeeks);
+                const cls = isDone ? 'circle-done' : (isActive ? 'circle-active' : 'circle-todo');
+                const mark = isDone ? '✓' : String(weekNo);
+                const phasePct = isDone ? 100 : (isActive ? Math.min(95, Math.max(15, roadmapScore - ((weekNo - 1) * (100 / totalWeeks)))) : 0);
+                return `
+                    <div class="phase-row">
+                        <div class="phase-circle ${cls}">${mark}</div>
+                        <div class="phase-text">
+                            <div class="phase-name">${escapeHtml(w.title || `Week ${weekNo}`)}</div>
+                        </div>
+                        <span class="phase-val">${Math.round(phasePct)}%</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderDrivesCard() {
+            const listEl = document.getElementById('drivesList');
+            if (!listEl) return;
+
+            if (state.applications.length > 0) {
+                document.getElementById('drivesSectionTitle').textContent = 'Your Applications';
+                listEl.innerHTML = state.applications.slice(0, 5).map(app => {
+                    const drive = app.drive || {};
+                    const status = String(app.status || 'applied').toLowerCase();
+                    const safeStatus = ['applied', 'shortlisted', 'interview', 'rejected', 'offered'].includes(status) ? status : 'applied';
+                    return `
+                        <div class="drive-row" onclick="window.location.href='drives.html'">
+                            <div class="drive-text">
+                                <div class="drive-company">${escapeHtml(drive.company || 'Drive')}</div>
+                                <div class="drive-meta">${escapeHtml(drive.role || 'Role')} • ${escapeHtml(drive.location || 'Location TBD')}</div>
+                            </div>
+                            <div class="drive-right">
+                                <span class="status-pill pill-${safeStatus}">${escapeHtml(safeStatus)}</span>
+                                <div class="days-left">Applied ${formatShortDate(app.createdAt)}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                return;
+            }
+
+            document.getElementById('drivesSectionTitle').textContent = 'Eligible Drives for You';
+            const drives = state.eligibleDrives.length ? state.eligibleDrives : state.drives;
+            if (!drives.length) {
+                listEl.innerHTML = '<p style="padding:20px; text-align:center; color:#94A3B8;">No drives available yet.</p>';
+                return;
+            }
+
+            listEl.innerHTML = drives.slice(0, 5).map(drive => {
+                const days = daysLeft(drive.deadline);
+                const daysText = days === null ? 'Open' : (days <= 0 ? 'Closing' : `${days} days left`);
+                return `
+                    <div class="drive-row" onclick="window.location.href='drives.html'">
+                        <div class="drive-text">
+                            <div class="drive-company">${escapeHtml(drive.company || 'Company')}</div>
+                            <div class="drive-meta">${escapeHtml(drive.role || 'Role')} • ${escapeHtml(drive.location || 'Location TBD')}</div>
+                        </div>
+                        <div class="drive-right">
+                            <span class="status-pill pill-soon">Eligible</span>
+                            <div class="days-left">${daysText}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function daysLeft(deadline) {
+            if (!deadline) return null;
+            const d = new Date(deadline);
+            if (Number.isNaN(d.getTime())) return null;
+            return Math.ceil((d.getTime() - Date.now()) / 86400000);
+        }
+
+        function formatShortDate(input) {
+            if (!input) return '';
+            const d = new Date(input);
+            if (Number.isNaN(d.getTime())) return '';
+            return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+        }
+
+        function escapeHtml(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
         }
 
         function handleLogout() {
             localStorage.removeItem('nextern_token');
             localStorage.removeItem('nextern_name');
+            localStorage.removeItem('nextern_user');
             window.location.href = '../login.html';
         }
 
         document.addEventListener('DOMContentLoaded', initDashboard);
     </script>
 </body>
+
 </html>

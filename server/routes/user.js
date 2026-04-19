@@ -13,6 +13,18 @@ const User = require('../models/User');
 const protect = require('../middleware/protect');
 const router = express.Router();
 
+function computeProfileComplete(payload = {}) {
+    const requiredText = ['firstName', 'lastName', 'college', 'branch', 'year'];
+    const hasRequiredText = requiredText.every((key) => {
+        const v = payload[key];
+        return typeof v === 'string' && v.trim().length > 0;
+    });
+    const hasValidCgpa = typeof payload.cgpa === 'number' && payload.cgpa > 0;
+    const hasSkills = Array.isArray(payload.skills) && payload.skills.length > 0;
+
+    return hasRequiredText && hasValidCgpa && hasSkills;
+}
+
 
 /* ----------------------------------------------------------------
    GET /api/user/me
@@ -37,12 +49,14 @@ router.get('/me', protect, async (req, res) => {
                 year: user.year,
                 cgpa: user.cgpa,
                 graduationYear: user.graduationYear,
+                bio: user.bio,
                 skills: user.skills,
                 targetCompanies: user.targetCompanies,
                 linkedin: user.linkedin,
                 github: user.github,
                 avatar: user.avatar,
                 role: user.role,
+                isProfileComplete: user.isProfileComplete,
                 createdAt: user.createdAt,
             },
         });
@@ -65,7 +79,7 @@ router.put('/me', protect, async (req, res) => {
         const allowed = [
             'firstName', 'lastName', 'phone',
             'college', 'branch', 'year', 'cgpa', 'graduationYear',
-            'skills', 'targetCompanies', 'linkedin', 'github'
+            'bio', 'skills', 'targetCompanies', 'linkedin', 'github'
         ];
 
         const updates = {};
@@ -74,6 +88,13 @@ router.put('/me', protect, async (req, res) => {
                 updates[field] = req.body[field];
             }
         });
+
+        const current = await User.findById(req.user._id).lean();
+        const mergedForCompleteness = {
+            ...(current || {}),
+            ...updates,
+        };
+        updates.isProfileComplete = computeProfileComplete(mergedForCompleteness);
 
         const user = await User.findByIdAndUpdate(
             req.user._id,
