@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+(function() {
+  var token = localStorage.getItem('nextern_token');
+  if (!token) { window.location.href = '../login.html'; return; }
+  try {
+    var payload = JSON.parse(atob(token.split('.')[1]));
+    if (payload.exp * 1000 < Date.now()) {
+      localStorage.clear();
+      window.location.href = '../login.html';
+    }
+  } catch(e) { localStorage.clear(); window.location.href = '../login.html'; }
+})();
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resume AI Analyzer — Nextern</title>
@@ -335,7 +348,7 @@
     </div>
 
     <script>
-        const API_BASE = 'http://localhost:4000';
+        const API_BASE = window.API_BASE || 'http://localhost:4000';
         let selectedFile = null;
 
         // ── INITIAL DATA ──

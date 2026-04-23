@@ -1439,7 +1439,7 @@
             if (isGoogleUser) {
                 // Google OAuth user — update existing profile via PUT
                 const token = localStorage.getItem('nextern_token');
-                response = await fetch('http://localhost:4000/api/user/me', {
+                response = await fetch(`${window.API_BASE || 'http://localhost:4000'}/api/user/me', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1451,7 +1451,7 @@
                 // New email/password user — register via POST
                 payload.email = document.getElementById('regEmail').value.trim();
                 payload.password = document.getElementById('regPassword').value;
-                response = await fetch('http://localhost:4000/api/auth/register', {
+                response = await fetch(`${window.API_BASE || 'http://localhost:4000'}/api/auth/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
@@ -1522,7 +1522,7 @@
 
         // Fetch user data from server
         try {
-            const response = await fetch('http://localhost:4000/api/user/me', {
+            const response = await fetch(`${window.API_BASE || 'http://localhost:4000'}/api/user/me', {
                 headers: { 'Authorization': `Bearer ${tokenFromUrl}` }
             });
             const data = await response.json();

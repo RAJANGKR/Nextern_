@@ -264,22 +264,47 @@
     <script src="../js/config.js"></script>
     <script src="../js/admin-saas.js"></script>
     <script>
-        (async function checkAuth() {
+        // Token expiry pre-check
+        (function() {
+            var token = localStorage.getItem('nextern_token');
+            if (!token) { window.location.href = '../login.html'; return; }
+            try {
+                var payload = JSON.parse(atob(token.split('.')[1]));
+                if (payload.exp * 1000 < Date.now()) {
+                    localStorage.clear();
+                    window.location.href = '../login.html';
+                }
+            } catch(e) { localStorage.clear(); window.location.href = '../login.html'; }
+        })();
+
+        // Full admin role verification via API
+        async function verifyAdmin() {
             const token = localStorage.getItem('nextern_token');
-            if(!token) return window.location.href = '../login.html';
-            
+            if (!token) { window.location.href = '../login.html'; return false; }
+
             try {
                 const res = await fetch((window.API_BASE || 'http://localhost:4000') + '/api/user/me', {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: { 'Authorization': 'Bearer ' + token }
                 });
                 const data = await res.json();
-                if(!res.ok || data.user.role !== 'admin') {
-                    alert('Access Restricted');
-                    window.location.href = 'feed.html';
+
+                if (!data.success || !data.user || data.user.role !== 'admin') {
+                    showToast('Access denied. Admins only.', 'error');
+                    setTimeout(() => { window.location.href = 'feed.html'; }, 1500);
+                    return false;
                 }
-                document.getElementById('adminNameDisplay').textContent = data.user.lastName || data.user.firstName || 'Admin';
-            } catch(e) { window.location.href = '../login.html'; }
-        })();
+
+                const name = (data.user.firstName || '') + ' ' + (data.user.lastName || '');
+                const el = document.getElementById('adminNameDisplay');
+                if (el) el.textContent = data.user.lastName || data.user.firstName || 'Admin';
+                return true;
+
+            } catch(e) {
+                window.location.href = '../login.html';
+                return false;
+            }
+        }
     </script>
 </body>
 </html>
+

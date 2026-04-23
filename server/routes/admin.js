@@ -387,6 +387,24 @@ router.post('/drives', async (req, res) => {
         }
 
         await logAction(req.user._id, 'drive.create', `${newDrive.company} — ${newDrive.role}`);
+
+        // Create a System Post for the Student Feed
+        try {
+            await Post.create({
+                author: req.user._id,
+                content: `New Placement Drive Launched: ${newDrive.company} is hiring for ${newDrive.role}. Package: ${newDrive.package || 'Competitive'}.`,
+                type: 'drive',
+                isSystem: true,
+                isPinned: true,
+                meta: {
+                    company: newDrive.company,
+                    role: newDrive.role,
+                    package: newDrive.package,
+                    deadline: newDrive.deadline
+                }
+            });
+        } catch (postErr) { console.error('Drive Post Error:', postErr.message); }
+
         res.status(201).json({ success: true, drive: newDrive });
     } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 });
@@ -714,15 +732,35 @@ const Announcement = require('../models/Announcement');
 
 router.post('/announcements', async (req, res) => {
     try {
+        const { title, content, type, targetBranches } = req.body;
+        
+        // 1. Create the persistent Announcement log
         const announcement = await Announcement.create({
-            ...req.body,
+            title,
+            content,
+            type,
+            targetBranches,
             admin: req.user._id
         });
         
-        // Log this action
-        await logAction(req.user._id, 'announcement.create', announcement.title);
+        // 2. Create a System Post for the Student Feed
+        const systemPost = await Post.create({
+            author: req.user._id,
+            content: `${title}\n\n${content}`,
+            type: type === 'drive' ? 'drive' : 'announcement',
+            isSystem: true,
+            isPinned: true, // Announcements are usually important
+            meta: {
+                targetBranch: targetBranches && targetBranches.includes('All') ? null : (targetBranches && targetBranches[0]),
+                // If more than one branch, we might need more complex meta, 
+                // but for now we follow the filter logic in posts.js
+            }
+        });
         
-        res.status(201).json({ success: true, announcement });
+        // Log this action
+        await logAction(req.user._id, 'announcement.create', title);
+        
+        res.status(201).json({ success: true, announcement, post: systemPost });
     } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 });
 

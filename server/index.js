@@ -1,16 +1,5 @@
 /* ================================================================
    index.js — Nextern Backend Entry Point
-
-   TEACH: This is the main file that:
-   1. Loads environment variables from .env
-   2. Connects to MongoDB
-   3. Creates the Express app
-   4. Registers middleware (cors, json parsing, passport)
-   5. Mounts route handlers
-   6. Starts listening on a port
-
-   Run with:   npm run dev   (uses nodemon — auto-restarts on save)
-   Or:         npm start     (plain node, no auto-restart)
 ================================================================ */
 
 // Load .env variables FIRST — before anything else
@@ -18,6 +7,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 const passport = require('passport');
 const connectDB = require('./config/db');
 
@@ -32,44 +22,49 @@ connectDB();
 /* ── Create Express app ── */
 const app = express();
 
+/* ── Security: Helmet headers ── */
+app.use(helmet({
+    crossOriginEmbedderPolicy: false,
+    contentSecurityPolicy: false
+}));
+app.disable('x-powered-by');
 
-/* ================================================================
-   MIDDLEWARE
-   TEACH: Middleware runs on EVERY request before route handlers.
-   Order matters — register them in this order.
-================================================================ */
+/* ── CORS: Allow frontend origins ── */
+const allowedOrigins = [
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    process.env.CLIENT_URL,
+].filter(Boolean);
 
-/* CORS — allow requests from your frontend (live-server)
-   Without this, the browser blocks API calls from a different origin.
-   TEACH: CORS = Cross-Origin Resource Sharing
-   Your frontend is on port 5500, backend on 5000 — different origins. */
 app.use(cors({
-    origin: [
-        'http://127.0.0.1:5500',   // live-server default
-        'http://localhost:5500',
-        'http://127.0.0.1:3000',
-        'http://localhost:3000',
-    ],
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.some(allowed =>
+            origin === allowed || origin.endsWith('.vercel.app')
+        )) {
+            callback(null, true);
+        } else {
+            console.log('CORS blocked:', origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-/* Parse incoming JSON request bodies
-   TEACH: Without this, req.body would be undefined.
-   express.json() reads the body and parses it as JSON. */
+/* ── Parse request bodies ── */
 app.use(express.json());
-
-/* Parse URL-encoded bodies (form submissions) */
 app.use(express.urlencoded({ extended: false }));
 
-/* Passport — needed for Google OAuth */
+/* ── Passport (Google OAuth) ── */
 app.use(passport.initialize());
 
 
 /* ================================================================
    ROUTES
-   TEACH: app.use('/api/auth', authRoutes) means:
-   Any request to /api/auth/... is handled by authRoutes.
-   So POST /api/auth/login maps to the /login route in routes/auth.js
 ================================================================ */
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
@@ -84,16 +79,18 @@ app.use('/api/applications', require('./routes/applications.routes'));
 app.use('/api/progress', require('./routes/progress.routes'));
 app.use('/api/analytics', require('./routes/analytics'));
 
-/* ── Health check route — visit http://localhost:5000/api/health ── */
+/* ── Health check ── */
 app.get('/api/health', (req, res) => {
     res.json({
         success: true,
-        message: 'Nextern API is running 🚀',
+        message: 'Nextern API is running',
+        environment: process.env.NODE_ENV || 'development',
         timestamp: new Date().toISOString(),
+        version: '1.0.0'
     });
 });
 
-/* ── 404 handler — if no route matched ── */
+/* ── 404 handler ── */
 app.use((req, res) => {
     res.status(404).json({
         success: false,
@@ -103,11 +100,23 @@ app.use((req, res) => {
 
 /* ── Global error handler ── */
 app.use((err, req, res, next) => {
-    console.error('Unhandled error:', err);
-    res.status(500).json({
+    console.error('Error:', err.message);
+    const message = process.env.NODE_ENV === 'production'
+        ? 'Something went wrong'
+        : err.message;
+    res.status(err.status || 500).json({
         success: false,
-        message: 'Something went wrong on the server.',
+        message
     });
+});
+
+process.on('unhandledRejection', (reason) => {
+    console.error('Unhandled Rejection:', reason);
+});
+
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+    process.exit(1);
 });
 
 
@@ -117,14 +126,11 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
-    console.log(`
-  Starting Nextern API...
-  PORT: ${PORT}
-  `);
+    console.log(`Nextern API running on port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
 });
 
 const startScheduler = require('./scraper/schedule');
 startScheduler();
 
 const seedPosts = require('./scraper/seedPosts');
-seedPosts(); // seeds on server start if empty
+seedPosts();

@@ -268,7 +268,7 @@ async function handleAnnounceSubmit(e) {
     const type = document.getElementById('annType').value;
     const branches = Array.from(document.querySelectorAll('#branchSelector input:checked')).map(i => i.value);
 
-    if(!title || !content) return alert('Fill title and content');
+    if(!title || !content) return showToast('Please fill title and content.', 'warning');
 
     try {
         const res = await fetch(`${API_BASE}/api/admin/announcements`, {
@@ -277,10 +277,10 @@ async function handleAnnounceSubmit(e) {
             body: JSON.stringify({ title, content, type, targetBranches: branches })
         });
         if(res.ok) {
-            alert('Success!');
+            showToast('Announcement posted successfully!', 'success');
             switchView('announcements');
         }
-    } catch(err) { alert('Error: ' + err.message); }
+    } catch(err) { showToast('Error: ' + err.message, 'error'); }
 }
 
 async function loadAnnouncementsHistory() {
@@ -451,7 +451,7 @@ async function handleAddDriveSubmit(e) {
         description: document.getElementById('drDescription').value,
     };
 
-    if(!payload.company || !payload.role) return alert('Fill required fields');
+    if(!payload.company || !payload.role) return showToast('Company name and role are required.', 'warning');
 
     try {
         const res = await fetch(`${API_BASE}/api/admin/drives`, {
@@ -460,14 +460,16 @@ async function handleAddDriveSubmit(e) {
             body: JSON.stringify(payload)
         });
         if(res.ok) {
-            alert('Drive Launched Successfully!');
+            showToast('Drive launched successfully!', 'success');
             switchView('drives');
         }
-    } catch(err) { alert('Launch Error: ' + err.message); }
+    } catch(err) { showToast('Launch Error: ' + err.message, 'error'); }
 }
 
 // ── INITIALIZATION ──
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     setupNavigation();
-    switchView('dashboard');
+    // Verify admin role via API first, then load dashboard
+    const isAdmin = typeof verifyAdmin === 'function' ? await verifyAdmin() : true;
+    if (isAdmin) switchView('dashboard');
 });

@@ -2,6 +2,19 @@
 <html lang="en">
 
 <head>
+<script>
+(function() {
+  var token = localStorage.getItem('nextern_token');
+  if (!token) { window.location.href = '../login.html'; return; }
+  try {
+    var payload = JSON.parse(atob(token.split('.')[1]));
+    if (payload.exp * 1000 < Date.now()) {
+      localStorage.clear();
+      window.location.href = '../login.html';
+    }
+  } catch(e) { localStorage.clear(); window.location.href = '../login.html'; }
+})();
+</script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Roadmap — Nextern</title>
@@ -1020,7 +1033,7 @@
             const token = localStorage.getItem('nextern_token');
             if (token) {
                 try {
-                    await fetch('http://localhost:4000/api/progress/toggle', {
+                    await fetch(`${window.API_BASE || 'http://localhost:4000'}/api/progress/toggle', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                         body: JSON.stringify({ topicCode: `rm_task-${wi}-${ti}` })
@@ -1061,7 +1074,7 @@
                 try {
                     const u = JSON.parse(localStorage.getItem('nextern_user'));
                     if (u && u._id) {
-                        const res = await fetch(`http://localhost:4000/api/progress/${u._id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+                        const res = await fetch(`${window.API_BASE || "http://localhost:4000"}/api/progress/${u._id}`, { headers: { 'Authorization': `Bearer ${token}` } });
                         const data = await res.json();
                         if (data.success && data.completedTopics) {
                             saved = data.completedTopics.filter(t => t.startsWith('rm_'));

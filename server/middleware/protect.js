@@ -1,60 +1,58 @@
-/* ================================================================
-   middleware/protect.js — JWT Auth Middleware
-
-   Verifies JWT token from Authorization header, attaches user
-   to req.user, and updates lastActive timestamp.
-================================================================ */
-
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const protect = async (req, res, next) => {
-    let token;
-
-    // Check for token in Authorization header
-    // Header format: "Authorization: Bearer eyJhbGci..."
-    if (
-        req.headers.authorization &&
-        req.headers.authorization.startsWith('Bearer ')
-    ) {
-        token = req.headers.authorization.split(' ')[1];
-    }
-
-    // No token found
-    if (!token) {
-        return res.status(401).json({
-            success: false,
-            message: 'Not authorised. Please log in.',
-        });
-    }
-
     try {
-        // Verify token — throws error if expired or invalid
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        let token;
 
-        // Attach user to request (without password)
-        req.user = await User.findById(decoded.id);
+        if (req.headers.authorization &&
+            req.headers.authorization.startsWith('Bearer')) {
+            token = req.headers.authorization.split(' ')[1];
+        }
 
-        if (!req.user) {
+        if (!token) {
             return res.status(401).json({
                 success: false,
-                message: 'User not found. Please log in again.',
+                message: 'Not authorized. Please login.'
             });
         }
 
-        // Update lastActive (non-blocking — don't await)
-        User.updateOne(
-            { _id: req.user._id },
-            { $set: { lastActive: new Date() } }
-        ).catch(() => {});
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        next(); // Token is valid — proceed to route handler
+        const user = await User.findById(decoded.id).select('-password');
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'User no longer exists.'
+            });
+        }
+
+        req.user = user;
+
+        // Update last active (non-blocking)
+        User.findByIdAndUpdate(decoded.id, {
+            lastActive: new Date()
+        }).catch(() => {});
+
+        next();
 
     } catch (error) {
-        console.error('JWT Verify Error:', error.message);
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid token. Please login again.'
+            });
+        }
+        if (error.name === 'TokenExpiredError') {
+            return res.status(401).json({
+                success: false,
+                message: 'Token expired. Please login again.'
+            });
+        }
         return res.status(401).json({
             success: false,
-            message: 'Token invalid or expired. Please log in again.',
+            message: 'Authentication failed.'
         });
     }
 };
