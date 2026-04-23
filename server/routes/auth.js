@@ -15,9 +15,13 @@ const hasCollegeProfile = (user) => Boolean(user?.college && String(user.college
 ================================================================ */
 router.post('/register', async (req, res) => {
     try {
-        const { firstName, lastName, email, phone, password, college,
-            branch, year, cgpa, graduationYear, skills,
-            targetCompanies, linkedin, github } = req.body;
+        const { firstName, lastName, email, phone, password,
+            gender, dob, city, state, country, bio,
+            college, branch, year, cgpa, graduationYear,
+            tenthPercent, twelfthPercent, activeBacklogs, internships, projects,
+            skills, languages, certifications,
+            targetCompanies, preferredRoles, preferredLocations, openToRelocate,
+            linkedin, github, portfolio, leetcode } = req.body;
 
         const existingUser = await User.findOne({ email });
         if (existingUser)
@@ -25,7 +29,12 @@ router.post('/register', async (req, res) => {
 
         const user = await User.create({
             firstName, lastName, email, phone, password,
-            college, branch, year, cgpa, graduationYear, skills, targetCompanies, linkedin, github
+            gender, dob, city, state, country, bio,
+            college, branch, year, cgpa, graduationYear,
+            tenthPercent, twelfthPercent, activeBacklogs, internships, projects,
+            skills, languages, certifications,
+            targetCompanies, preferredRoles, preferredLocations, openToRelocate,
+            linkedin, github, portfolio, leetcode
         });
 
         const token = generateToken(user._id);
@@ -132,7 +141,7 @@ router.get('/google/callback',
         } else {
             redirectPath = hasCollegeProfile(req.user)
                 ? '/pages/feed.html'
-                : '/complete-profile.html';
+                : '/register.html';
         }
 
         res.redirect(`${clientBaseUrl}${redirectPath}?token=${token}&name=${name}`);

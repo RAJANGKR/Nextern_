@@ -50,19 +50,42 @@ const UserSchema = new mongoose.Schema({
         select: false,
     },
 
+    // ── PERSONAL INFO EXTRAS ──
+    gender: { type: String, trim: true },
+    dob: { type: String, trim: true },
+    city: { type: String, trim: true },
+    state: { type: String, trim: true },
+    country: { type: String, trim: true, default: 'India' },
+    bio: { type: String, trim: true, maxlength: 300 },
+
     // ── ACADEMIC INFO ──
     college: { type: String, trim: true },
     branch: { type: String, trim: true },
     year: { type: String },
     cgpa: { type: Number, min: 0, max: 10 },
     graduationYear: { type: Number },
+    tenthPercent: { type: Number },
+    twelfthPercent: { type: Number },
+    activeBacklogs: { type: Number, default: 0 },
+    internships: { type: Number, default: 0 },
+    projects: { type: Number, default: 0 },
+
+    // ── SKILLS & LANGUAGES ──
+    skills: [{ type: String }],
+    languages: [{ type: String }],
+    certifications: [{ type: String }],
 
     // ── CAREER INFO ──
-    bio: { type: String, trim: true },
-    skills: [{ type: String }],
     targetCompanies: [{ type: String }],
+    preferredRoles: [{ type: String }],
+    preferredLocations: [{ type: String }],
+    openToRelocate: { type: Boolean, default: false },
+
+    // ── ONLINE PRESENCE ──
     linkedin: { type: String, trim: true },
     github: { type: String, trim: true },
+    portfolio: { type: String, trim: true },
+    leetcode: { type: String, trim: true },
 
 
     role: {

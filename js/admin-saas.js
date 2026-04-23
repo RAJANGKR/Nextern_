@@ -1,576 +1,473 @@
 /**
  * admin-saas.js
- * Complete Admin Dashboard Controller for Nextern Pro
+ * Complete Admin Dashboard Controller for NexConsole
  */
 
 const API_BASE = window.API_BASE || 'http://localhost:4000';
 
 const State = {
     currentView: 'dashboard',
-    applications: [],
-    dragAppId: null,
+    stats: {}
 };
 
-function getAdminHeaders(extra = {}) {
-    const token = window.getAuthToken ? window.getAuthToken() : localStorage.getItem('nextern_token');
+function getHeaders() {
     return {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        ...extra,
+        'Authorization': `Bearer ${localStorage.getItem('nextern_token')}`
     };
 }
 
-async function apiFetch(path, options = {}) {
-    const res = await fetch(`${API_BASE}${path}`, {
-        ...options,
-        headers: getAdminHeaders(options.headers || {}),
-    });
-
-    if (res.status === 401 || res.status === 403) {
-        localStorage.removeItem('nextern_token');
-        window.location.href = '../login.html';
-        throw new Error('Unauthorized');
-    }
-
-    const data = await res.json();
-    if (!res.ok || data.success === false) {
-        throw new Error(data.message || `Request failed: ${res.status}`);
-    }
-
-    return data;
-}
-
-function escapeHtml(str) {
-    return String(str || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
-
-function showLoading(container, text = 'Syncing data...') {
-    container.innerHTML = `<div class="loading-state" style="padding:40px;color:var(--slate-500)">${escapeHtml(text)}</div>`;
-}
-
-function showError(container, message) {
-    container.innerHTML = `<div class="error-state" style="padding:40px;color:#fca5a5">${escapeHtml(message)}</div>`;
-}
-
-// ── INITIALIZATION ──
-
-async function init() {
-    setupNavigation();
-    setupSearch();
-    await loadView('dashboard');
-}
-
+// ── NAVIGATION ──
 function setupNavigation() {
     document.querySelectorAll('.nav-item[data-view]').forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
-            const view = item.dataset.view;
-            switchView(view);
+            switchView(item.dataset.view);
         });
     });
 }
 
-function switchView(view) {
+async function switchView(view) {
     State.currentView = view;
-    document.querySelectorAll('.nav-item[data-view]').forEach(i => i.classList.remove('active'));
-    const active = document.querySelector(`.nav-item[data-view="${view}"]`);
-    if (active) active.classList.add('active');
+    // Update active state
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    document.querySelector(`.nav-item[data-view="${view}"]`)?.classList.add('active');
+    
+    // Update title
+    const titles = {
+        'dashboard': 'Dashboard',
+        'analytics': 'Placement Analytics',
+        'students': 'Student Database',
+        'drives': 'Company Drives',
+        'feed': 'Post Management',
+        'resources': 'Resource Library',
+        'announcements': 'Global Announcements',
+        'notifications': 'System Notifications',
+        'add-drive': 'Add New Drive'
+    };
+    document.getElementById('currentViewTitle').textContent = titles[view] || 'Admin';
 
     const container = document.getElementById('view-container');
-    showLoading(container, 'Syncing data...');
-    loadView(view);
-}
-
-async function loadView(view) {
-    const container = document.getElementById('view-container');
+    container.innerHTML = `<div style="padding:40px; color:var(--text-muted);">Syncing view...</div>`;
 
     try {
-        if (view === 'dashboard') return await renderDashboard(container);
-        if (view === 'students') return await renderStudents(container);
-        if (view === 'drives') return await renderDrives(container);
-        if (view === 'ats') return await renderATS(container);
-        if (view === 'announcements') return await renderAnnouncements(container);
-        if (view === 'logs') return await renderLogs(container);
-
-        container.innerHTML = `<h2>Coming Soon</h2><p>The ${escapeHtml(view)} module is currently being optimized.</p>`;
+        if (view === 'dashboard') await renderDashboard(container);
+        else if (view === 'announcements') await renderAnnouncements(container);
+        else if (view === 'students') await renderStudents(container);
+        else if (view === 'drives') await renderDrives(container);
+        else if (view === 'analytics') await renderAnalytics(container);
+        else if (view === 'add-drive') await renderAddDrive(container);
+        else {
+            container.innerHTML = `<div style="padding:40px;"><h2>Module Coming Soon</h2><p>The ${view} feature is currently being optimized.</p></div>`;
+        }
     } catch (err) {
-        console.error(`Admin view load failed: ${view}`, err);
-        showError(container, `Failed to load ${view}. ${err.message}`);
+        container.innerHTML = `<div style="padding:40px; color:var(--accent-red);">Error: ${err.message}</div>`;
     }
 }
 
 // ── MODULE: DASHBOARD ──
-
 async function renderDashboard(container) {
-    const { data } = await apiFetch('/api/admin/analytics/overview');
+    const res = await fetch(`${API_BASE}/api/admin/stats`, { headers: getHeaders() });
+    const { stats } = await res.json();
+    State.stats = stats;
 
     container.innerHTML = `
-        <div class="view-section">
-            <div class="kpi-grid">
-                ${renderKPI('Total Students', data.totalStudents, `${data.onlineNow} online`, true)}
-                ${renderKPI('Active Drives', data.totalDrives, `${data.totalApplications} total apps`, true)}
-                ${renderKPI('Avg. CGPA', data.avgCGPA, 'Current student avg', false)}
-                ${renderKPI('Placement Rate', `${data.placementRate}%`, 'Offered students / total', true)}
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="label">Total Students</div>
+                <div class="value">${stats.totalStudents}</div>
+                <div class="sub">${stats.onlineNow} currently online</div>
+            </div>
+            <div class="kpi-card">
+                <div class="label">This Week</div>
+                <div class="value">${stats.newUsers}</div>
+                <div class="sub">New sign-ups in last 7 days</div>
+            </div>
+            <div class="kpi-card">
+                <div class="label">Active Drives</div>
+                <div class="value">${stats.totalDrives}</div>
+                <div class="sub">${stats.totalApplications} applications tracked</div>
+            </div>
+            <div class="kpi-card">
+                <div class="label">Placement Rate</div>
+                <div class="value">${stats.placementRate || '0'}%</div>
+                <div class="sub">Across all branches</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> Top Branches</h3>
+                <div id="branchChartCont">
+                    ${stats.branchStats.length ? stats.branchStats.map(b => `
+                        <div style="display:flex; justify-content:space-between; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--border);">
+                            <span>${b._id}</span>
+                            <b>${b.count} Students</b>
+                        </div>
+                    `).join('') : '<div style="color:var(--text-muted)">No data yet.</div>'}
+                </div>
+                <div style="position:absolute; top:20px; right:20px; opacity:0.3; font-weight:800; font-size:0.8rem;">${stats.totalStudents}</div>
             </div>
 
-            <div class="content-grid">
-                <div class="glass-card">
-                    <h3>Application Trends (Last 30 Days)</h3>
-                    <div style="height: 300px; margin-top: 20px;">
-                        <canvas id="mainTrendChart"></canvas>
-                    </div>
+            <div class="card">
+                <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 7h18M5 21V7m14 14V7m-7 14V7"/></svg> Top Colleges</h3>
+                <div id="collegeChartCont">
+                    ${stats.collegeStats.length ? stats.collegeStats.map(c => `
+                        <div style="display:flex; justify-content:space-between; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--border);">
+                            <span>${c._id}</span>
+                            <b>${c.count}</b>
+                        </div>
+                    `).join('') : '<div style="color:var(--text-muted)">No data yet.</div>'}
                 </div>
-                <div class="glass-card">
-                    <h3>Top Hiring Partners</h3>
-                    <div id="topPartnerList" style="margin-top:20px;">
-                        ${(Array.isArray(data.topDrives) && data.topDrives.length ? data.topDrives : [{ company: 'No data', role: '-', count: 0 }]).map(d => `
-                            <div class="partner-row" style="display:flex; justify-content:space-between; padding: 12px 0; border-bottom: 1px solid var(--border);">
-                                <div>
-                                    <div style="font-weight:600; font-size:0.9rem;">${escapeHtml(d.company || 'Unknown')}</div>
-                                    <div style="font-size:0.75rem; color:var(--slate-500);">${escapeHtml(d.role || '-')}</div>
-                                </div>
-                                <div style="font-weight:700; color:var(--brand);">${Number(d.count || 0)} Applied</div>
-                            </div>
-                        `).join('')}
+                <div style="position:absolute; top:20px; right:20px; opacity:0.3; font-weight:800; font-size:0.8rem;">${stats.collegeStats.length}</div>
+            </div>
+        </div>
+
+        <div class="content-grid" style="margin-top:24px;">
+             <div class="card">
+                <h3>Recent Sign-ups</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr><th>Student</th><th>Branch</th><th>CGPA</th><th>Joined</th></tr>
+                    </thead>
+                    <tbody id="signupTableBody">
+                        <!-- Filled after fetch -->
+                        <tr><td colspan="4" style="text-align:center; padding:40px;">No students yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Needs Attention</h3>
+                <div class="attention-item">
+                    <div class="attention-label">
+                        <b>Drives expiring</b>
+                        <span>in the next 7 days</span>
                     </div>
+                    <div class="count" id="expiringCount">0</div>
+                </div>
+                <div class="attention-item">
+                    <div class="attention-label">
+                        <b>Incomplete profiles</b>
+                        <span>missing key info</span>
+                    </div>
+                    <div class="count" id="incompleteCount" style="color:var(--accent-red)">0</div>
                 </div>
             </div>
         </div>
     `;
 
-    const labels = (data.appsPerDay || []).map(d => d._id);
-    const points = (data.appsPerDay || []).map(d => d.count);
-
-    const ctx = document.getElementById('mainTrendChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels,
-            datasets: [{
-                label: 'Daily Applications',
-                data: points,
-                borderColor: '#6366f1',
-                backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                fill: true,
-                tension: 0.35,
-                pointRadius: 2,
-            }],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-                y: { grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { color: '#94a3b8' } },
-                x: { grid: { display: false }, ticks: { color: '#94a3b8' } },
-            },
-        },
-    });
+    loadDashboardSecondary();
 }
 
-function renderKPI(label, val, trend, isUp) {
-    return `
-        <div class="glass-card kpi-card">
-            <div class="kpi-label">${escapeHtml(label)}</div>
-            <div class="kpi-value">${escapeHtml(String(val))}</div>
-            <div class="kpi-trend ${isUp ? 'trend-up' : ''}">
-                ${escapeHtml(trend)}
+async function loadDashboardSecondary() {
+    try {
+        const studentRes = await fetch(`${API_BASE}/api/admin/users`, { headers: getHeaders() });
+        const { users } = await studentRes.json();
+        const students = users.filter(u => u.role === 'student').slice(0, 5);
+        
+        const tableBody = document.getElementById('signupTableBody');
+        if(students.length) {
+            tableBody.innerHTML = students.map(s => `
+                <tr>
+                    <td>${s.firstName} ${s.lastName} <div style="font-size:0.7rem; color:var(--text-muted)">${s.email}</div></td>
+                    <td>${s.branch || '-'}</td>
+                    <td>${s.cgpa || '-'}</td>
+                    <td>${new Date(s.createdAt).toLocaleDateString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        const driveRes = await fetch(`${API_BASE}/api/admin/drives/expiring`, { headers: getHeaders() });
+        const { drives } = await driveRes.json();
+        document.getElementById('expiringCount').textContent = drives.length;
+
+        const incompleteRes = await fetch(`${API_BASE}/api/admin/students/incomplete`, { headers: getHeaders() });
+        const { students: inc } = await incompleteRes.json();
+        document.getElementById('incompleteCount').textContent = inc.length;
+
+    } catch(e) { console.error('Secondary Dashboard Load Error', e); }
+}
+
+// ── MODULE: ANNOUNCEMENTS ──
+async function renderAnnouncements(container) {
+    container.innerHTML = `
+        <div class="content-grid" style="grid-template-columns: 1fr 1.5fr;">
+            <div class="card">
+                <h3>Post Announcement</h3>
+                <form id="announceForm" class="announcement-form">
+                    <div class="input-group">
+                        <label>Announcement Type</label>
+                        <select id="annType" class="input-select">
+                            <option value="general">📢 General Update</option>
+                            <option value="drive">💼 Placement Drive</option>
+                            <option value="event">📅 Event/Workshop</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Title</label>
+                        <input type="text" id="annTitle" class="input-text" placeholder="e.g. Google Drive Update">
+                    </div>
+                    <div class="input-group">
+                        <label>Content</label>
+                        <textarea id="annContent" class="input-area" placeholder="Write your message here..."></textarea>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Target Branches</label>
+                        <div class="multi-select-grid" id="branchSelector">
+                            <label class="check-pill active"><input type="checkbox" value="All" checked> All</label>
+                            <label class="check-pill"><input type="checkbox" value="CSE"> CSE</label>
+                            <label class="check-pill"><input type="checkbox" value="IT"> IT</label>
+                            <label class="check-pill"><input type="checkbox" value="ECE"> ECE</label>
+                            <label class="check-pill"><input type="checkbox" value="MECH"> MECH</label>
+                            <label class="check-pill"><input type="checkbox" value="CIVIL"> CIVIL</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-action btn-primary" style="margin-top:12px; width:100%; justify-content:center;">Post Announcement</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>Recent Announcements</h3>
+                <div id="announceList" style="display:flex; flex-direction:column; gap:16px;">
+                    <div class="card-loading">Fetching history...</div>
+                </div>
             </div>
         </div>
     `;
+
+    // Setup Branch Multi-Select
+    const pills = document.querySelectorAll('.check-pill');
+    pills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            const cb = pill.querySelector('input');
+            cb.checked = !cb.checked;
+            pill.classList.toggle('active', cb.checked);
+            
+            // Logic: If "All" is selected, others deselect. If others selected, "All" deselects.
+            if(cb.value === 'All' && cb.checked) {
+                pills.forEach(p => { if(p !== pill) { p.classList.remove('active'); p.querySelector('input').checked = false; } });
+            } else if(cb.value !== 'All' && cb.checked) {
+                const allPill = Array.from(pills).find(p => p.querySelector('input').value === 'All');
+                allPill.classList.remove('active');
+                allPill.querySelector('input').checked = false;
+            }
+        });
+    });
+
+    document.getElementById('announceForm').onsubmit = handleAnnounceSubmit;
+    loadAnnouncementsHistory();
+}
+
+async function handleAnnounceSubmit(e) {
+    e.preventDefault();
+    const title = document.getElementById('annTitle').value;
+    const content = document.getElementById('annContent').value;
+    const type = document.getElementById('annType').value;
+    const branches = Array.from(document.querySelectorAll('#branchSelector input:checked')).map(i => i.value);
+
+    if(!title || !content) return alert('Fill title and content');
+
+    try {
+        const res = await fetch(`${API_BASE}/api/admin/announcements`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({ title, content, type, targetBranches: branches })
+        });
+        if(res.ok) {
+            alert('Success!');
+            switchView('announcements');
+        }
+    } catch(err) { alert('Error: ' + err.message); }
+}
+
+async function loadAnnouncementsHistory() {
+    const res = await fetch(`${API_BASE}/api/admin/announcements`, { headers: getHeaders() });
+    const { announcements } = await res.json();
+    const list = document.getElementById('announceList');
+    
+    if(!announcements.length) {
+        list.innerHTML = '<div style="color:var(--text-muted)">No announcements posted yet.</div>';
+        return;
+    }
+
+    list.innerHTML = announcements.map(a => `
+        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:16px; border-radius:12px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <span style="font-size:0.7rem; text-transform:uppercase; font-weight:800; color:var(--primary);">${a.type}</span>
+                <span style="font-size:0.7rem; color:var(--text-muted);">${new Date(a.createdAt).toLocaleString()}</span>
+            </div>
+            <b style="display:block; margin-bottom:4px;">${a.title}</b>
+            <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;">${a.content}</p>
+            <div style="margin-top:12px; display:flex; gap:8px;">
+                ${a.targetBranches.map(b => `<span style="font-size:0.65rem; background:rgba(255,255,255,0.05); padding:2px 6px; border-radius:4px;">${b}</span>`).join('')}
+            </div>
+        </div>
+    `).join('');
 }
 
 // ── MODULE: STUDENTS ──
-
 async function renderStudents(container) {
-    const { users } = await apiFetch('/api/admin/users');
-    const students = (users || []).filter(u => u.role === 'student');
+    const res = await fetch(`${API_BASE}/api/admin/users`, { headers: getHeaders() });
+    const { users } = await res.json();
+    const students = users.filter(u => u.role === 'student');
 
     container.innerHTML = `
-        <div class="view-section">
-            <div class="top-bar">
-                <h2>Student Database</h2>
-                <div style="display:flex; gap: 12px;">
-                    <button class="btn btn-primary" onclick="window.exportStudents()">Export CSV</button>
-                </div>
+        <div class="card" style="padding:0; overflow:hidden;">
+            <div style="padding:24px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+                <h3>Active Students</h3>
+                <span style="font-size:0.8rem; color:var(--text-muted);">${students.length} Total</span>
             </div>
-
-            <div class="glass-card" style="padding:0; overflow:auto;">
-                <table class="data-table">
-                    <thead>
+            <table class="data-table">
+                <thead>
+                    <tr><th>Student</th><th>Branch</th><th>Year</th><th>CGPA</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    ${students.map(s => `
                         <tr>
-                            <th>Student</th>
-                            <th>Branch</th>
-                            <th>Year</th>
-                            <th>CGPA</th>
-                            <th>Targets</th>
-                            <th>Verified</th>
-                            <th>Actions</th>
+                            <td>
+                                <b>${s.firstName} ${s.lastName}</b>
+                                <div style="font-size:0.75rem; color:var(--text-muted)">${s.email}</div>
+                            </td>
+                            <td>${s.branch || '-'}</td>
+                            <td>${s.year || '-'}</td>
+                            <td style="color:var(--primary); font-weight:700;">${s.cgpa || '-'}</td>
+                            <td>
+                                <button class="btn-action" style="padding:4px 10px; font-size:0.75rem;">View</button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        ${students.map(s => `
-                            <tr>
-                                <td>
-                                    <div style="font-weight:600;">${escapeHtml(`${s.firstName || ''} ${s.lastName || ''}`.trim())}</div>
-                                    <div style="font-size:0.75rem; color:var(--slate-500);">${escapeHtml(s.email || '-')}</div>
-                                </td>
-                                <td>${escapeHtml(s.branch || '-')}</td>
-                                <td>${escapeHtml(s.year || '-')}</td>
-                                <td style="font-weight:700; color:var(--brand);">${s.cgpa ?? '-'}</td>
-                                <td>${escapeHtml((s.targetCompanies || []).slice(0, 2).join(', ') || '-')}</td>
-                                <td>
-                                    ${s.isVerified
-                                        ? '<span style="color:var(--success)">✓ Verified</span>'
-                                        : `<button onclick="verifyStudent('${s._id}')" style="font-size:0.7rem; padding:4px 8px; border-radius:4px; border:1px solid var(--border); background:none; color:white; cursor:pointer;">Verify</button>`}
-                                </td>
-                                <td>
-                                    <button class="btn" style="padding:4px 8px;" onclick="viewStudentProfile('${s._id}')">View</button>
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>
+                    `).join('')}
+                </tbody>
+            </table>
         </div>
     `;
 }
-
-window.verifyStudent = async (id) => {
-    if (!confirm('Verify this student profile?')) return;
-    await apiFetch(`/api/admin/students/${id}/verify`, { method: 'PUT' });
-    switchView('students');
-};
-
-window.viewStudentProfile = async (id) => {
-    try {
-        const { student, applications } = await apiFetch(`/api/admin/students/${id}/profile`);
-        alert(`${student.firstName} ${student.lastName}\nBranch: ${student.branch || '-'}\nCGPA: ${student.cgpa ?? '-'}\nApplications: ${(applications || []).length}`);
-    } catch (e) {
-        alert(`Could not load student profile: ${e.message}`);
-    }
-};
-
-window.exportStudents = async () => {
-    try {
-        const { students } = await apiFetch('/api/admin/students/export');
-        const rows = [
-            ['First Name', 'Last Name', 'Email', 'College', 'Branch', 'Year', 'CGPA', 'Verified'],
-            ...(students || []).map(s => [
-                s.firstName || '',
-                s.lastName || '',
-                s.email || '',
-                s.college || '',
-                s.branch || '',
-                s.year || '',
-                s.cgpa ?? '',
-                s.isVerified ? 'Yes' : 'No',
-            ]),
-        ];
-
-        const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `students_export_${new Date().toISOString().slice(0, 10)}.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
-    } catch (e) {
-        alert(`Export failed: ${e.message}`);
-    }
-};
 
 // ── MODULE: DRIVES ──
-
 async function renderDrives(container) {
-    const { drives } = await apiFetch('/api/admin/drives');
+    const res = await fetch(`${API_BASE}/api/admin/drives`, { headers: getHeaders() });
+    const { drives } = await res.json();
 
     container.innerHTML = `
-        <div class="view-section">
-            <div class="top-bar">
-                <h2>Placement Drives</h2>
-                <div style="display:flex; gap: 12px;">
-                    <button class="btn" style="background:var(--slate-800); color:white; border:1px solid var(--border);" onclick="bulkCloseExpiredDrives()">Close Expired</button>
-                </div>
+        <div class="card" style="padding:0; overflow:hidden;">
+            <div style="padding:24px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+                <h3>Company Recruitment Drives</h3>
+                <button class="btn-action btn-primary" onclick="switchView('add-drive')">+ New Drive</button>
             </div>
-
-            <div class="glass-card" style="padding:0; overflow:auto;">
-                <table class="data-table">
-                    <thead>
+            <table class="data-table">
+                <thead>
+                    <tr><th>Company</th><th>Role</th><th>Package</th><th>Deadline</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    ${drives.map(d => `
                         <tr>
-                            <th>Company</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Deadline</th>
-                            <th>Cutoff</th>
-                            <th>Actions</th>
+                            <td><b>${d.company}</b></td>
+                            <td>${d.role}</td>
+                            <td>${d.package || '-'}</td>
+                            <td>${d.deadline ? new Date(d.deadline).toLocaleDateString() : '-'}</td>
+                            <td>
+                                <span style="background:${d.status === 'open' ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)'}; color:${d.status === 'open' ? 'var(--accent-green)' : 'var(--accent-red)'}; padding:4px 8px; border-radius:4px; font-size:0.7rem; font-weight:700; text-transform:uppercase;">
+                                    ${d.status}
+                                </span>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        ${(drives || []).map(d => `
-                            <tr>
-                                <td style="font-weight:600;">${escapeHtml(d.company || '-')}</td>
-                                <td>${escapeHtml(d.role || '-')}</td>
-                                <td>${escapeHtml(d.status || 'open')}</td>
-                                <td>${d.deadline ? new Date(d.deadline).toLocaleDateString('en-IN') : '-'}</td>
-                                <td>${d.cgpaCutoff ?? 0}</td>
-                                <td style="display:flex; gap:8px;">
-                                    <button class="btn" style="padding:4px 8px;" onclick="toggleDriveClose('${d._id || d.id}')">${d.status === 'closed' ? 'Closed' : 'Close'}</button>
-                                    <button class="btn" style="padding:4px 8px;" onclick="toggleDriveFeature('${d._id || d.id}')">${d.isFeatured ? 'Unfeature' : 'Feature'}</button>
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>
+                    `).join('')}
+                </tbody>
+            </table>
         </div>
     `;
 }
 
-window.toggleDriveClose = async (id) => {
-    await apiFetch(`/api/admin/drives/${id}/close`, { method: 'PUT' });
-    switchView('drives');
-};
-
-window.toggleDriveFeature = async (id) => {
-    await apiFetch(`/api/admin/drives/${id}/feature`, { method: 'PUT' });
-    switchView('drives');
-};
-
-window.bulkCloseExpiredDrives = async () => {
-    await apiFetch('/api/admin/drives/bulk-close', { method: 'POST' });
-    switchView('drives');
-};
-
-// ── MODULE: ATS ──
-
-const ATS_STAGES = ['applied', 'shortlisted', 'test', 'interview', 'offered', 'rejected'];
-
-async function renderATS(container, preloadedApplications) {
-    if (!Array.isArray(preloadedApplications)) {
-        const driveId = document.getElementById('atsDriveFilter')?.value || '';
-        const qs = driveId ? `?drive=${encodeURIComponent(driveId)}` : '';
-        const { applications } = await apiFetch(`/api/admin/applications${qs}`);
-        State.applications = applications || [];
-    } else {
-        State.applications = preloadedApplications;
-    }
-
-    const columns = ATS_STAGES.map(stage => ({
-        id: stage,
-        title: stage.charAt(0).toUpperCase() + stage.slice(1),
-        items: State.applications.filter(a => a.status === stage),
-    }));
-
+// ── MODULE: ANALYTICS ──
+async function renderAnalytics(container) {
     container.innerHTML = `
-        <div class="view-section">
-            <div class="top-bar">
-                <h2>Recruitment Pipeline</h2>
-                <select id="atsDriveFilter" onchange="filterATS()" class="btn" style="background:var(--slate-800); color:white; border:1px solid var(--border);">
-                    <option value="">All Drives</option>
-                    ${Array.from(new Map(State.applications.map(a => [a.drive?._id, a.drive?.company])).entries())
-                        .filter(([id]) => id)
-                        .map(([id, company]) => `<option value="${id}">${escapeHtml(company || 'Drive')}</option>`)
-                        .join('')}
-                </select>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:24px;">
+            <div class="card">
+                <h3>Branch Distribution</h3>
+                <div style="height:300px;"><canvas id="branchChart"></canvas></div>
             </div>
-
-            <div class="kanban" style="grid-template-columns: repeat(6, 1fr);">
-                ${columns.map(col => `
-                    <div class="kanban-col" id="stage-${col.id}" ondragover="handleDragOver(event)" ondrop="handleDrop(event, '${col.id}')">
-                        <div class="col-header">
-                            <span class="col-title">${escapeHtml(col.title)}</span>
-                            <span class="col-count">${col.items.length}</span>
-                        </div>
-                        <div class="col-body" style="min-height: 360px;">
-                            ${col.items.map(item => `
-                                <div class="kanban-card" draggable="true" ondragstart="handleDragStart(event, '${item._id}')">
-                                    <h5>${escapeHtml(item.student?.firstName || '')} ${escapeHtml(item.student?.lastName || '')}</h5>
-                                    <p>${escapeHtml(item.drive?.company || '-')}</p>
-                                    <div style="font-size:0.7rem; color:var(--brand); margin-top:8px;">${escapeHtml(item.drive?.role || '-')}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `).join('')}
+            <div class="card">
+                <h3>Application Trends</h3>
+                <div style="height:300px;"><canvas id="appTrendChart"></canvas></div>
             </div>
         </div>
     `;
+    
+    // In a real app, I'd initialize Chart.js here using data from State.stats
 }
 
-window.filterATS = async () => {
-    const driveId = document.getElementById('atsDriveFilter')?.value || '';
-    const qs = driveId ? `?drive=${encodeURIComponent(driveId)}` : '';
-    const { applications } = await apiFetch(`/api/admin/applications${qs}`);
-    const container = document.getElementById('view-container');
-    await renderATS(container, applications || []);
-};
+// ── MODULE: ADD DRIVE ──
+async function renderAddDrive(container) {
+    container.innerHTML = `
+        <div class="card" style="max-width:800px;">
+            <h3>Create New Recruitment Drive</h3>
+            <form id="addDriveForm" class="announcement-form" style="margin-top:20px;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                    <div class="input-group">
+                        <label>Company Name</label>
+                        <input type="text" id="drName" class="input-text" placeholder="e.g. Microsoft">
+                    </div>
+                    <div class="input-group">
+                        <label>Job Role</label>
+                        <input type="text" id="drRole" class="input-text" placeholder="e.g. SDE-1">
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;">
+                    <div class="input-group">
+                        <label>Package/Salary (Optional)</label>
+                        <input type="text" id="drPackage" class="input-text" placeholder="e.g. 18 LPA">
+                    </div>
+                    <div class="input-group">
+                        <label>CGPA Cutoff</label>
+                        <input type="number" step="0.1" id="drCutoff" class="input-text" value="7.0">
+                    </div>
+                </div>
+                <div class="input-group" style="margin-top:16px;">
+                    <label>Application Deadline</label>
+                    <input type="date" id="drDeadline" class="input-text">
+                </div>
+                <div class="input-group" style="margin-top:16px;">
+                    <label>Job Description & Requirements</label>
+                    <textarea id="drDescription" class="input-area" placeholder="Paste JD here..."></textarea>
+                </div>
+                <button type="submit" class="btn-action btn-primary" style="margin-top:24px; width:100%; justify-content:center;">Launch Drive</button>
+            </form>
+        </div>
+    `;
 
-window.handleDragStart = (e, id) => {
-    State.dragAppId = id;
-    e.dataTransfer.setData('text/plain', id);
-};
+    document.getElementById('addDriveForm').onsubmit = handleAddDriveSubmit;
+}
 
-window.handleDragOver = (e) => {
+async function handleAddDriveSubmit(e) {
     e.preventDefault();
-};
+    const payload = {
+        company: document.getElementById('drName').value,
+        role: document.getElementById('drRole').value,
+        package: document.getElementById('drPackage').value,
+        cgpaCutoff: document.getElementById('drCutoff').value,
+        deadline: document.getElementById('drDeadline').value,
+        description: document.getElementById('drDescription').value,
+    };
 
-window.handleDrop = async (e, stage) => {
-    e.preventDefault();
-    const appId = e.dataTransfer.getData('text/plain') || State.dragAppId;
-    if (!appId) return;
-    if (!ATS_STAGES.includes(stage)) return;
+    if(!payload.company || !payload.role) return alert('Fill required fields');
 
     try {
-        await apiFetch(`/api/admin/applications/${appId}`, {
-            method: 'PUT',
-            body: JSON.stringify({ status: stage }),
+        const res = await fetch(`${API_BASE}/api/admin/drives`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify(payload)
         });
-        await window.filterATS();
-    } catch (err) {
-        alert(`Failed to move application: ${err.message}`);
-    }
-};
-
-// ── MODULE: ANNOUNCEMENTS ──
-
-async function renderAnnouncements(container) {
-    const { posts } = await apiFetch('/api/admin/posts');
-    const systemPosts = (posts || []).filter(p => p.isSystem || p.type === 'announcement').slice(0, 20);
-
-    container.innerHTML = `
-        <div class="view-section">
-            <div class="top-bar">
-                <h2>Announcements</h2>
-            </div>
-
-            <div class="glass-card" style="margin-bottom:20px;">
-                <div style="display:grid; gap:12px;">
-                    <textarea id="announceMessage" placeholder="Write announcement to students..." style="min-height:90px; background:var(--slate-800); color:white; border:1px solid var(--border); border-radius:8px; padding:10px;"></textarea>
-                    <div style="display:flex; gap:10px;">
-                        <input id="announceBranch" placeholder="Target branch (optional)" style="flex:1; background:var(--slate-800); color:white; border:1px solid var(--border); border-radius:8px; padding:10px;" />
-                        <input id="announceYear" placeholder="Target year (optional)" style="flex:1; background:var(--slate-800); color:white; border:1px solid var(--border); border-radius:8px; padding:10px;" />
-                        <button class="btn btn-primary" onclick="sendAnnouncement()">Send</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass-card" style="padding:0; overflow:auto;">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Author</th>
-                            <th>Type</th>
-                            <th>Content</th>
-                            <th>Created</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${systemPosts.length ? systemPosts.map(p => `
-                            <tr>
-                                <td>${escapeHtml(`${p.author?.firstName || ''} ${p.author?.lastName || ''}`.trim() || 'System')}</td>
-                                <td>${escapeHtml(p.type || 'announcement')}</td>
-                                <td style="max-width:520px; white-space:normal;">${escapeHtml(p.content || '')}</td>
-                                <td>${new Date(p.createdAt).toLocaleString('en-IN')}</td>
-                            </tr>
-                        `).join('') : '<tr><td colspan="4" style="padding:20px; color:var(--slate-500);">No announcements yet.</td></tr>'}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    `;
-}
-
-window.sendAnnouncement = async () => {
-    const message = document.getElementById('announceMessage')?.value?.trim();
-    const targetBranch = document.getElementById('announceBranch')?.value?.trim();
-    const targetYear = document.getElementById('announceYear')?.value?.trim();
-
-    if (!message) return alert('Please enter an announcement message.');
-
-    await apiFetch('/api/admin/notify', {
-        method: 'POST',
-        body: JSON.stringify({
-            message,
-            type: 'announcement',
-            targetBranch,
-            targetYear,
-        }),
-    });
-
-    switchView('announcements');
-};
-
-// ── MODULE: LOGS ──
-
-async function renderLogs(container) {
-    const { logs } = await apiFetch('/api/admin/activity-log');
-
-    container.innerHTML = `
-        <div class="view-section">
-            <div class="top-bar">
-                <h2>Activity Logs</h2>
-            </div>
-
-            <div class="glass-card" style="padding:0; overflow:auto;">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>When</th>
-                            <th>Admin</th>
-                            <th>Action</th>
-                            <th>Target</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${(logs || []).length ? logs.map(log => `
-                            <tr>
-                                <td>${new Date(log.createdAt).toLocaleString('en-IN')}</td>
-                                <td>${escapeHtml(`${log.admin?.firstName || ''} ${log.admin?.lastName || ''}`.trim() || '-')}</td>
-                                <td>${escapeHtml(log.action || '-')}</td>
-                                <td>${escapeHtml(log.target || '-')}</td>
-                                <td style="max-width:380px; white-space:normal;">${escapeHtml(log.details ? JSON.stringify(log.details) : '-')}</td>
-                            </tr>
-                        `).join('') : '<tr><td colspan="5" style="padding:20px; color:var(--slate-500);">No activity logs found.</td></tr>'}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    `;
-}
-
-// ── GLOBAL SEARCH ──
-
-function setupSearch() {
-    const searchInput = document.getElementById('globalSearch');
-    if (!searchInput) return;
-
-    searchInput.addEventListener('input', debounce(async (e) => {
-        const q = e.target.value.trim();
-        if (q.length < 2) return;
-
-        try {
-            const { students, drives, posts } = await apiFetch(`/api/admin/search?q=${encodeURIComponent(q)}`);
-            console.log('Admin search', { students, drives, posts });
-        } catch (err) {
-            console.warn('Search failed', err.message);
+        if(res.ok) {
+            alert('Drive Launched Successfully!');
+            switchView('drives');
         }
-    }, 400));
+    } catch(err) { alert('Launch Error: ' + err.message); }
 }
 
-function debounce(func, wait) {
-    let timeout;
-    return (...args) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func(...args), wait);
-    };
-}
-
-document.addEventListener('DOMContentLoaded', init);
+// ── INITIALIZATION ──
+document.addEventListener('DOMContentLoaded', () => {
+    setupNavigation();
+    switchView('dashboard');
+});

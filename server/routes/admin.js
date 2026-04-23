@@ -706,4 +706,38 @@ router.post('/settings/reset-drives', async (req, res) => {
 });
 
 
+/* ════════════════════════════════════
+   ANNOUNCEMENTS
+   System-wide targeted communications
+   ═════════════════════════════════════ */
+const Announcement = require('../models/Announcement');
+
+router.post('/announcements', async (req, res) => {
+    try {
+        const announcement = await Announcement.create({
+            ...req.body,
+            admin: req.user._id
+        });
+        
+        // Log this action
+        await logAction(req.user._id, 'announcement.create', announcement.title);
+        
+        res.status(201).json({ success: true, announcement });
+    } catch (e) { res.status(500).json({ success: false, message: e.message }); }
+});
+
+router.get('/announcements', async (req, res) => {
+    try {
+        const announcements = await Announcement.find().sort({ createdAt: -1 }).populate('admin', 'firstName lastName');
+        res.json({ success: true, announcements });
+    } catch (e) { res.status(500).json({ success: false, message: e.message }); }
+});
+
+router.delete('/announcements/:id', async (req, res) => {
+    try {
+        await Announcement.findByIdAndDelete(req.params.id);
+        res.json({ success: true, message: 'Announcement deleted.' });
+    } catch (e) { res.status(500).json({ success: false, message: e.message }); }
+});
+
 module.exports = router;

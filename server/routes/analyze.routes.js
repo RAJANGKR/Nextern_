@@ -64,7 +64,7 @@ router.post('/resume', protect, upload.single('resume'), async (req, res) => {
         const doc = await Analysis.create({
             studentId: req.user._id,
             driveId,
-            driveTitle: role,
+            driveTitle: `${company} - ${role}`,
             matchScore: analysis.matchScore,
             summary: analysis.summary,
             presentSkills: analysis.presentSkills,
@@ -74,6 +74,20 @@ router.post('/resume', protect, upload.single('resume'), async (req, res) => {
             resumeTips: analysis.resumeTips,
             studyTopics: analysis.studyTopics
         });
+
+        // 4. Cleanup old history (Keep only 5 latest)
+        // We check if count is > 5 (after creation) and delete the oldest.
+        const historyCount = await Analysis.countDocuments({ studentId: req.user._id });
+        if (historyCount > 5) {
+            const toDelete = await Analysis.find({ studentId: req.user._id })
+                .sort({ createdAt: 1 })
+                .limit(historyCount - 5);
+            
+            if (toDelete.length > 0) {
+                await Analysis.deleteMany({ _id: { $in: toDelete.map(d => d._id) } });
+                console.log(`🧹 [Analyze] Cleaned up ${toDelete.length} old analyses for ${req.user.email}`);
+            }
+        }
 
         console.log(`✅ [Analyze] Analysis saved. Score: ${analysis.matchScore}%`);
 

@@ -3,363 +3,532 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Placement Analytics — Nextern</title>
+    <title>Analytics Dashboard — Nextern</title>
+    
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Theme & Global Styles -->
-    <link rel="stylesheet" href="../css/dark-mode.css">
-    <script src="../js/theme.js"></script>
+    
     <style>
         :root {
-            --accent: #6C63FF;
-            --accent-soft: #EEF2FF;
-            --bg-body: #F5F6FA;
-            --bg-white: #FFFFFF;
-            --border: #E2E8F0;
-            --text-dark: #0F172A;
-            --text-gray: #64748B;
-            --radius: 16px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-soft: rgba(99, 102, 241, 0.08);
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-body); color: var(--text-dark); min-height: 100vh; }
+        [data-theme="dark"] {
+            --bg-body: #020617;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --glass-bg: rgba(30, 41, 59, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.05);
+        }
 
-        /* --- TOP NAVBAR --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-body); 
+            color: var(--text-main);
+            display: grid;
+            grid-template-rows: 64px 1fr;
+            grid-template-columns: 240px 1fr;
+            height: 100vh; /* Changed from min-height to enable inner scrolling */
+            overflow: hidden;
+        }
+
+        /* ── TOPBAR ── */
         .topnav {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            height: 56px;
-            background: white;
-            border-bottom: 1px solid #E2E8F0;
+            grid-column: 1 / -1;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            padding: 0 20px;
-            gap: 16px;
+            padding: 0 24px;
+            z-index: 100;
         }
 
         .nav-logo {
-            text-decoration: none;
             font-family: 'Syne', sans-serif;
             font-weight: 800;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
+            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 2px;
-        }
-
-        .nav-search {
-            flex: 1;
-            max-width: 400px;
-            display: flex;
-            align-items: center;
-            background: #F8FAFC;
-            border: 1px solid #E2E8F0;
-            border-radius: 8px;
-            padding: 6px 12px;
-            gap: 8px;
-        }
-
-        .nav-search input {
-            border: none;
-            background: transparent;
-            outline: none;
-            width: 100%;
-            font-size: 0.9rem;
+            gap: 4px;
         }
 
         .nav-right {
+            margin-left: auto;
             display: flex;
             align-items: center;
             gap: 16px;
-            margin-left: auto;
         }
 
-        /* --- LAYOUT --- */
-        .analytics-container { display: flex; min-height: 100vh; }
-        .main-content { flex: 1; padding: 32px 40px; }
+        /* ── SIDEBAR ── */
+        .sidebar {
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            padding: 24px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-        /* --- HEADER --- */
-        .page-header { margin-bottom: 32px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .header-left h1 { font-family: 'Syne', sans-serif; font-size: 2rem; margin-bottom: 4px; }
-        .header-left p { color: var(--text-gray); font-size: 0.95rem; }
+        .side-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+        }
 
-        /* --- STAT CARDS --- */
-        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 32px; }
-        .stat-card { background: var(--bg-white); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); }
-        .stat-card h3 { font-size: 0.8rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
-        .stat-val { font-size: 1.8rem; font-weight: 700; color: var(--text-dark); }
-        .stat-trend { font-size: 0.75rem; margin-top: 8px; font-weight: 500; }
-        .trend-up { color: #10B981; }
+        .side-link:hover { background: var(--primary-soft); color: var(--primary); }
+        .side-link.active { background: var(--primary-soft); color: var(--primary); }
+        .side-link svg { width: 20px; height: 20px; }
 
-        /* --- CHARTS GRID --- */
-        .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 32px; }
-        .chart-card { background: var(--bg-white); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); min-height: 350px; }
-        .chart-card h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; }
+        /* ── MAIN CONTENT ── */
+        .main-content {
+            padding: 32px;
+            overflow-y: auto;
+            background: var(--bg-body);
+        }
+
+        .content-header { margin-bottom: 32px; }
+        .content-header h1 { font-family: 'Syne', sans-serif; font-size: 2.25rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.02em; }
+        .content-header p { color: var(--text-muted); font-size: 1rem; }
+
+        /* ── STATS GRID ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; width: 80px; height: 80px;
+            background: radial-gradient(circle at top right, var(--primary-soft), transparent);
+            opacity: 0.5;
+        }
+
+        .stat-label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: block; }
+        .stat-value { font-size: 2.2rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
+        .stat-sub { font-size: 0.75rem; color: var(--secondary); font-weight: 600; display: flex; align-items: center; gap: 4px; }
+
+        /* ── DASHBOARD GRID ── */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .chart-header h2 { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
+        .chart-container { position: relative; height: 320px; width: 100%; }
+
+        /* ── BENCHMARK CARD (THE PRETTY ONE) ── */
+        .benchmark-card {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            color: white;
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benchmark-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.1;
+        }
+
+        .benchmark-item h4 { font-size: 0.85rem; font-weight: 500; opacity: 0.8; margin-bottom: 12px; }
         
-        /* --- BATCH COMPARISON --- */
-        .batch-card { background: linear-gradient(135deg, #6C63FF, #5A52E5); color: white; padding: 24px; border-radius: var(--radius); box-shadow: 0 10px 15px -3px rgba(108, 99, 255, 0.3); border: none; min-height: 350px; }
-        .batch-card h2 { border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 12px; }
-        .comparison-item { margin-bottom: 24px; }
-        .comp-label { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px; opacity: 0.9; }
-        .comp-bar { height: 8px; background: rgba(255,255,255,0.2); border-radius: 4px; overflow: hidden; }
-        .comp-fill { height: 100%; background: white; border-radius: 4px; }
-        .percentile-text { font-size: 0.9rem; font-weight: 600; margin-top: 6px; }
-
-        /* --- INSIGHTS --- */
-        .insights-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-        .insight-card { background: var(--bg-white); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); }
-        .insight-list { list-style: none; margin-top: 16px; }
-        .insight-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
-        .insight-item:last-child { border-bottom: none; }
-        .insight-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; }
-
-        /* Skeleton States */
-        .loading { font-size: 0.9rem; color: var(--text-gray); }
-
-        @media (max-width: 1024px) {
-            .charts-grid { grid-template-columns: 1fr; }
-            .stats-row { grid-template-columns: 1fr 1fr; }
+        .progress-container {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 100px;
+            overflow: hidden;
+            margin-bottom: 8px;
         }
+
+        .progress-bar {
+            height: 100%;
+            background: white;
+            border-radius: 100px;
+            transition: width 1s ease-in-out;
+        }
+
+        .benchmark-val { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; }
+        .benchmark-badge { font-size: 0.75rem; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 100px; }
+
+        /* ── INSIGHTS SECTION ── */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .insight-tile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--primary-soft);
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+            transition: transform 0.2s;
+        }
+
+        .insight-tile:hover { transform: translateX(6px); }
+        .insight-icon { width: 44px; height: 44px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.25rem; box-shadow: var(--shadow-sm); }
+        .insight-info { flex: 1; }
+        .insight-info b { display: block; font-size: 0.95rem; color: var(--text-main); margin-bottom: 2px; }
+        .insight-info span { font-size: 0.8rem; color: var(--text-muted); }
+        .insight-action { color: var(--primary); font-weight: 700; font-size: 0.85rem; text-decoration: none; }
+
+        @media (max-width: 1200px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .insights-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            body { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+        }
+
+        /* ── LOADER ── */
+        .card-loading {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
     </style>
+    <script src="../js/theme.js"></script>
 </head>
 <body>
 
-    <!-- TOP NAVBAR -->
+    <!-- TOPBAR -->
     <nav class="topnav">
         <a href="feed.html" class="nav-logo">
-            <span style="color:#0F172A">Nex</span>
-            <span style="color:#6C63FF">tern</span>
+            <span style="color:var(--text-main)">Nex</span><span style="color:var(--primary)">tern</span>
         </a>
-
-        <div class="nav-search">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input type="text" placeholder="Search..." />
-        </div>
-
-        <div class="nav-right" style="margin-left:auto; display:flex; align-items:center; gap:16px;">
-            <button class="theme-toggle-btn" id="themeToggleBtn" onclick="window.toggleTheme()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                </svg>
+        <div class="nav-right">
+            <button class="theme-toggle-btn" id="themeToggleBtn" onclick="window.toggleTheme()" style="background:none; border:none; color:var(--text-main); cursor:pointer;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
             </button>
-            <a href="../profile.html" id="navAvatar" style="width:32px; height:32px; border-radius:50%; background:#6C63FF; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; text-decoration:none;">
-                U
-            </a>
+            <a href="../profile.html" id="navAvatar" style="width:36px; height:36px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-weight:800; text-decoration:none;">U</a>
         </div>
     </nav>
 
-    <div class="analytics-container">
-        <!-- SIDEBAR -->
-        <div id="sidebar-mount"></div>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <a href="feed.html" class="side-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> Feed
+        </a>
+        <a href="drives.html" class="side-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg> Drives
+        </a>
+        <a href="resume-analyzer.html" class="side-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Resume Analyzer
+        </a>
+        <a href="analytics.html" class="side-link active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg> Analytics
+        </a>
+        <a href="roadmap.html" class="side-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> Roadmap
+        </a>
+    </aside>
 
-        <main class="main-content">
-            <header class="page-header">
-                <div class="header-left">
-                    <h1>Placement Analytics</h1>
-                    <p>Real-time insights into your career journey and batch trends.</p>
-                </div>
-                <div class="header-right">
-                    <button class="primary" style="padding: 10px 20px; background: var(--accent); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;" onclick="refreshData()">Refresh Live Data</button>
-                </div>
-            </header>
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header class="content-header">
+            <h1>Placement Insights</h1>
+            <p>Tracking your career trajectory and batch competitiveness.</p>
+        </header>
 
-            <!-- SECTION 1: YOUR STATS -->
-            <div class="stats-row">
-                <div class="stat-card">
-                    <h3>Applications</h3>
-                    <div class="stat-val" id="statApps">--</div>
-                    <div class="stat-trend trend-up">↑ Active Phase</div>
+        <!-- STATS -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-label">Total Applications</span>
+                <div class="stat-value" id="statApps">0</div>
+                <div class="stat-sub"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> 12% vs last month</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Interview Invites</span>
+                <div class="stat-value" id="statInterviews">0</div>
+                <div class="stat-sub" style="color:var(--accent)">Steady progress</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Avg. Match Score</span>
+                <div class="stat-value" id="statMatch">0%</div>
+                <div class="stat-sub">Optimized for ATS</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Placement Status</span>
+                <div class="stat-value" id="statOffers">Active</div>
+                <div class="stat-sub" id="statOffersTrend">Keep pushing!</div>
+            </div>
+        </section>
+
+        <!-- COMPETITION INSIGHTS (NEW) -->
+        <section class="stats-grid" id="competitionSection" style="margin-bottom: 32px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+            <!-- Driven by JS -->
+        </section>
+
+        <!-- CHARTS -->
+        <section class="dashboard-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Monthly Activity</h2>
                 </div>
-                <div class="stat-card">
-                    <h3>Interviews</h3>
-                    <div class="stat-val" id="statInterviews">--</div>
-                    <div class="stat-trend" style="color:var(--accent)">Keep preparing!</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Match Score</h3>
-                    <div class="stat-val" id="statMatch">--%</div>
-                    <div class="stat-trend">Avg. across analyses</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Offers</h3>
-                    <div class="stat-val" id="statOffers">--</div>
-                    <div class="stat-trend trend-up">Sky is the limit!</div>
+                <div class="chart-container">
+                    <canvas id="mainChart"></canvas>
                 </div>
             </div>
 
-            <!-- SECTION 2 & 3: BATCH & COLLEGE -->
-            <div class="charts-grid">
-                <div class="chart-card">
-                    <h2>Placement Distribution by Branch</h2>
+            <div class="benchmark-card">
+                <h2 style="font-family:'Syne';font-size:1.4rem;">Global Benchmarks</h2>
+                <div class="benchmark-item">
+                    <h4>Preparation Progress</h4>
+                    <div class="progress-container"><div class="progress-bar" id="barPrep" style="width: 0%"></div></div>
+                    <div class="benchmark-val">
+                        <span id="labelPrep">0%</span>
+                        <span class="benchmark-badge" id="rankPrep">Calculating...</span>
+                    </div>
+                </div>
+                <div class="benchmark-item">
+                    <h4>Academic Standing</h4>
+                    <div class="progress-container"><div class="progress-bar" id="barCgpa" style="width: 0%; background: #fbbf24;"></div></div>
+                    <div class="benchmark-val">
+                        <span id="labelCgpa">0.0</span>
+                        <span class="benchmark-badge" id="rankCgpa">Percentile: 0%</span>
+                    </div>
+                </div>
+                <div style="margin-top:auto; padding: 16px; background:rgba(255,255,255,0.1); border-radius:12px; font-size:0.85rem; line-height:1.4;">
+                    💡 Users with >80% prep progress have <b>3.4x higher chance</b> of being placed in Tier-1 companies.
+                </div>
+            </div>
+        </section>
+
+        <!-- SECONDARY GRID -->
+        <section class="dashboard-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Placement by Branch (LPA)</h2>
+                </div>
+                <div class="chart-container">
                     <canvas id="branchChart"></canvas>
                 </div>
-                <div class="batch-card">
-                    <h2>Batch Benchmarks</h2>
-                    <div class="comparison-item" style="margin-top: 30px;">
-                        <div class="comp-label"><span>Prep Progress</span><span id="labelPrep">--%</span></div>
-                        <div class="comp-bar"><div class="comp-fill" id="barPrep" style="width: 0%"></div></div>
-                        <div class="percentile-text" id="textPrep">You're in the loading...</div>
-                    </div>
-                    <div class="comparison-item">
-                        <div class="comp-label"><span>Academic CGPA</span><span id="labelCgpa">--</span></div>
-                        <div class="comp-bar"><div class="comp-fill" id="barCgpa" style="width: 0%"></div></div>
-                        <div class="percentile-text" id="textCgpa">Calculating percentile...</div>
-                    </div>
-                    <div class="comparison-item">
-                        <div class="comp-label"><span>Interview Conversions</span><span>Top 15%</span></div>
-                        <div class="comp-bar"><div class="comp-fill" style="width: 85%"></div></div>
-                        <div class="percentile-text">Maintaining good momentum</div>
-                    </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Match Optimized Roles</h2>
+                </div>
+                <div id="matchList">
+                    <div class="card-loading">Analyzing your best fits...</div>
                 </div>
             </div>
+        </section>
+    </main>
 
-            <div class="charts-grid" style="grid-template-columns: 1fr 2fr;">
-                <div class="chart-card">
-                    <h2>Hiring Distribution</h2>
-                    <canvas id="typeChart"></canvas>
-                </div>
-                <div class="chart-card">
-                    <h2>Drive Activity (Monthly)</h2>
-                    <canvas id="trendChart"></canvas>
-                </div>
-            </div>
-
-            <!-- SECTION 4: DRIVE INSIGHTS -->
-            <div class="insights-row">
-                <div class="insight-card">
-                    <h2>Drive Competitiveness</h2>
-                    <p style="font-size: 0.85rem; color: var(--text-gray); margin-bottom: 12px;">Applications per seat ratio across companies.</p>
-                    <div class="insight-list" id="compList">
-                        <div class="loading">Fetching competitive data...</div>
-                    </div>
-                </div>
-                <div class="insight-card">
-                    <h2>Match Optimized Opportunities</h2>
-                    <p style="font-size: 0.85rem; color: var(--text-gray); margin-bottom: 12px;">Drives that align best with your skills.</p>
-                    <div class="insight-list" id="matchList">
-                        <div class="loading">Finding your best matches...</div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- SCRIPTS -->
-    <script src="../js/config.js"></script>
-    <script src="../js/sidebar.js"></script>
     <script>
-        const API_BASE = window.API_BASE || 'http://localhost:4000';
-        const HEADERS = window.getAuthHeaders();
+        const API_BASE = 'http://localhost:4000';
+        const HEADERS = {
+            'Authorization': `Bearer ${localStorage.getItem('nextern_token')}`,
+            'Content-Type': 'application/json'
+        };
 
         async function init() {
-            setNavAvatar();
-            await fetchPersonalStats();
-            await fetchCollegeStats();
-            await fetchDriveInsights();
+            setUserInfo();
+            await loadAllData();
         }
 
-        function setNavAvatar() {
+        function setUserInfo() {
             const name = localStorage.getItem('nextern_name') || 'Student';
             document.getElementById('navAvatar').textContent = name.charAt(0).toUpperCase();
         }
 
-        async function fetchPersonalStats() {
+        async function loadAllData() {
             try {
-                const res = await fetch(`${API_BASE}/api/analytics/personal`, { headers: HEADERS });
-                const { success, personal } = await res.json();
-                if (!success) return;
+                const [personalRes, placementRes, insightsRes] = await Promise.all([
+                    fetch(`${API_BASE}/api/analytics/personal`, { headers: HEADERS }),
+                    fetch(`${API_BASE}/api/analytics/placement`, { headers: HEADERS }),
+                    fetch(`${API_BASE}/api/analytics/insights`, { headers: HEADERS })
+                ]);
 
-                // Update Counters
-                const apps = personal.applications.find(a => a._id === 'applied')?.count || 0;
-                const ints = personal.applications.find(a => a._id === 'interview')?.count || 0;
-                const offers = personal.applications.find(a => a._id === 'offered')?.count || 0;
-                
-                document.getElementById('statApps').textContent = apps;
-                document.getElementById('statInterviews').textContent = ints;
-                document.getElementById('statOffers').textContent = offers;
+                const personalData = await personalRes.json();
+                const placementData = await placementRes.json();
+                const insightsData = await insightsRes.json();
 
-                // Match Score Avg
-                if (personal.matchHistory.length > 0) {
-                    const avg = personal.matchHistory.reduce((acc, curr) => acc + curr.matchScore, 0) / personal.matchHistory.length;
-                    document.getElementById('statMatch').textContent = Math.round(avg);
+                if (personalData.success) updatePersonalUI(personalData.personal);
+                if (placementData.success) updatePlacementUI(placementData.stats);
+                if (insightsData.success) updateInsightsUI(insightsData);
+
+            } catch (err) {
+                console.error('Analytics Loading Error:', err);
+            }
+        }
+
+        function updatePersonalUI(data) {
+            // Stats
+            const apps = data.applications.find(a => a._id === 'applied')?.count || 0;
+            const ints = data.applications.find(a => a._id === 'interview')?.count || 0;
+            const offers = data.applications.find(a => a._id === 'offered')?.count || 0;
+
+            document.getElementById('statApps').textContent = apps;
+            document.getElementById('statInterviews').textContent = ints;
+            
+            const statusEl = document.getElementById('statOffers');
+            const statusTrend = document.getElementById('statOffersTrend');
+            
+            if (offers > 0) {
+                statusEl.textContent = 'Placed 🎉';
+                statusEl.style.color = 'var(--secondary)';
+                statusTrend.textContent = 'Congratulations!';
+            } else {
+                statusEl.textContent = 'Active';
+                statusTrend.textContent = 'Keep pushing!';
+            }
+
+            // Match Score
+            if (data.matchHistory.length > 0) {
+                const avg = data.matchHistory.reduce((acc, curr) => acc + curr.matchScore, 0) / data.matchHistory.length;
+                document.getElementById('statMatch').textContent = `${Math.round(avg)}%`;
+            }
+
+            // Benchmarks
+            document.getElementById('labelPrep').textContent = `${Math.round(data.prepPercent)}%`;
+            document.getElementById('barPrep').style.width = `${data.prepPercent}%`;
+            document.getElementById('rankPrep').textContent = data.prepPercent > 70 ? 'Top 5%' : 'Improving';
+
+            document.getElementById('labelCgpa').textContent = data.cgpa.toFixed(1);
+            document.getElementById('barCgpa').style.width = `${(data.cgpa/10)*100}%`;
+            document.getElementById('rankCgpa').textContent = `Percentile: ${Math.round(data.cgpaPercentile)}%`;
+
+            // Mock Match List for now
+            renderMatchList();
+        }
+
+        function updatePlacementUI(stats) {
+            renderMainChart(stats.monthlyActivity);
+            renderBranchChart(stats.branchPackages);
+        }
+
+        // ── CHARTS ──
+
+        function renderMainChart(data) {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            
+            // Map data to month indices
+            const points = new Array(12).fill(0);
+            data.forEach(d => { if(d._id >= 1 && d._id <= 12) points[d._id-1] = d.count; });
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Drives',
+                        data: points,
+                        borderColor: '#6366f1',
+                        borderWidth: 3,
+                        backgroundColor: (context) => {
+                            const chart = context.chart;
+                            const {ctx, chartArea} = chart;
+                            if (!chartArea) return null;
+                            const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                            gradient.addColorStop(0, 'rgba(99, 102, 241, 0.2)');
+                            gradient.addColorStop(1, 'rgba(99, 102, 241, 0.0)');
+                            return gradient;
+                        },
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#6366f1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false },
+                            ticks: { font: { family: 'Inter' } }
+                        },
+                        x: { 
+                            grid: { display: false },
+                            ticks: { font: { family: 'Inter' } }
+                        }
+                    }
                 }
-
-                // Benchmarks
-                document.getElementById('labelPrep').textContent = `${Math.round(personal.prepPercent)}%`;
-                document.getElementById('barPrep').style.width = `${personal.prepPercent}%`;
-                document.getElementById('textPrep').textContent = personal.prepPercent > 70 ? `Top 10% of your batch!` : personal.prepPercent > 40 ? `Top 40% of your batch` : `Keep up the preparation!`;
-
-                document.getElementById('labelCgpa').textContent = personal.cgpa;
-                document.getElementById('barCgpa').style.width = `${(personal.cgpa/10)*100}%`;
-                document.getElementById('textCgpa').textContent = `Better than ${Math.round(personal.cgpaPercentile)}% of students`;
-
-            } catch (err) { console.error('Personal Stats Error:', err); }
+            });
         }
-
-        async function fetchCollegeStats() {
-            try {
-                const res = await fetch(`${API_BASE}/api/analytics/placement`, { headers: HEADERS });
-                const { success, stats } = await res.json();
-                if (!success) return;
-
-                renderBranchChart(stats.branchPackages);
-                renderTypeChart(stats.companyTypes);
-                renderTrendChart(stats.monthlyActivity);
-
-            } catch (err) { console.error('College Stats Error:', err); }
-        }
-
-        async function fetchDriveInsights() {
-            // Mocking for now as it needs complex logic
-            const compList = document.getElementById('compList');
-            const companies = [
-                { name: 'Google', ratio: '240:1', trend: 'High' },
-                { name: 'Microsoft', ratio: '180:1', trend: 'High' },
-                { name: 'TCS', ratio: '12:1', trend: 'Low' },
-                { name: 'Zomato', ratio: '45:1', trend: 'Med' }
-            ];
-            compList.innerHTML = companies.map(c => `
-                <div class="insight-item">
-                    <div class="insight-icon">🏢</div>
-                    <div style="flex:1">
-                        <div style="font-weight:600; font-size: 0.9rem;">${c.name}</div>
-                        <div style="font-size:0.75rem; color:var(--text-gray)">Competition Ratio</div>
-                    </div>
-                    <div style="font-weight:700; color:var(--accent)">${c.ratio}</div>
-                </div>
-            `).join('');
-
-            const matchList = document.getElementById('matchList');
-            matchList.innerHTML = `
-                <div class="insight-item">
-                    <div class="insight-icon" style="background:#dcfce7; color:#16a34a">🎯</div>
-                    <div style="flex:1">
-                        <div style="font-weight:600; font-size: 0.9rem;">Senior Frontend Engineer</div>
-                        <div style="font-size:0.75rem; color:var(--text-gray)">92% Match with your React skills</div>
-                    </div>
-                    <a href="drives.html" style="font-size:0.75rem; color:var(--accent); font-weight:700">Apply</a>
-                </div>
-                <div class="insight-item">
-                    <div class="insight-icon" style="background:#dcfce7; color:#16a34a">🎯</div>
-                    <div style="flex:1">
-                        <div style="font-weight:600; font-size: 0.9rem;">Fullstack Developer</div>
-                        <div style="font-size:0.75rem; color:var(--text-gray)">85% Match - Node.js specialized</div>
-                    </div>
-                    <a href="drives.html" style="font-size:0.75rem; color:var(--accent); font-weight:700">Apply</a>
-                </div>
-            `;
-        }
-
-        // --- CHARTING FUNCTIONS ---
 
         function renderBranchChart(data) {
             const ctx = document.getElementById('branchChart').getContext('2d');
@@ -368,69 +537,56 @@
                 data: {
                     labels: data.map(d => d._id || 'Unknown'),
                     datasets: [{
-                        label: 'Average Package (LPA)',
+                        label: 'LPA',
                         data: data.map(d => d.avgPackage || 0),
-                        backgroundColor: '#6C63FF',
-                        borderRadius: 8
+                        backgroundColor: '#6366f1',
+                        borderRadius: 6,
+                        barThickness: 32
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true, grid: { display: false } }, x: { grid: { display: false } } }
+                    scales: {
+                        y: { grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false } },
+                        x: { grid: { display: false } }
+                    }
                 }
             });
         }
 
-        function renderTypeChart(data) {
-            const ctx = document.getElementById('typeChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: data.map(d => d._id),
-                    datasets: [{
-                        data: data.map(d => d.count),
-                        backgroundColor: ['#6C63FF', '#4C43FF', '#8C83FF', '#ACA3FF'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } } },
-                    cutout: '70%'
-                }
-            });
-        }
+        function updateInsightsUI(data) {
+            // Recommendations
+            const list = document.getElementById('matchList');
+            if (data.recommendations && data.recommendations.length > 0) {
+                list.innerHTML = data.recommendations.map(item => `
+                    <div class="insight-tile">
+                        <div class="insight-icon">${item.icon || '🚀'}</div>
+                        <div class="insight-info">
+                            <b>${item.role} @ ${item.company}</b>
+                            <span>${item.match}% AI Match Score</span>
+                        </div>
+                        <a href="drives.html" class="insight-action">View</a>
+                    </div>
+                `).join('');
+            } else {
+                list.innerHTML = '<div style="padding: 20px; color: var(--text-muted); text-align: center;">No specific matches found. Keep building your profile!</div>';
+            }
 
-        function renderTrendChart(data) {
-            const ctx = document.getElementById('trendChart').getContext('2d');
-            const monthNames = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.map(d => monthNames[d._id]),
-                    datasets: [{
-                        label: 'Drives Posted',
-                        data: data.map(d => d.count),
-                        borderColor: '#6C63FF',
-                        tension: 0.4,
-                        fill: true,
-                        backgroundColor: 'rgba(108, 99, 255, 0.1)'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true }, x: { grid: { display: false } } }
-                }
-            });
-        }
-
-        function refreshData() {
-            window.location.reload();
+            // Competition
+            const compSection = document.getElementById('competitionSection');
+            if (data.competition && data.competition.length > 0) {
+                compSection.innerHTML = data.competition.map(c => `
+                    <div class="stat-card" style="padding: 16px;">
+                        <span class="stat-label">Competitors: ${c.company}</span>
+                        <div class="stat-value" style="font-size: 1.4rem;">${c.ratio}</div>
+                        <div class="stat-sub" style="color:${c.trend === 'High' ? '#ef4444' : 'var(--secondary)'}">
+                            ${c.trend === 'High' ? '🔥 High Demand' : '✅ Moderate'}
+                        </div>
+                    </div>
+                `).join('');
+            }
         }
 
         document.addEventListener('DOMContentLoaded', init);

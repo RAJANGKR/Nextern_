@@ -6,30 +6,59 @@
 
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
+// Helper to get keys from environment accurately
+function getApiKeys() {
+    const raw = process.env.GEMINI_API_KEY;
+    if (!raw) return [];
+    const keys = raw.split(',').map(k => k.trim()).filter(Boolean);
+    console.log(`🔑 [Gemini Service] Loaded ${keys.length} API keys.`);
+    return keys;
+}
+
+let keyIndex = 0;
+
 /**
  * Calls Google Gemini API to analyze a resume.
- * @param {string} resumeText - Plain text extracted from the PDF.
- * @param {string} role - The job role (e.g., "Software Engineer").
- * @param {string} company - The company name.
- * @returns {Promise<Object>} - Structured analysis result.
+ * Tries multiple model names and multiple API keys in case of quota issues.
  */
 async function analyzeResume(resumeText, role = 'General Software Engineer', company = 'Nextern Profile') {
-    const apiKey = process.env.GEMINI_API_KEY;
-
-    if (!apiKey) {
+    const keys = getApiKeys();
+    if (keys.length === 0) {
         throw new Error('GEMINI_API_KEY is not set in server/.env');
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    // List of models to try (some might have separate quotas or higher availability)
+    const modelsToTry = [
+        'gemini-2.0-flash',
+        'gemini-pro',
+        'gemini-1.5-flash',
+        'gemini-2.5-flash'
+    ];
 
-    const prompt = `
+    // Truncate resume text if it's abnormally long to save tokens
+    const safeResumeText = resumeText.slice(0, 8000); 
+
+    let lastError = null;
+
+    // Outer loop: Try each API key
+    for (let k = 0; k < keys.length; k++) {
+        const currentKey = keys[keyIndex % keys.length];
+        const genAI = new GoogleGenerativeAI(currentKey);
+
+        // Inner loop: Try each model name for the current key
+        for (const modelName of modelsToTry) {
+            try {
+                console.log(`🤖 [Gemini] Trying Key #${(keyIndex % keys.length) + 1} with model '${modelName}'...`);
+                
+                const model = genAI.getGenerativeModel({ model: modelName });
+
+                const prompt = `
 You are an expert placement consultant for Indian 
 engineering students. Analyze this resume against 
 the job requirements and return ONLY valid JSON.
 
 Resume Text:
-${resumeText}
+${safeResumeText}
 
 Job: ${company} - ${role}
 
@@ -46,32 +75,45 @@ Return this exact JSON structure, no other text:
 }
 `;
 
-    try {
-        console.log(`🤖 [Gemini] Generating analysis for ${company}...`);
-        const result = await model.generateContent(prompt);
-        const text = result.response.text();
+                const result = await model.generateContent(prompt);
+                const text = result.response.text();
 
-        // Extract JSON from response (Gemini sometimes adds markdown blocks)
-        const jsonMatch = text.match(/\{[\s\S]*\}/);
-        if (!jsonMatch) {
-            throw new Error('AI response did not contain valid JSON structure.');
-        }
+                // Extract JSON
+                const jsonMatch = text.match(/\{[\s\S]*\}/);
+                if (!jsonMatch) throw new Error('Invalid JSON structure in AI response');
 
-        const analysis = JSON.parse(jsonMatch[0]);
+                const analysis = JSON.parse(jsonMatch[0]);
 
-        // Basic validation of required fields
-        const requiredFields = ['matchScore', 'summary', 'presentSkills', 'missingSkills', 'resumeTips', 'studyTopics', 'strengths', 'improvements'];
-        for (const field of requiredFields) {
-            if (analysis[field] === undefined) {
-                analysis[field] = field.includes('Score') ? 0 : (field === 'summary' ? 'Analysis complete.' : []);
+                // Fill missing fields
+                const fields = ['matchScore', 'summary', 'presentSkills', 'missingSkills', 'resumeTips', 'studyTopics', 'strengths', 'improvements'];
+                fields.forEach(f => {
+                    if (analysis[f] === undefined) analysis[f] = f.includes('Score') ? 0 : (f === 'summary' ? 'Done.' : []);
+                });
+
+                console.log(`✅ [Gemini] SUCCESS with model '${modelName}'!`);
+                return analysis;
+
+            } catch (err) {
+                const msg = err.message || '';
+                console.error(`⚠️ [Gemini Fail] Key #${(keyIndex % keys.length) + 1} | Model '${modelName}': ${msg.slice(0, 100)}...`);
+                lastError = err;
+
+                // If it's a 404 (model not found), it won't work for this key/model, try next model
+                if (msg.includes('404')) continue;
+                
+                // If it's a 429 (quota), try next model or next key
+                if (msg.includes('429')) continue;
+
+                // Other errors: try next model
+                continue;
             }
         }
 
-        return analysis;
-    } catch (err) {
-        console.error('❌ [Gemini Error]:', err.message);
-        throw new Error(`AI Analysis failed: ${err.message}`);
+        // After trying all models for this key, move to next key
+        keyIndex++;
     }
+
+    throw new Error(`AI Analysis failed after trying all keys and models. Final error: ${lastError.message}`);
 }
 
 module.exports = {

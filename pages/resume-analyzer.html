@@ -158,6 +158,8 @@
     </style>
     <script src="../js/theme.js"></script>
     <link rel="stylesheet" href="../css/dark-mode.css">
+    <!-- PDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
@@ -294,10 +296,14 @@
                     <h4 class="section-title">Your Strengths</h4>
                     <div class="list-container" id="strengthsList"></div>
 
-                    <div style="display: flex; gap: 12px; margin-top: 32px;">
-                        <button class="btn-analyze" style="flex: 1; background: #64748B" onclick="location.reload()">Reset</button>
-                        <a href="prep-hub.html" class="btn-analyze" style="flex: 1; text-decoration: none;">Go to Prep Hub</a>
+                    <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 12px; margin-top: 32px;">
+                        <button class="btn-analyze" style="background: #64748B" onclick="location.reload()">New Analysis</button>
+                        <button class="btn-analyze" id="downloadPdfBtn" style="background: #0F172A">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Download Report (PDF)
+                        </button>
                     </div>
+                    <a href="prep-hub.html" class="btn-analyze" style="width: 100%; text-decoration: none; margin-top: 12px;">Go to Prep Hub</a>
                 </div>
             </div>
         </div>
@@ -364,6 +370,8 @@
             } catch (err) { console.error('Error fetching drives:', err); }
         }
 
+        let historyData = [];
+
         async function fetchHistory() {
             try {
                 const res = await fetch(`${API_BASE}/api/analyze/my-history`, {
@@ -371,8 +379,9 @@
                 });
                 const data = await res.json();
                 if (data.success) {
+                    historyData = data.analyses;
                     const tbody = document.getElementById('historyTableBody');
-                    tbody.innerHTML = data.analyses.map(item => {
+                    tbody.innerHTML = data.analyses.map((item, index) => {
                         const scoreColor = item.matchScore >= 70 ? '#16A34A' : item.matchScore >= 40 ? '#D97706' : '#EF4444';
                         const scoreBg = item.matchScore >= 70 ? '#F0FDF4' : item.matchScore >= 40 ? '#FFFBEB' : '#FEF2F2';
                         return `
@@ -380,12 +389,19 @@
                                 <td><strong>${item.driveTitle || 'General'}</strong></td>
                                 <td>${new Date(item.createdAt).toLocaleDateString()}</td>
                                 <td><span class="score-mini" style="background:${scoreBg};color:${scoreColor}">${item.matchScore}%</span></td>
-                                <td><a href="#" style="color:#6C63FF;font-weight:600;font-size:0.85rem;text-decoration:none">View Analysis</a></td>
+                                <td><a href="javascript:void(0)" onclick="viewPastAnalysis(${index})" style="color:#6C63FF;font-weight:600;font-size:0.85rem;text-decoration:none">View Analysis</a></td>
                             </tr>
                         `;
                     }).join('');
                 }
             } catch (err) { console.error('Error fetching history:', err); }
+        }
+
+        function viewPastAnalysis(index) {
+            const data = historyData[index];
+            if (!data) return;
+            showResults(data);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // ── FILE UPLOAD ──
@@ -508,6 +524,59 @@
             // Scroll to results
             window.scrollTo({ top: 100, behavior: 'smooth' });
         }
+
+        // ── PDF DOWNLOAD ──
+        async function downloadReport() {
+            const element = document.getElementById('resultsSection');
+            const name = localStorage.getItem('nextern_name') || 'Student';
+            
+            console.log('📄 [PDF] Starting download for:', name);
+
+            const opt = {
+                margin: [0.5, 0.5],
+                filename: `Nextern_Analysis_${name.replace(/\s+/g, '_')}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true,
+                    letterRendering: true,
+                    logging: false
+                },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            // Buttons to hide
+            const selectorsToHide = [
+                '#downloadPdfBtn',
+                'button[onclick="location.reload()"]',
+                'a[href="prep-hub.html"]'
+            ];
+            
+            const hiddenElements = [];
+            selectorsToHide.forEach(sel => {
+                const el = document.querySelector(sel);
+                if (el) {
+                    hiddenElements.push({ el, originalDisplay: el.style.display });
+                    el.style.display = 'none';
+                }
+            });
+
+            try {
+                await html2pdf().set(opt).from(element).save();
+                console.log('✅ [PDF] Download successful.');
+            } catch (err) {
+                console.error('❌ [PDF] Error:', err);
+                alert('PDF generation failed. You can try printing the page (Ctrl+P) as a workaround.');
+            } finally {
+                // Restore buttons
+                hiddenElements.forEach(item => {
+                    item.el.style.display = item.originalDisplay || 'block';
+                });
+            }
+        }
+
+        // Attach listener explicitly
+        document.getElementById('downloadPdfBtn').addEventListener('click', downloadReport);
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
