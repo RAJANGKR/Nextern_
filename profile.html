@@ -1,263 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Profile — Nextern</title>
+    <meta name="description" content="Manage your Nextern profile, skills, and career preferences." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;700&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <script src="js/config.js"></script>
+    <script>
+    // Auth guard — must run before anything renders
+    (function() {
+        var token = localStorage.getItem('nextern_token');
+        if (!token) { window.location.href = 'login.html'; return; }
+        try {
+            var payload = JSON.parse(atob(token.split('.')[1]));
+            if (payload.exp * 1000 < Date.now()) { localStorage.clear(); window.location.href = 'login.html'; }
+        } catch(e) { localStorage.clear(); window.location.href = 'login.html'; }
+    })();
+    </script>
     <style>
         :root {
             --accent: #6C63FF;
             --accent-hover: #5A52E0;
             --accent-light: #EEF2FF;
+            --accent-ring: rgba(108, 99, 255, 0.15);
             --green: #22C55E;
             --green-light: #F0FDF4;
             --red: #EF4444;
-            --red-light: #FEF2F2;
-
-            --bg: #F3F4F8;
+            --text: #111827;
+            --text-soft: #6B7280;
+            --text-muted: #9CA3AF;
+            --border: #E5E7EB;
+            --bg: #F4F5F9;
             --bg-white: #FFFFFF;
-            --text: #0F172A;
-            --text-soft: #64748B;
-            --text-muted: #94A3B8;
-            --border: #E2E8F0;
-
             --font-head: 'Syne', sans-serif;
             --font-body: 'DM Sans', sans-serif;
-
-            --radius-sm: 6px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
+            --radius: 14px;
+            --radius-sm: 8px;
             --radius-pill: 100px;
-
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.07);
+            --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: var(--font-body);
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
         }
 
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
+        a { color: inherit; text-decoration: none; }
+        button { font-family: var(--font-body); cursor: pointer; border: none; background: none; }
 
-        input,
-        select,
-        textarea,
-        button {
-            font-family: var(--font-body);
-        }
-
+        /* ── TOPNAV ── */
         .topnav {
-            position: fixed;
+            position: sticky;
             top: 0;
-            left: 0;
-            right: 0;
-            height: 56px;
+            z-index: 200;
+            height: 58px;
             background: var(--bg-white);
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 0 24px;
+            gap: 20px;
+            padding: 0 28px;
             box-shadow: var(--shadow-sm);
-            z-index: 100;
         }
 
         .nav-logo {
             font-family: var(--font-head);
             font-weight: 800;
-            font-size: 1.3rem;
+            font-size: 1.35rem;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            flex-shrink: 0;
         }
-
-        .nav-logo span {
-            color: var(--accent);
-        }
-
-        .nav-search {
-            flex: 1;
-            max-width: 320px;
-        }
-
-        .nav-search input {
-            width: 100%;
-            padding: 8px 14px;
-            border-radius: var(--radius-pill);
-            border: 1.5px solid var(--border);
-            font-size: 0.84rem;
-            background: var(--bg);
-            outline: none;
-        }
-
-        .nav-search input:focus {
-            border-color: var(--accent);
-        }
+        .nav-logo span { color: var(--accent); }
 
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 2px;
             margin-left: auto;
         }
 
-        .nav-link-item {
-            font-size: 0.76rem;
-            color: var(--text-muted);
-            padding: 8px 14px;
+        .nav-link {
+            font-size: 0.83rem;
+            font-weight: 500;
+            color: var(--text-soft);
+            padding: 6px 14px;
             border-radius: var(--radius-sm);
-            transition: color 0.15s;
+            transition: color var(--transition), background var(--transition);
         }
+        .nav-link:hover { color: var(--text); background: var(--bg); }
+        .nav-link.active { color: var(--accent); background: var(--accent-light); }
 
-        .nav-link-item:hover {
-            color: var(--text);
-        }
-
-        .nav-badge {
-            margin-left: 5px;
-            background: var(--red);
-            color: #fff;
-            padding: 1px 5px;
-            border-radius: var(--radius-pill);
-            font-size: 0.62rem;
-            font-weight: 700;
-        }
-
-        .nav-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #4C1D95);
+        .nav-avatar-wrap {
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: #fff;
+            gap: 10px;
+            padding: 4px 10px 4px 4px;
+            border-radius: var(--radius-pill);
+            border: 1.5px solid var(--border);
+            cursor: pointer;
+            transition: border-color var(--transition);
+            margin-left: 12px;
+        }
+        .nav-avatar-wrap:hover { border-color: var(--accent); }
+        .nav-avatar {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #4C1D95);
+            color: white;
             font-weight: 700;
             font-size: 0.78rem;
-            margin-left: 10px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
         }
+        .nav-avatar-name { font-size: 0.8rem; font-weight: 600; }
 
-        .page-layout {
-            max-width: 1120px;
+        /* ── PAGE LAYOUT ── */
+        .page-wrap {
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 76px 16px 40px;
+            padding: 36px 20px 60px;
             display: grid;
-            grid-template-columns: 220px 1fr;
-            gap: 20px;
+            grid-template-columns: 280px 1fr;
+            gap: 28px;
             align-items: start;
         }
 
-        .left-sidebar {
+        /* ── LEFT STICKY PANEL ── */
+        .left-panel {
             position: sticky;
-            top: 72px;
-        }
-
-        .sidebar-card,
-        .profile-card,
-        .preview-card {
-            background: var(--bg-white);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .sidebar-card {
-            padding: 8px;
-        }
-
-        .sidebar-nav-link {
-            display: flex;
-            align-items: center;
-            padding: 9px 12px;
-            border-radius: var(--radius-sm);
-            font-size: 0.85rem;
-            color: var(--text-soft);
-            transition: background 0.15s, color 0.15s;
-        }
-
-        .sidebar-nav-link:hover {
-            background: var(--bg);
-            color: var(--text);
-        }
-
-        .sidebar-nav-link.active {
-            background: var(--accent-light);
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        .snav-badge {
-            margin-left: auto;
-            background: var(--accent);
-            color: #fff;
-            font-size: 0.62rem;
-            font-weight: 700;
-            border-radius: var(--radius-pill);
-            padding: 1px 6px;
-        }
-
-        .content {
-            min-width: 0;
+            top: 78px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 16px;
         }
 
-        .profile-card {
-            padding: 18px;
+        .identity-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            padding: 28px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
 
-        .profile-card h1 {
+        .avatar-ring {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #4C1D95);
+            color: white;
             font-family: var(--font-head);
-            font-size: 1.45rem;
-            letter-spacing: -0.3px;
-            margin-bottom: 5px;
+            font-size: 2rem;
+            font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 16px;
+            box-shadow: 0 0 0 4px var(--bg), 0 0 0 6px var(--accent-light);
         }
 
-        .profile-card p {
-            font-size: 0.84rem;
+        .identity-name {
+            font-family: var(--font-head);
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .identity-meta {
+            font-size: 0.82rem;
             color: var(--text-soft);
             margin-bottom: 16px;
         }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
+        .completeness-bar-wrap {
+            width: 100%;
+            background: var(--bg);
+            border-radius: var(--radius-pill);
+            height: 6px;
+            margin-bottom: 8px;
+            overflow: hidden;
         }
 
-        .field {
+        .completeness-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #a78bfa);
+            border-radius: var(--radius-pill);
+            transition: width 0.6s ease;
+        }
+
+        .completeness-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .completeness-label span { color: var(--accent); font-weight: 700; }
+
+        .skills-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 16px;
+            justify-content: center;
+        }
+
+        .skill-pill-sm {
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: var(--radius-pill);
+        }
+
+        .side-nav-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            padding: 8px;
+        }
+
+        .side-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-soft);
+            transition: all var(--transition);
+        }
+        .side-nav-link:hover { background: var(--bg); color: var(--text); }
+        .side-nav-link.active { background: var(--accent-light); color: var(--accent); }
+        .side-nav-link svg { flex-shrink: 0; opacity: 0.7; }
+
+        .logout-link { color: var(--red) !important; }
+        .logout-link:hover { background: #FEF2F2 !important; }
+
+        /* ── RIGHT FORM AREA ── */
+        .right-area {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 20px;
         }
 
-        .field-full {
-            grid-column: 1 / -1;
+        .form-section {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
         }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-icon {
+            width: 36px; height: 36px;
+            background: var(--accent-light);
+            color: var(--accent);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-family: var(--font-head);
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .section-sub { font-size: 0.8rem; color: var(--text-soft); margin-top: 1px; }
+
+        .section-body { padding: 24px; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .field { display: flex; flex-direction: column; gap: 6px; }
+        .field.full { grid-column: 1 / -1; }
 
         .field label {
-            font-size: 0.75rem;
+            font-size: 0.76rem;
+            font-weight: 700;
             color: var(--text-soft);
-            font-weight: 600;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
         }
 
         .field input,
@@ -266,226 +317,288 @@
             border: 1.5px solid var(--border);
             background: var(--bg-white);
             border-radius: var(--radius-sm);
-            padding: 9px 10px;
-            font-size: 0.84rem;
+            padding: 10px 12px;
+            font-size: 0.88rem;
+            font-family: var(--font-body);
             color: var(--text);
             outline: none;
-        }
-
-        .field textarea {
-            min-height: 90px;
-            resize: vertical;
+            transition: border-color var(--transition), box-shadow var(--transition);
         }
 
         .field input:focus,
         .field select:focus,
         .field textarea:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.11);
+            box-shadow: 0 0 0 3px var(--accent-ring);
         }
 
-        .skills-row {
+        .field textarea { min-height: 96px; resize: vertical; }
+
+        /* Skills section */
+        .skills-input-row {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
+        .skills-input-row input { flex: 1; }
 
-        .skills-row input {
-            flex: 1;
-        }
-
-        .btn {
-            border: none;
-            border-radius: var(--radius-sm);
-            padding: 9px 12px;
-            font-size: 0.78rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .btn-add {
+        .add-skill-btn {
             background: var(--accent-light);
             color: var(--accent);
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 10px 18px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background var(--transition);
+            white-space: nowrap;
         }
+        .add-skill-btn:hover { background: #ddd9ff; }
 
-        .btn-add:hover {
-            background: #E4E0FF;
-        }
-
-        .skill-list {
+        .skills-cloud {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-top: 10px;
+            margin-top: 14px;
         }
 
         .skill-chip {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 7px;
             background: #F7F7FF;
-            border: 1px solid #D9D6FF;
+            border: 1.5px solid #D9D6FF;
             color: var(--accent);
-            font-size: 0.74rem;
+            font-size: 0.78rem;
             font-weight: 600;
             border-radius: var(--radius-pill);
-            padding: 4px 10px;
+            padding: 5px 12px;
+            transition: background var(--transition);
         }
-
-        .skill-chip button {
-            border: none;
-            background: none;
-            color: var(--accent);
+        .skill-chip:hover { background: var(--accent-light); }
+        .skill-chip .rm {
             cursor: pointer;
-            font-size: 0.75rem;
-            line-height: 1;
-        }
-
-        .actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 14px;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            color: #fff;
-        }
-
-        .btn-primary:hover {
-            background: var(--accent-hover);
-        }
-
-        .btn-light {
-            background: var(--bg);
-            color: var(--text-soft);
-            border: 1px solid var(--border);
-        }
-
-        .save-msg {
-            font-size: 0.78rem;
-            color: #16A34A;
-            display: none;
-        }
-
-        .preview-card {
-            padding: 16px;
-        }
-
-        .preview-top {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .preview-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #4C1D95);
-            color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            color: var(--accent);
+            transition: background var(--transition);
+        }
+        .skill-chip .rm:hover { background: rgba(108,99,255,0.2); }
+
+        /* Save actions bar */
+        .save-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 24px;
+            border-top: 1px solid var(--border);
+            background: #FAFAFA;
         }
 
-        .preview-name {
+        .btn-save {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 11px 28px;
             font-size: 0.9rem;
             font-weight: 700;
+            font-family: var(--font-body);
+            cursor: pointer;
+            transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+            box-shadow: 0 2px 8px rgba(108,99,255,0.35);
         }
+        .btn-save:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(108,99,255,0.4); }
+        .btn-save:active { transform: translateY(0); }
+        .btn-save:disabled { opacity: 0.6; pointer-events: none; }
 
-        .preview-meta {
-            font-size: 0.77rem;
+        .btn-reset {
+            background: var(--bg);
             color: var(--text-soft);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 20px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            font-family: var(--font-body);
+            cursor: pointer;
+            transition: background var(--transition);
         }
+        .btn-reset:hover { background: #EDEDF3; }
 
-        .preview-line {
-            font-size: 0.78rem;
-            color: var(--text-soft);
-            margin-top: 8px;
+        .save-status {
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-left: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
+        .save-status.show { opacity: 1; }
+        .save-status.ok { color: var(--green); }
+        .save-status.err { color: var(--red); }
 
-        @media (max-width: 900px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .page-layout {
-                grid-template-columns: 1fr;
-            }
-
-            .left-sidebar,
-            .nav-search,
-            .nav-links {
-                display: none;
-            }
+        @media (max-width: 860px) {
+            .page-wrap { grid-template-columns: 1fr; }
+            .left-panel { position: static; }
+            .form-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 
 <body>
-    <nav class="topnav">
-        <a href="/pages/feed.html" class="nav-logo">Nex<span>tern</span></a>
 
-        <div class="nav-search">
-            <input type="text" placeholder="Search profile fields..." />
-        </div>
+<!-- ── TOPNAV ── -->
+<nav class="topnav">
+    <a href="pages/feed.html" class="nav-logo">Nex<span>tern</span></a>
 
-        <div class="nav-links">
-            <a href="pages/feed.html" class="nav-link-item">Home</a>
-            <a href="pages/drives.html" class="nav-link-item">Drives <span class="nav-badge">3</span></a>
-            <a href="pages/roadmap.html" class="nav-link-item">Roadmap</a>
-            <a href="pages/prep-hub.html" class="nav-link-item">Prep</a>
-            <a href="pages/seniors.html" class="nav-link-item">Seniors</a>
-        </div>
-
-        <div class="nav-avatar" id="navAvatar">R</div>
+    <nav class="nav-links">
+        <a href="pages/feed.html" class="nav-link">Feed</a>
+        <a href="pages/drives.html" class="nav-link">Drives</a>
+        <a href="pages/roadmap.html" class="nav-link">Roadmap</a>
+        <a href="pages/prep-hub.html" class="nav-link">Prep</a>
+        <a href="pages/dashboard.html" class="nav-link">Dashboard</a>
     </nav>
 
-    <div class="page-layout">
-        <!-- LEFT SIDEBAR -->
-        <div id="sidebar-mount"></div>
-        <script src="js/sidebar.js"></script>
+    <div class="nav-avatar-wrap" onclick="window.location.href='profile.html'">
+        <div class="nav-avatar" id="navAvatar">–</div>
+        <span class="nav-avatar-name" id="navName">My Profile</span>
+    </div>
+</nav>
 
-        <main class="content">
-            <section class="profile-card">
-                <h1>My Profile</h1>
-                <p>Edit your details, branch, year, and skills. Changes are saved locally.</p>
+<!-- ── PAGE ── -->
+<div class="page-wrap">
 
-                <form id="profileForm" class="form-grid">
+    <!-- LEFT PANEL -->
+    <aside class="left-panel">
+        <div class="identity-card">
+            <div class="avatar-ring" id="bigAvatar">–</div>
+            <div class="identity-name" id="idName">Loading…</div>
+            <div class="identity-meta" id="idMeta">–</div>
+
+            <div style="width:100%;">
+                <div class="completeness-bar-wrap">
+                    <div class="completeness-bar" id="complBar" style="width:0%"></div>
+                </div>
+                <div class="completeness-label">Profile <span id="complPct">0%</span> complete</div>
+            </div>
+
+            <div class="skills-preview" id="skillsPreview"></div>
+        </div>
+
+        <nav class="side-nav-card">
+            <a href="pages/feed.html" class="side-nav-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                Feed
+            </a>
+            <a href="pages/drives.html" class="side-nav-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                Placement Drives
+            </a>
+            <a href="pages/roadmap.html" class="side-nav-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                My Roadmap
+            </a>
+            <a href="pages/prep-hub.html" class="side-nav-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                Prep Hub
+            </a>
+            <a href="pages/resume-analyzer.html" class="side-nav-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Resume Analyzer
+            </a>
+            <a href="profile.html" class="side-nav-link active">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                My Profile
+            </a>
+            <a href="#" class="side-nav-link logout-link" onclick="window.handleLogout();return false;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Logout
+            </a>
+        </nav>
+    </aside>
+
+    <!-- RIGHT AREA -->
+    <main class="right-area">
+
+        <!-- PERSONAL INFO -->
+        <div class="form-section">
+            <div class="section-head">
+                <div class="section-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div>
+                    <div class="section-title">Personal Information</div>
+                    <div class="section-sub">Your name, contact, and basic details</div>
+                </div>
+            </div>
+            <div class="section-body">
+                <div class="form-grid">
                     <div class="field">
-                        <label for="fullName">Full Name</label>
-                        <input id="fullName" type="text" placeholder="Your name" />
+                        <label for="firstName">First Name</label>
+                        <input id="firstName" type="text" placeholder="Rajan" />
                     </div>
-
+                    <div class="field">
+                        <label for="lastName">Last Name</label>
+                        <input id="lastName" type="text" placeholder="Garudkar" />
+                    </div>
                     <div class="field">
                         <label for="email">Email</label>
                         <input id="email" type="email" placeholder="you@example.com" />
                     </div>
-
                     <div class="field">
                         <label for="phone">Phone</label>
-                        <input id="phone" type="tel" placeholder="+91 ..." />
+                        <input id="phone" type="tel" placeholder="+91 98765 43210" />
                     </div>
-
-                    <div class="field">
-                        <label for="college">College</label>
-                        <input id="college" type="text" placeholder="College name" />
+                    <div class="field full">
+                        <label for="bio">Short Bio</label>
+                        <textarea id="bio" placeholder="Tell recruiters about yourself — your interests, strengths, and career aspirations..."></textarea>
                     </div>
+                </div>
+            </div>
+        </div>
 
-                    <div class="field">
-                        <label for="branch">Branch Name</label>
-                        <input id="branch" type="text" placeholder="CSE" />
+        <!-- EDUCATION -->
+        <div class="form-section">
+            <div class="section-head">
+                <div class="section-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                </div>
+                <div>
+                    <div class="section-title">Education</div>
+                    <div class="section-sub">College, branch, year and academic performance</div>
+                </div>
+            </div>
+            <div class="section-body">
+                <div class="form-grid">
+                    <div class="field full">
+                        <label for="college">College / University</label>
+                        <input id="college" type="text" placeholder="e.g. PCCOE, Pune" />
                     </div>
-
                     <div class="field">
-                        <label for="year">Year</label>
+                        <label for="branch">Branch</label>
+                        <select id="branch">
+                            <option value="">Select branch</option>
+                            <option>Computer Science</option>
+                            <option>Information Technology</option>
+                            <option>Electronics & Telecom</option>
+                            <option>Mechanical</option>
+                            <option>Civil</option>
+                            <option>Electrical</option>
+                            <option>Chemical</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="year">Current Year</label>
                         <select id="year">
+                            <option value="">Select year</option>
                             <option value="1st Year">1st Year</option>
                             <option value="2nd Year">2nd Year</option>
                             <option value="3rd Year">3rd Year</option>
@@ -493,296 +606,279 @@
                             <option value="Passout">Passout</option>
                         </select>
                     </div>
-
                     <div class="field">
                         <label for="cgpa">CGPA</label>
-                        <input id="cgpa" type="number" min="0" max="10" step="0.1" placeholder="7.8" />
+                        <input id="cgpa" type="number" min="0" max="10" step="0.01" placeholder="e.g. 8.5" />
                     </div>
-
                     <div class="field">
-                        <label for="targetCompany">Target Company</label>
-                        <input id="targetCompany" type="text" placeholder="Google / Microsoft..." />
-                    </div>
-
-                    <div class="field field-full">
-                        <label for="bio">Short Bio</label>
-                        <textarea id="bio" placeholder="Write a short intro..."></textarea>
-                    </div>
-
-                    <div class="field field-full">
-                        <label for="skillInput">Skills</label>
-                        <div class="skills-row">
-                            <input id="skillInput" type="text" placeholder="Type a skill and click Add" />
-                            <button class="btn btn-add" id="addSkillBtn" type="button">Add Skill</button>
-                        </div>
-                        <div class="skill-list" id="skillList"></div>
-                    </div>
-                </form>
-
-                <div class="actions">
-                    <button class="btn btn-primary" id="saveBtn" type="button">Save Profile</button>
-                    <button class="btn btn-light" id="resetBtn" type="button">Reset</button>
-                    <span class="save-msg" id="saveMsg">Profile updated</span>
-                </div>
-            </section>
-
-            <section class="preview-card">
-                <div class="preview-top">
-                    <div class="preview-avatar" id="previewAvatar">R</div>
-                    <div>
-                        <div class="preview-name" id="previewName">Rajan Garudkar</div>
-                        <div class="preview-meta" id="previewMeta">CSE · 3rd Year</div>
+                        <label for="targetCompany">Target Companies</label>
+                        <input id="targetCompany" type="text" placeholder="Google, Microsoft, Amazon…" />
                     </div>
                 </div>
-                <p class="preview-line" id="previewCollege">College: Not set</p>
-                <p class="preview-line" id="previewTarget">Target: Not set</p>
-                <p class="preview-line" id="previewSkills">Skills: Not set</p>
-            </section>
-        </main>
-        <script>
-            // 1. CATCH TOKEN FROM URL (Useful for social login redirects)
-            const urlParams = new URLSearchParams(window.location.search);
-            const tokenFromUrl = urlParams.get('token');
-            const nameFromUrl = urlParams.get('name');
-            if (tokenFromUrl) {
-                localStorage.setItem('nextern_token', tokenFromUrl);
-                if (nameFromUrl) localStorage.setItem('nextern_name', decodeURIComponent(nameFromUrl));
-                window.history.replaceState({}, '', window.location.pathname); // Clean URL
+            </div>
+        </div>
+
+        <!-- SKILLS -->
+        <div class="form-section">
+            <div class="section-head">
+                <div class="section-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <div>
+                    <div class="section-title">Skills</div>
+                    <div class="section-sub">Programming languages, frameworks, tools & more</div>
+                </div>
+            </div>
+            <div class="section-body">
+                <div class="skills-input-row">
+                    <input id="skillInput" type="text" placeholder="Type a skill (e.g. Python, React) and click Add…" />
+                    <button class="add-skill-btn" id="addSkillBtn" type="button">+ Add</button>
+                </div>
+                <div class="skills-cloud" id="skillList"></div>
+            </div>
+        </div>
+
+        <!-- ONLINE PRESENCE -->
+        <div class="form-section">
+            <div class="section-head">
+                <div class="section-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </div>
+                <div>
+                    <div class="section-title">Online Presence</div>
+                    <div class="section-sub">LinkedIn, GitHub, and portfolio links</div>
+                </div>
+            </div>
+            <div class="section-body">
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="linkedin">LinkedIn URL</label>
+                        <input id="linkedin" type="url" placeholder="https://linkedin.com/in/yourprofile" />
+                    </div>
+                    <div class="field">
+                        <label for="github">GitHub URL</label>
+                        <input id="github" type="url" placeholder="https://github.com/yourhandle" />
+                    </div>
+                    <div class="field">
+                        <label for="portfolio">Portfolio / Website</label>
+                        <input id="portfolio" type="url" placeholder="https://yourportfolio.com" />
+                    </div>
+                    <div class="field">
+                        <label for="leetcode">LeetCode Profile</label>
+                        <input id="leetcode" type="url" placeholder="https://leetcode.com/yourhandle" />
+                    </div>
+                </div>
+            </div>
+            <div class="save-bar">
+                <button class="btn-save" id="saveBtn" type="button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    Save Profile
+                </button>
+                <button class="btn-reset" id="resetBtn" type="button">Discard Changes</button>
+                <span class="save-status" id="saveStatus"></span>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+    // ── TOKEN FROM URL (Google OAuth redirect) ──
+    (function() {
+        const p = new URLSearchParams(window.location.search);
+        const t = p.get('token'), n = p.get('name');
+        if (t) { localStorage.setItem('nextern_token', t); }
+        if (n) { localStorage.setItem('nextern_name', decodeURIComponent(n)); }
+        if (t || n) window.history.replaceState({}, '', window.location.pathname);
+    })();
+
+    let skills = [];
+
+    // ── HELPERS ──
+    const $ = id => document.getElementById(id);
+    const val = id => $( id ) ? $( id ).value.trim() : '';
+    const set = (id, v) => { if($(id)) $(id).value = v || ''; };
+
+    function updateIdentityCard() {
+        const first = val('firstName'), last = val('lastName');
+        const name = [first, last].filter(Boolean).join(' ') || 'Your Name';
+        const branch = val('branch') || '–';
+        const year = val('year') || '–';
+        const initial = name.charAt(0).toUpperCase();
+
+        $('bigAvatar').textContent = initial;
+        $('navAvatar').textContent = initial;
+        $('navName').textContent = first || 'Profile';
+        $('idName').textContent = name;
+        $('idMeta').textContent = `${branch} · ${year}`;
+
+        // Skills preview
+        const prev = $('skillsPreview');
+        prev.innerHTML = skills.slice(0, 5).map(s => `<span class="skill-pill-sm">${s}</span>`).join('') +
+            (skills.length > 5 ? `<span class="skill-pill-sm">+${skills.length - 5}</span>` : '');
+
+        // Completeness
+        const checks = [
+            !!first, !!last,
+            !!val('email'),
+            !!val('college'),
+            !!val('branch'),
+            !!val('year'),
+            Number(val('cgpa')) > 0,
+            skills.length > 0,
+            !!val('linkedin') || !!val('github'),
+            !!val('targetCompany'),
+            !!val('bio'),
+        ];
+        const pct = Math.round((checks.filter(Boolean).length / checks.length) * 100);
+        $('complBar').style.width = pct + '%';
+        $('complPct').textContent = pct + '%';
+    }
+
+    function renderSkills() {
+        $('skillList').innerHTML = skills.map((s, i) => `
+            <span class="skill-chip">
+                ${s}
+                <span class="rm" onclick="removeSkill(${i})" title="Remove">✕</span>
+            </span>
+        `).join('');
+        updateIdentityCard();
+    }
+
+    window.removeSkill = function(i) {
+        skills.splice(i, 1);
+        renderSkills();
+    };
+
+    $('addSkillBtn').addEventListener('click', () => {
+        const inp = $('skillInput');
+        const v = inp.value.trim();
+        if (!v) return;
+        if (!skills.some(s => s.toLowerCase() === v.toLowerCase())) {
+            skills.push(v);
+            renderSkills();
+        }
+        inp.value = '';
+        inp.focus();
+    });
+
+    $('skillInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); $('addSkillBtn').click(); }
+    });
+
+    ['firstName','lastName','email','phone','bio','college','branch','year','cgpa','targetCompany','linkedin','github','portfolio','leetcode']
+        .forEach(id => { const el = $(id); if(el) el.addEventListener('input', updateIdentityCard); });
+
+    // ── LOAD PROFILE ──
+    async function loadProfile() {
+        // Load from localStorage first for instant display
+        const user = JSON.parse(localStorage.getItem('nextern_user') || '{}');
+        populateFrom(user);
+
+        // Then refresh from server
+        try {
+            const res = await fetch(`${window.API_BASE}/api/user/me`, { headers: window.getAuthHeaders() });
+            if (res.status === 401) { localStorage.clear(); window.location.href = 'login.html'; return; }
+            const data = await res.json();
+            if (data.success && data.user) {
+                window.syncLocalStorage(data.user);
+                populateFrom(data.user);
             }
+        } catch(e) { console.error('Profile load error:', e); }
+    }
 
-            // 2. STRICT AUTH GUARD
-            if (!window.checkAuth('login.html')) {
-                // If checkAuth failed, the page will redirect, 
-                // but we hide the body to avoid flash of content
-                document.body.style.display = 'none';
-            }
+    function populateFrom(u) {
+        set('firstName', u.firstName);
+        set('lastName', u.lastName);
+        set('email', u.email);
+        set('phone', u.phone);
+        set('bio', u.bio);
+        set('college', u.college);
+        set('branch', u.branch);
+        set('year', u.year);
+        set('cgpa', u.cgpa);
+        set('targetCompany', Array.isArray(u.targetCompanies) ? u.targetCompanies.join(', ') : (u.targetCompanies || ''));
+        set('linkedin', u.linkedin);
+        set('github', u.github);
+        set('portfolio', u.portfolio || u.website);
+        set('leetcode', u.leetcode);
+        skills = Array.isArray(u.skills) ? [...u.skills] : [];
+        renderSkills();
+    }
 
-            const formIds = [
-                'fullName',
-                'email',
-                'phone',
-                'college',
-                'branch',
-                'year',
-                'cgpa',
-                'targetCompany',
-                'bio'
-            ];
+    // ── SAVE PROFILE ──
+    async function saveProfile() {
+        const btn = $('saveBtn');
+        const status = $('saveStatus');
+        btn.disabled = true;
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin 1s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.39-8.79"/></svg> Saving…';
 
-            let skills = [];
+        const targetStr = val('targetCompany');
+        const targetCompanies = targetStr ? targetStr.split(',').map(s => s.trim()).filter(Boolean) : [];
 
-            function getValue(id) {
-                return document.getElementById(id).value.trim();
-            }
+        const payload = {
+            firstName: val('firstName'),
+            lastName: val('lastName'),
+            phone: val('phone'),
+            bio: val('bio'),
+            college: val('college'),
+            branch: val('branch'),
+            year: val('year'),
+            cgpa: val('cgpa') ? parseFloat(val('cgpa')) : null,
+            targetCompanies,
+            skills,
+            linkedin: val('linkedin'),
+            github: val('github'),
+            portfolio: val('portfolio'),
+            leetcode: val('leetcode'),
+        };
 
-            function setValue(id, value) {
-                const el = document.getElementById(id);
-                if (!el) return;
-                el.value = value || '';
-            }
-
-            function renderSkills() {
-                const list = document.getElementById('skillList');
-                list.innerHTML = '';
-
-                skills.forEach((skill, index) => {
-                    const chip = document.createElement('span');
-                    chip.className = 'skill-chip';
-                    chip.innerHTML = `${skill} <button type="button" aria-label="Remove skill">x</button>`;
-                    chip.querySelector('button').addEventListener('click', () => {
-                        skills.splice(index, 1);
-                        renderSkills();
-                        updatePreview();
-                    });
-                    list.appendChild(chip);
-                });
-            }
-
-            function updatePreview() {
-                const name = getValue('fullName') || 'Rajan Garudkar';
-                const branch = getValue('branch') || 'CSE';
-                const year = getValue('year') || '3rd Year';
-                const college = getValue('college') || 'Not set';
-                const target = getValue('targetCompany') || 'Not set';
-
-                document.getElementById('navAvatar').textContent = name.charAt(0).toUpperCase();
-                document.getElementById('previewAvatar').textContent = name.charAt(0).toUpperCase();
-                document.getElementById('previewName').textContent = name;
-                document.getElementById('previewMeta').textContent = `${branch} · ${year}`;
-                document.getElementById('previewCollege').textContent = `College: ${college}`;
-                document.getElementById('previewTarget').textContent = `Target: ${target}`;
-                document.getElementById('previewSkills').textContent = `Skills: ${skills.length ? skills.join(', ') : 'Not set'}`;
-            }
-
-            async function loadProfile() {
-                // First, populate from localStorage for instant perceived speed
-                const populateFromStorage = () => {
-                    setValue('fullName', localStorage.getItem('nextern_name') || '');
-                    setValue('email', localStorage.getItem('nextern_email') || '');
-                    setValue('phone', localStorage.getItem('nextern_phone') || '');
-                    setValue('college', localStorage.getItem('nextern_college') || '');
-                    setValue('branch', localStorage.getItem('nextern_branch') || '');
-                    setValue('year', localStorage.getItem('nextern_year') || '3rd Year');
-                    setValue('cgpa', localStorage.getItem('nextern_cgpa') || '');
-                    setValue('targetCompany', localStorage.getItem('nextern_target_company') || '');
-                    setValue('bio', localStorage.getItem('nextern_bio') || '');
-
-                    try {
-                        const parsed = JSON.parse(localStorage.getItem('nextern_skills') || '[]');
-                        skills = Array.isArray(parsed) ? parsed : [];
-                    } catch (err) {
-                        skills = [];
-                    }
-                    renderSkills();
-                    updatePreview();
-                };
-
-                populateFromStorage();
-
-                // Then, fetch fresh data from the server to ensure we're synced
-                try {
-                    const res = await fetch(`${window.API_BASE}/api/user/me`, {
-                        headers: window.getAuthHeaders()
-                    });
-                    const data = await res.json();
-
-                    if (data.success && data.user) {
-                        console.log('🔄 [Profile] Fresh data fetched from server.');
-                        window.syncLocalStorage(data.user);
-                        populateFromStorage(); // Re-populate with fresh server data
-                    }
-                } catch (err) {
-                    console.error('❌ [Profile] Failed to fetch fresh profile:', err);
-                }
-            }
-
-            async function saveProfile() {
-                const btn = document.getElementById('saveBtn');
-                const originalText = btn.textContent;
-                btn.textContent = 'Saving...';
-                btn.disabled = true;
-
-                const fullName = getValue('fullName') || 'Rajan Garudkar';
-                const nameParts = fullName.split(' ');
-                const firstName = nameParts[0] || 'Rajan';
-                const lastName = nameParts.slice(1).join(' ') || 'Garudkar';
-
-                const branch = getValue('branch') || 'CSE';
-                const year = getValue('year') || '3rd Year';
-
-                const targetStr = getValue('targetCompany');
-                const targetCompanies = targetStr ? targetStr.split(',').map(s => s.trim()).filter(Boolean) : [];
-
-                const payload = {
-                    firstName,
-                    lastName,
-                    phone: getValue('phone'),
-                    college: getValue('college'),
-                    branch: branch,
-                    year: year,
-                    cgpa: getValue('cgpa') !== '' ? parseFloat(getValue('cgpa')) : null,
-                    targetCompanies,
-                    bio: getValue('bio'),
-                    skills: skills
-                };
-
-                try {
-                    if (!window.API_BASE) {
-                        throw new Error("config.js not loaded properly.");
-                    }
-
-                    const res = await fetch(`${window.API_BASE}/api/user/me`, {
-                        method: 'PUT',
-                        headers: window.getAuthHeaders(),
-                        body: JSON.stringify(payload)
-                    });
-
-                    const data = await res.json();
-
-                    if (data.success) {
-                        // Use global helper to sync everything
-                        window.syncLocalStorage(data.user || {
-                            firstName, lastName, email: getValue('email'), phone: getValue('phone'),
-                            college: getValue('college'), branch, year, cgpa: getValue('cgpa'),
-                            bio: getValue('bio'), skills, targetCompanies
-                        });
-
-                        updatePreview();
-
-                        const msg = document.getElementById('saveMsg');
-                        msg.textContent = 'Profile updated';
-                        msg.style.color = '#16A34A';
-                        msg.style.display = 'inline';
-                        setTimeout(() => {
-                            msg.style.display = 'none';
-                        }, 2000);
-                    } else {
-                        throw new Error(data.message || 'Failed to save');
-                    }
-                } catch (err) {
-                    console.error("Save Error:", err);
-                    const tokenExtracted = window.getAuthToken();
-                    const msg = document.getElementById('saveMsg');
-                    if (!tokenExtracted || tokenExtracted === 'null') {
-                        msg.textContent = 'Token is MISSING (' + tokenExtracted + ') from your browser storage!';
-                    } else {
-                        msg.textContent = err.message || 'Error saving profile';
-                    }
-                    msg.style.color = '#EF4444';
-                    msg.style.display = 'inline';
-                    setTimeout(() => {
-                        msg.style.display = 'none';
-                    }, 8000);
-                } finally {
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                }
-            }
-
-            function resetForm() {
-                formIds.forEach(id => setValue(id, id === 'year' ? '3rd Year' : ''));
-                skills = [];
-                renderSkills();
-                updatePreview();
-            }
-
-            document.getElementById('addSkillBtn').addEventListener('click', () => {
-                const input = document.getElementById('skillInput');
-                const value = input.value.trim();
-                if (!value) return;
-
-                const exists = skills.some(skill => skill.toLowerCase() === value.toLowerCase());
-                if (!exists) {
-                    skills.push(value);
-                    renderSkills();
-                    updatePreview();
-                }
-                input.value = '';
-                input.focus();
+        try {
+            const res = await fetch(`${window.API_BASE}/api/user/me`, {
+                method: 'PUT',
+                headers: window.getAuthHeaders(),
+                body: JSON.stringify(payload)
             });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || 'Server error');
 
-            document.getElementById('skillInput').addEventListener('keydown', event => {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    document.getElementById('addSkillBtn').click();
-                }
-            });
+            if (data.success) {
+                window.syncLocalStorage(data.user || payload);
+                updateIdentityCard();
+                showStatus('✓ Profile saved successfully', 'ok');
+                if (window.showToast) showToast('Profile saved!', 'success');
+            } else throw new Error(data.message || 'Save failed');
+        } catch(err) {
+            showStatus('✗ ' + err.message, 'err');
+            if (window.showToast) showToast(err.message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save Profile';
+        }
+    }
 
-            formIds.forEach(id => {
-                document.getElementById(id).addEventListener('input', updatePreview);
-                document.getElementById(id).addEventListener('change', updatePreview);
-            });
+    function showStatus(msg, cls) {
+        const s = $('saveStatus');
+        s.textContent = msg;
+        s.className = `save-status show ${cls}`;
+        setTimeout(() => s.classList.remove('show'), 3500);
+    }
 
-            document.getElementById('saveBtn').addEventListener('click', saveProfile);
-            document.getElementById('resetBtn').addEventListener('click', resetForm);
+    $('saveBtn').addEventListener('click', saveProfile);
+    $('resetBtn').addEventListener('click', loadProfile);
 
-            window.handleLogout = function () {
-                window.clearLocalSession();
-                window.location.href = 'login.html';
-            };
+    // ── KBD SHORTCUT Ctrl+S ──
+    document.addEventListener('keydown', e => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveProfile(); }
+    });
 
-            loadProfile();
-        </script>
+    // Spin animation for saving spinner
+    const style = document.createElement('style');
+    style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+    document.head.appendChild(style);
+
+    loadProfile();
+</script>
+
 </body>
-
 </html>
