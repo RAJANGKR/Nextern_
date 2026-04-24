@@ -442,6 +442,9 @@ async function renderAddDrive(container) {
 
 async function handleAddDriveSubmit(e) {
     e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+
     const payload = {
         company: document.getElementById('drName').value,
         role: document.getElementById('drRole').value,
@@ -453,17 +456,32 @@ async function handleAddDriveSubmit(e) {
 
     if(!payload.company || !payload.role) return showToast('Company name and role are required.', 'warning');
 
+    btn.disabled = true;
+    btn.textContent = 'Launching...';
+
     try {
         const res = await fetch(`${API_BASE}/api/admin/drives`, {
             method: 'POST',
             headers: getHeaders(),
             body: JSON.stringify(payload)
         });
+        
+        const data = await res.json();
+        
         if(res.ok) {
             showToast('Drive launched successfully!', 'success');
-            switchView('drives');
+            // Slight delay so they see the success toast before it switches
+            setTimeout(() => switchView('drives'), 1000);
+        } else {
+            showToast(data.message || 'Failed to launch drive', 'error');
+            btn.disabled = false;
+            btn.textContent = originalText;
         }
-    } catch(err) { showToast('Launch Error: ' + err.message, 'error'); }
+    } catch(err) { 
+        showToast('Launch Error: ' + err.message, 'error');
+        btn.disabled = false;
+        btn.textContent = originalText;
+    }
 }
 
 // ── INITIALIZATION ──
