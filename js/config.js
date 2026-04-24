@@ -8,7 +8,7 @@
 const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
 window.API_BASE = isLocal
     ? `http://${window.location.hostname}:4000`
-    : (window.NEXTERN_API_URL || 'https://nextern-api.up.railway.app');
+    : (window.NEXTERN_API_URL || 'https://nextern-production.up.railway.app');
 
 // Also expose as CONFIG.API_BASE for compatibility
 window.CONFIG = { API_BASE: window.API_BASE };
