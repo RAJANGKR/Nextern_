@@ -3,7 +3,7 @@
  * Complete Admin Dashboard Controller for NexConsole
  */
 
-const API_BASE = window.API_BASE || 'http://localhost:4000';
+const API_BASE = window.API_BASE || 'https://nextern-production.up.railway.app';
 
 const State = {
     currentView: 'dashboard',

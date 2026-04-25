@@ -27,7 +27,7 @@
     async function refreshLiveData() {
         const token = localStorage.getItem('nextern_token');
         if (!token) return;
-        const API_BASE = window.API_BASE || 'http://localhost:4000';
+        const API_BASE = window.API_BASE || 'https://nextern-production.up.railway.app';
         try {
             // Drive badge count
             const dr = await fetch(`${API_BASE}/api/drives`, { headers: { Authorization: `Bearer ${token}` } });

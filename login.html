@@ -431,6 +431,7 @@
                         <span class="field-error" id="passwordError"></span>
                     </div>
 
+                    <div id="loginError" style="color: var(--red); font-size: 0.85rem; margin-bottom: 12px; text-align: center;"></div>
                     <button type="submit" class="btn-submit" id="loginBtn">
                         Sign in
                     </button>
@@ -462,56 +463,59 @@
         }
 
         /* ── LOGIN ── */
-        async function handleLogin(event) {
-            event.preventDefault();
-            clearError('email', 'emailError');
-            clearError('password', 'passwordError');
-
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-
-            if (!email) {
-                showError('email', 'emailError', 'Email is required.');
-                return;
+        async function handleLogin(e) {
+          if (e) e.preventDefault();
+          
+          const email = document.getElementById('email').value.trim();
+          const password = document.getElementById('password').value;
+          
+          if (!email || !password) {
+            document.getElementById('loginError').textContent = 
+              'Please enter email and password';
+            return;
+          }
+          
+          const btn = document.getElementById('loginBtn');
+          btn.textContent = 'Signing in...';
+          btn.disabled = true;
+          document.getElementById('loginError').textContent = '';
+          
+          try {
+            const res = await fetch(
+              'https://nextern-production.up.railway.app/api/auth/login',
+              {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+              }
+            );
+            
+            const data = await res.json();
+            
+            if (data.success) {
+              localStorage.setItem('nextern_token', data.token);
+              localStorage.setItem('nextern_name', 
+                data.user.firstName + ' ' + data.user.lastName);
+              localStorage.setItem('nextern_user', JSON.stringify(data.user));
+              
+              if (data.user.role === 'admin') {
+                window.location.href = 'pages/admin.html';
+              } else {
+                window.location.href = 'pages/feed.html';
+              }
+            } else {
+              document.getElementById('loginError').textContent = 
+                data.message || 'Invalid email or password';
+              btn.textContent = 'Sign in';
+              btn.disabled = false;
             }
-            if (!validateEmail(email)) {
-                showError('email', 'emailError', 'Please enter a valid email.');
-                return;
-            }
-            if (!password) {
-                showError('password', 'passwordError', 'Password is required.');
-                return;
-            }
-
-            const btn = document.getElementById('loginBtn');
-            btn.textContent = 'Signing in...';
-            btn.disabled = true;
-
-            try {
-                const response = await fetch('http://localhost:4000/api/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    localStorage.setItem('nextern_token', data.token);
-                    localStorage.setItem('nextern_name', data.user.firstName + ' ' + data.user.lastName);
-                    localStorage.setItem('nextern_user', JSON.stringify(data.user));
-                    window.location.href = '/pages/feed.html';
-                } else {
-                    showError('password', 'passwordError', data.message || 'Invalid email or password.');
-                    btn.textContent = 'Sign in';
-                    btn.disabled = false;
-                }
-
-            } catch (error) {
-                showError('password', 'passwordError', 'Could not connect to server. Is it running on port 4000?');
-                btn.textContent = 'Sign in';
-                btn.disabled = false;
-            }
+          } catch(err) {
+            console.error('Login error:', err);
+            document.getElementById('loginError').textContent = 
+              'Could not connect to server.';
+            btn.textContent = 'Sign in';
+            btn.disabled = false;
+          }
         }
 
         /* ── PASSWORD TOGGLE ── */
@@ -529,7 +533,7 @@
 
         /* ── GOOGLE AUTH ── */
         function handleGoogleAuth() {
-            window.location.href = 'http://localhost:4000/api/auth/google';
+            window.location.href = 'https://nextern-production.up.railway.app/api/auth/google';
         }
 
         /* ── CLEAR ERRORS ON TYPE ── */
