@@ -5,10 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Build your profile — Nextern</title>
-    <meta name="description" content="Create your Nextern profile to get personalized placement drives, AI roadmaps, and career guidance." />
+    <meta name="description"
+        content="Create your Nextern profile to get personalized placement drives, AI roadmaps, and career guidance." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap"
         rel="stylesheet" />
     <style>
         /* ══════════════════════════════════════════
@@ -32,11 +34,17 @@
             --radius: 12px;
             --radius-sm: 8px;
             --radius-pill: 100px;
-            --shadow-card: 0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+            --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
             --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
             font-family: var(--font-body);
@@ -46,9 +54,20 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        a { color: var(--accent); text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        button { font-family: var(--font-body); cursor: pointer; border: none; }
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            font-family: var(--font-body);
+            cursor: pointer;
+            border: none;
+        }
 
         /* ══════════════════════════════════════════
            HEADER
@@ -57,6 +76,7 @@
             text-align: center;
             padding: 40px 20px 0;
         }
+
         .page-header h1 {
             font-family: var(--font-head);
             font-weight: 800;
@@ -64,6 +84,7 @@
             letter-spacing: -0.5px;
             margin-bottom: 6px;
         }
+
         .page-header p {
             color: var(--text-soft);
             font-size: 0.92rem;
@@ -79,6 +100,7 @@
             justify-content: center;
             padding: 28px 20px 0;
         }
+
         .stepper {
             display: flex;
             align-items: center;
@@ -88,6 +110,7 @@
             border-radius: var(--radius-pill);
             padding: 10px 28px;
         }
+
         .step-item {
             display: flex;
             align-items: center;
@@ -97,11 +120,18 @@
             user-select: none;
             transition: opacity var(--transition);
         }
-        .step-item:hover { opacity: 0.8; }
+
+        .step-item:hover {
+            opacity: 0.8;
+        }
+
         .step-number {
-            width: 28px; height: 28px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 0.78rem;
             font-weight: 700;
             background: var(--bg);
@@ -110,6 +140,7 @@
             transition: all var(--transition);
             flex-shrink: 0;
         }
+
         .step-label {
             font-size: 0.82rem;
             font-weight: 500;
@@ -117,6 +148,7 @@
             white-space: nowrap;
             transition: color var(--transition);
         }
+
         .step-connector {
             width: 40px;
             height: 2px;
@@ -133,6 +165,7 @@
             color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-ring);
         }
+
         .step-item.active .step-label {
             color: var(--text);
             font-weight: 600;
@@ -144,14 +177,20 @@
             border-color: var(--accent);
             color: #fff;
         }
+
         .step-item.completed .step-number::after {
             content: '✓';
             font-size: 0.7rem;
         }
-        .step-item.completed .step-number span { display: none; }
+
+        .step-item.completed .step-number span {
+            display: none;
+        }
+
         .step-item.completed .step-label {
             color: var(--text-soft);
         }
+
         .step-connector.completed {
             background: var(--accent);
         }
@@ -164,6 +203,7 @@
             margin: 24px auto 0;
             padding: 0 20px 40px;
         }
+
         .form-card {
             background: var(--bg-white);
             border: 1px solid var(--border);
@@ -171,15 +211,26 @@
             box-shadow: var(--shadow-card);
             padding: 32px 36px 28px;
         }
+
         .step-panel {
             display: none;
             animation: fadeIn 0.3s ease;
         }
-        .step-panel.active { display: block; }
+
+        .step-panel.active {
+            display: block;
+        }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .panel-title {
@@ -188,6 +239,7 @@
             font-size: 1.35rem;
             margin-bottom: 2px;
         }
+
         .panel-subtitle {
             color: var(--text-soft);
             font-size: 0.88rem;
@@ -202,17 +254,20 @@
             grid-template-columns: 1fr 1fr;
             gap: 16px;
         }
+
         .form-row-3 {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 16px;
         }
+
         .form-group {
             margin-bottom: 18px;
             display: flex;
             flex-direction: column;
             gap: 5px;
         }
+
         label {
             font-size: 0.82rem;
             font-weight: 600;
@@ -240,15 +295,24 @@
             transition: border-color var(--transition), box-shadow var(--transition);
             appearance: none;
         }
-        input:focus, select:focus, textarea:focus {
+
+        input:focus,
+        select:focus,
+        textarea:focus {
             border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-ring);
         }
-        input.error, select.error {
+
+        input.error,
+        select.error {
             border-color: var(--red);
             box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
         }
-        input::placeholder, textarea::placeholder { color: var(--text-muted); }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--text-muted);
+        }
 
         select {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239CA3AF' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
@@ -286,10 +350,12 @@
             overflow: hidden;
             transition: border-color var(--transition), box-shadow var(--transition);
         }
+
         .input-with-prefix:focus-within {
             border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-ring);
         }
+
         .input-prefix {
             padding: 10px 12px;
             background: var(--bg);
@@ -298,23 +364,42 @@
             color: var(--text-soft);
             flex-shrink: 0;
         }
+
         .input-with-prefix input {
             border: none;
             border-radius: 0;
             flex: 1;
         }
-        .input-with-prefix input:focus { box-shadow: none; }
+
+        .input-with-prefix input:focus {
+            box-shadow: none;
+        }
 
         /* Password toggle */
-        .input-with-toggle { position: relative; }
-        .input-with-toggle input { padding-right: 44px; }
+        .input-with-toggle {
+            position: relative;
+        }
+
+        .input-with-toggle input {
+            padding-right: 44px;
+        }
+
         .toggle-pw {
             position: absolute;
-            right: 12px; top: 50%; transform: translateY(-50%);
-            background: none; border: none;
-            font-size: 0.9rem; cursor: pointer; opacity: 0.5; padding: 0;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            opacity: 0.5;
+            padding: 0;
         }
-        .toggle-pw:hover { opacity: 1; }
+
+        .toggle-pw:hover {
+            opacity: 1;
+        }
 
         /* Password strength */
         .pw-strength {
@@ -324,12 +409,14 @@
             overflow: hidden;
             margin-top: 4px;
         }
+
         .pw-strength-bar {
             height: 100%;
             width: 0;
             border-radius: var(--radius-pill);
             transition: width 0.3s, background 0.3s;
         }
+
         .pw-strength-label {
             font-size: 0.7rem;
             margin-top: 2px;
@@ -344,24 +431,31 @@
             gap: 8px;
             align-items: center;
         }
+
         .tag-input-field {
             flex: 1;
         }
+
         .tag-input-field input {
             width: 100%;
         }
+
         .tag-add-btn {
-            width: 38px; height: 38px;
+            width: 38px;
+            height: 38px;
             border-radius: var(--radius-sm);
             border: 1.5px solid var(--border);
             background: var(--bg-white);
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.2rem;
             color: var(--accent);
             cursor: pointer;
             transition: all var(--transition);
             flex-shrink: 0;
         }
+
         .tag-add-btn:hover {
             border-color: var(--accent);
             background: var(--accent-light);
@@ -374,11 +468,13 @@
             margin-top: 8px;
             align-items: center;
         }
+
         .tag-suggestions .label {
             font-size: 0.78rem;
             color: var(--text-muted);
             margin-right: 2px;
         }
+
         .suggestion-chip {
             display: inline-flex;
             align-items: center;
@@ -393,15 +489,18 @@
             transition: all var(--transition);
             font-family: var(--font-body);
         }
+
         .suggestion-chip::before {
             content: '+';
             font-weight: 700;
             color: var(--accent);
         }
+
         .suggestion-chip:hover {
             background: var(--accent-light);
             color: var(--accent);
         }
+
         .suggestion-chip.added {
             background: var(--accent-light);
             color: var(--accent);
@@ -416,6 +515,7 @@
             margin-top: 8px;
             min-height: 0;
         }
+
         .tag {
             display: inline-flex;
             align-items: center;
@@ -430,20 +530,33 @@
             white-space: nowrap;
             animation: tagPop 0.2s ease;
         }
+
         @keyframes tagPop {
-            from { transform: scale(0.85); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from {
+                transform: scale(0.85);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
+
         .tag-remove {
             cursor: pointer;
             font-size: 0.85rem;
             opacity: 0.6;
-            background: none; border: none;
+            background: none;
+            border: none;
             color: var(--accent);
             padding: 0;
             font-family: var(--font-body);
         }
-        .tag-remove:hover { opacity: 1; }
+
+        .tag-remove:hover {
+            opacity: 1;
+        }
 
         /* ══════════════════════════════════════════
            CHECKBOX
@@ -456,8 +569,10 @@
             font-size: 0.85rem;
             color: var(--text-soft);
         }
+
         .checkbox-label input[type="checkbox"] {
-            width: 16px; height: 16px;
+            width: 16px;
+            height: 16px;
             flex-shrink: 0;
             accent-color: var(--accent);
             cursor: pointer;
@@ -475,7 +590,10 @@
             color: #92400E;
             margin-top: 8px;
         }
-        .tip-box strong { color: #78350F; }
+
+        .tip-box strong {
+            color: #78350F;
+        }
 
         /* ══════════════════════════════════════════
            NAVIGATION BUTTONS
@@ -488,6 +606,7 @@
             padding-top: 20px;
             border-top: 1px solid var(--border);
         }
+
         .btn-back {
             display: inline-flex;
             align-items: center;
@@ -501,9 +620,14 @@
             padding: 8px 0;
             transition: color var(--transition);
         }
-        .btn-back:hover { color: var(--accent); }
+
+        .btn-back:hover {
+            color: var(--accent);
+        }
+
         .btn-back svg {
-            width: 16px; height: 16px;
+            width: 16px;
+            height: 16px;
         }
 
         .btn-continue {
@@ -520,10 +644,24 @@
             cursor: pointer;
             transition: background var(--transition), transform 0.15s;
         }
-        .btn-continue:hover { background: var(--accent-hover); }
-        .btn-continue:active { transform: scale(0.98); }
-        .btn-continue:disabled { opacity: 0.7; pointer-events: none; }
-        .btn-continue svg { width: 16px; height: 16px; }
+
+        .btn-continue:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-continue:active {
+            transform: scale(0.98);
+        }
+
+        .btn-continue:disabled {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .btn-continue svg {
+            width: 16px;
+            height: 16px;
+        }
 
         .skip-link {
             display: block;
@@ -534,7 +672,11 @@
             cursor: pointer;
             transition: color var(--transition);
         }
-        .skip-link:hover { color: var(--text-soft); text-decoration: none; }
+
+        .skip-link:hover {
+            color: var(--text-soft);
+            text-decoration: none;
+        }
 
         /* ══════════════════════════════════════════
            SUCCESS STATE
@@ -544,17 +686,23 @@
             text-align: center;
             padding: 60px 20px;
         }
-        .success-state.show { display: block; }
+
+        .success-state.show {
+            display: block;
+        }
+
         .success-icon {
             font-size: 3rem;
             margin-bottom: 16px;
         }
+
         .success-state h2 {
             font-family: var(--font-head);
             font-size: 1.6rem;
             font-weight: 800;
             margin-bottom: 8px;
         }
+
         .success-state p {
             color: var(--text-soft);
             font-size: 0.9rem;
@@ -570,17 +718,42 @@
                 padding: 8px 16px;
                 -webkit-overflow-scrolling: touch;
             }
-            .step-label { display: none; }
-            .step-connector { width: 24px; margin: 0 6px; }
-            .form-card { padding: 24px 20px 20px; }
-            .form-row, .form-row-3 { grid-template-columns: 1fr; }
-            .page-header h1 { font-size: 1.5rem; }
+
+            .step-label {
+                display: none;
+            }
+
+            .step-connector {
+                width: 24px;
+                margin: 0 6px;
+            }
+
+            .form-card {
+                padding: 24px 20px 20px;
+            }
+
+            .form-row,
+            .form-row-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
         }
 
         @media (max-width: 480px) {
-            .page-header { padding: 24px 16px 0; }
-            .form-container { padding: 0 12px 32px; }
-            .stepper-wrap { padding: 20px 12px 0; }
+            .page-header {
+                padding: 24px 16px 0;
+            }
+
+            .form-container {
+                padding: 0 12px 32px;
+            }
+
+            .stepper-wrap {
+                padding: 20px 12px 0;
+            }
         }
     </style>
 </head>
@@ -741,7 +914,8 @@
 
                     <div class="form-group">
                         <label for="bio">Short Bio</label>
-                        <textarea id="bio" maxlength="300" placeholder="2-3 sentences about who you are and what excites you in tech."></textarea>
+                        <textarea id="bio" maxlength="300"
+                            placeholder="2-3 sentences about who you are and what excites you in tech."></textarea>
                         <div class="char-count"><span id="bioCount">0</span> / 300</div>
                     </div>
 
@@ -751,7 +925,8 @@
                             <label for="regPassword">Password</label>
                             <div class="input-with-toggle">
                                 <input type="password" id="regPassword" placeholder="Min. 8 characters" />
-                                <button type="button" class="toggle-pw" onclick="togglePassword('regPassword', this)">👁</button>
+                                <button type="button" class="toggle-pw"
+                                    onclick="togglePassword('regPassword', this)">👁</button>
                             </div>
                             <div class="pw-strength">
                                 <div class="pw-strength-bar" id="pwStrengthBar"></div>
@@ -765,7 +940,10 @@
                         <div></div>
                         <button type="button" class="btn-continue" onclick="nextStep()">
                             Continue
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
                         </button>
                     </div>
                 </div>
@@ -840,7 +1018,8 @@
                         </div>
                         <div class="form-group">
                             <label for="twelfthPercent">12th %</label>
-                            <input type="number" id="twelfthPercent" placeholder="e.g. 88" min="0" max="100" step="0.1" />
+                            <input type="number" id="twelfthPercent" placeholder="e.g. 88" min="0" max="100"
+                                step="0.1" />
                         </div>
                     </div>
 
@@ -861,12 +1040,18 @@
 
                     <div class="form-nav">
                         <button type="button" class="btn-back" onclick="prevStep()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 12H5M12 19l-7-7 7-7" />
+                            </svg>
                             Back
                         </button>
                         <button type="button" class="btn-continue" onclick="nextStep()">
                             Continue
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
                         </button>
                     </div>
                 </div>
@@ -884,22 +1069,35 @@
                             <div class="tag-input-field">
                                 <input type="text" id="skillInput" placeholder="Type and press Enter (e.g. React)" />
                             </div>
-                            <button type="button" class="tag-add-btn" onclick="addFromInput('skillInput','skills')">+</button>
+                            <button type="button" class="tag-add-btn"
+                                onclick="addFromInput('skillInput','skills')">+</button>
                         </div>
                         <div class="tag-suggestions" id="skillSuggestions">
                             <span class="label">Suggested:</span>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'skills')">JavaScript</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'skills')">TypeScript</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'skills')">Python</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'skills')">Java</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'skills')">C++</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'skills')">C</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'skills')">Go</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'skills')">Rust</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'skills')">React</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'skills')">Next.js</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'skills')">Node.js</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'skills')">Express</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'skills')">JavaScript</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'skills')">TypeScript</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'skills')">Python</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'skills')">Java</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'skills')">C++</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'skills')">C</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'skills')">Go</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'skills')">Rust</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'skills')">React</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'skills')">Next.js</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'skills')">Node.js</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'skills')">Express</button>
                         </div>
                         <div class="tags-display" id="skillTags"></div>
                         <span class="field-error" id="skillsError"></span>
@@ -911,22 +1109,35 @@
                             <div class="tag-input-field">
                                 <input type="text" id="languageInput" placeholder="Type and press Enter" />
                             </div>
-                            <button type="button" class="tag-add-btn" onclick="addFromInput('languageInput','languages')">+</button>
+                            <button type="button" class="tag-add-btn"
+                                onclick="addFromInput('languageInput','languages')">+</button>
                         </div>
                         <div class="tag-suggestions" id="languageSuggestions">
                             <span class="label">Suggested:</span>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'languages')">English</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'languages')">Hindi</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'languages')">Spanish</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'languages')">French</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'languages')">German</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'languages')">Mandarin</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'languages')">Japanese</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'languages')">Tamil</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'languages')">Telugu</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'languages')">Marathi</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'languages')">Bengali</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'languages')">Other</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'languages')">English</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'languages')">Hindi</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'languages')">Spanish</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'languages')">French</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'languages')">German</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'languages')">Mandarin</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'languages')">Japanese</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'languages')">Tamil</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'languages')">Telugu</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'languages')">Marathi</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'languages')">Bengali</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'languages')">Other</button>
                         </div>
                         <div class="tags-display" id="languageTags"></div>
                     </div>
@@ -937,29 +1148,43 @@
                             <div class="tag-input-field">
                                 <input type="text" id="certInput" placeholder="e.g. AWS Cloud Practitioner" />
                             </div>
-                            <button type="button" class="tag-add-btn" onclick="addFromInput('certInput','certifications')">+</button>
+                            <button type="button" class="tag-add-btn"
+                                onclick="addFromInput('certInput','certifications')">+</button>
                         </div>
                         <div class="tag-suggestions" id="certSuggestions">
                             <span class="label">Suggested:</span>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'certifications')">AWS Cloud Practitioner</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'certifications')">Google Data Analytics</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'certifications')">Meta Frontend</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'certifications')">Azure Fundamentals</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'certifications')">CCNA</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'certifications')">Oracle Java</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'certifications')">TensorFlow Developer</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'certifications')">AWS Cloud Practitioner</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'certifications')">Google Data Analytics</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'certifications')">Meta Frontend</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'certifications')">Azure Fundamentals</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'certifications')">CCNA</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'certifications')">Oracle Java</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'certifications')">TensorFlow Developer</button>
                         </div>
                         <div class="tags-display" id="certTags"></div>
                     </div>
 
                     <div class="form-nav">
                         <button type="button" class="btn-back" onclick="prevStep()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 12H5M12 19l-7-7 7-7" />
+                            </svg>
                             Back
                         </button>
                         <button type="button" class="btn-continue" onclick="nextStep()">
                             Continue
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
                         </button>
                     </div>
                 </div>
@@ -977,22 +1202,35 @@
                             <div class="tag-input-field">
                                 <input type="text" id="companyInput" placeholder="e.g. Google" />
                             </div>
-                            <button type="button" class="tag-add-btn" onclick="addFromInput('companyInput','companies')">+</button>
+                            <button type="button" class="tag-add-btn"
+                                onclick="addFromInput('companyInput','companies')">+</button>
                         </div>
                         <div class="tag-suggestions" id="companySuggestions">
                             <span class="label">Suggested:</span>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'companies')">Google</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'companies')">Microsoft</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'companies')">Amazon</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'companies')">Meta</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'companies')">Apple</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'companies')">Netflix</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'companies')">Adobe</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'companies')">Salesforce</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'companies')">Oracle</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'companies')">IBM</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'companies')">Atlassian</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'companies')">Stripe</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'companies')">Google</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'companies')">Microsoft</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'companies')">Amazon</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'companies')">Meta</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'companies')">Apple</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'companies')">Netflix</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'companies')">Adobe</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'companies')">Salesforce</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'companies')">Oracle</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'companies')">IBM</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'companies')">Atlassian</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'companies')">Stripe</button>
                         </div>
                         <div class="tags-display" id="companyTags"></div>
                     </div>
@@ -1003,22 +1241,35 @@
                             <div class="tag-input-field">
                                 <input type="text" id="roleInput" placeholder="e.g. Backend Engineer" />
                             </div>
-                            <button type="button" class="tag-add-btn" onclick="addFromInput('roleInput','roles')">+</button>
+                            <button type="button" class="tag-add-btn"
+                                onclick="addFromInput('roleInput','roles')">+</button>
                         </div>
                         <div class="tag-suggestions" id="roleSuggestions">
                             <span class="label">Suggested:</span>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Software Engineer (SDE)</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Frontend Engineer</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Backend Engineer</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Full Stack Engineer</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Mobile Engineer</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Data Scientist</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">ML Engineer</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">DevOps Engineer</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">SRE</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">QA Engineer</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Product Manager</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Data Analyst</button>
+                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Software
+                                Engineer (SDE)</button>
+                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Frontend
+                                Engineer</button>
+                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Backend
+                                Engineer</button>
+                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Full
+                                Stack Engineer</button>
+                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Mobile
+                                Engineer</button>
+                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Data
+                                Scientist</button>
+                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">ML
+                                Engineer</button>
+                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">DevOps
+                                Engineer</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'roles')">SRE</button>
+                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">QA
+                                Engineer</button>
+                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Product
+                                Manager</button>
+                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'roles')">Data
+                                Analyst</button>
                         </div>
                         <div class="tags-display" id="roleTags"></div>
                     </div>
@@ -1029,21 +1280,33 @@
                             <div class="tag-input-field">
                                 <input type="text" id="locationInput" placeholder="e.g. Bengaluru" />
                             </div>
-                            <button type="button" class="tag-add-btn" onclick="addFromInput('locationInput','locations')">+</button>
+                            <button type="button" class="tag-add-btn"
+                                onclick="addFromInput('locationInput','locations')">+</button>
                         </div>
                         <div class="tag-suggestions" id="locationSuggestions">
                             <span class="label">Suggested:</span>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'locations')">Bengaluru</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'locations')">Hyderabad</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'locations')">Pune</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'locations')">Mumbai</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'locations')">Chennai</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'locations')">Delhi NCR</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'locations')">Kolkata</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'locations')">Remote</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'locations')">Onsite (US)</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'locations')">Onsite (Europe)</button>
-                            <button type="button" class="suggestion-chip" onclick="addSuggestion(this,'locations')">Other</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'locations')">Bengaluru</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'locations')">Hyderabad</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'locations')">Pune</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'locations')">Mumbai</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'locations')">Chennai</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'locations')">Delhi NCR</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'locations')">Kolkata</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'locations')">Remote</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'locations')">Onsite (US)</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'locations')">Onsite (Europe)</button>
+                            <button type="button" class="suggestion-chip"
+                                onclick="addSuggestion(this,'locations')">Other</button>
                         </div>
                         <div class="tags-display" id="locationTags"></div>
                     </div>
@@ -1057,12 +1320,18 @@
 
                     <div class="form-nav">
                         <button type="button" class="btn-back" onclick="prevStep()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 12H5M12 19l-7-7 7-7" />
+                            </svg>
                             Back
                         </button>
                         <button type="button" class="btn-continue" onclick="nextStep()">
                             Continue
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
                         </button>
                     </div>
                 </div>
@@ -1097,12 +1366,16 @@
                     </div>
 
                     <div class="tip-box">
-                        <strong>Tip:</strong> Adding all four links boosts your profile completion and helps recruiters reach you faster.
+                        <strong>Tip:</strong> Adding all four links boosts your profile completion and helps recruiters
+                        reach you faster.
                     </div>
 
                     <div class="form-nav">
                         <button type="button" class="btn-back" onclick="prevStep()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 12H5M12 19l-7-7 7-7" />
+                            </svg>
                             Back
                         </button>
                         <button type="button" class="btn-continue" id="saveProfileBtn" onclick="handleSaveProfile()">
@@ -1118,332 +1391,332 @@
     </div>
 
     <script>
-    /* ══════════════════════════════════════════════════════════════
-       STATE
-    ══════════════════════════════════════════════════════════════ */
-    let currentStep = 1;
-    const totalSteps = 5;
-    const completedSteps = new Set();
-    let isGoogleUser = false; // true when user arrived via Google OAuth
+        /* ══════════════════════════════════════════════════════════════
+           STATE
+        ══════════════════════════════════════════════════════════════ */
+        let currentStep = 1;
+        const totalSteps = 5;
+        const completedSteps = new Set();
+        let isGoogleUser = false; // true when user arrived via Google OAuth
 
-    function updateStepper() {
-        for (let i = 1; i <= totalSteps; i++) {
-            const stepEl = document.querySelector(`.step-item[data-step="${i}"]`);
-            const connectorEl = document.querySelector(`.step-connector[data-connector="${i}"]`);
-            stepEl.classList.remove('active', 'completed');
+        function updateStepper() {
+            for (let i = 1; i <= totalSteps; i++) {
+                const stepEl = document.querySelector(`.step-item[data-step="${i}"]`);
+                const connectorEl = document.querySelector(`.step-connector[data-connector="${i}"]`);
+                stepEl.classList.remove('active', 'completed');
 
-            if (i === currentStep) {
-                stepEl.classList.add('active');
-            } else if (completedSteps.has(i)) {
-                stepEl.classList.add('completed');
+                if (i === currentStep) {
+                    stepEl.classList.add('active');
+                } else if (completedSteps.has(i)) {
+                    stepEl.classList.add('completed');
+                }
+
+                if (connectorEl) {
+                    connectorEl.classList.toggle('completed', completedSteps.has(i));
+                }
             }
 
-            if (connectorEl) {
-                connectorEl.classList.toggle('completed', completedSteps.has(i));
+            // Show/hide panels
+            document.querySelectorAll('.step-panel').forEach(panel => {
+                panel.classList.toggle('active', panel.dataset.panel == currentStep);
+            });
+        }
+
+        function nextStep() {
+            if (currentStep === 1 && !validateStep1()) return;
+            completedSteps.add(currentStep);
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateStepper();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
-        // Show/hide panels
-        document.querySelectorAll('.step-panel').forEach(panel => {
-            panel.classList.toggle('active', panel.dataset.panel == currentStep);
-        });
-    }
-
-    function nextStep() {
-        if (currentStep === 1 && !validateStep1()) return;
-        completedSteps.add(currentStep);
-        if (currentStep < totalSteps) {
-            currentStep++;
-            updateStepper();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepper();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
-    }
 
-    function prevStep() {
-        if (currentStep > 1) {
-            currentStep--;
-            updateStepper();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        function goToStep(step) {
+            // Allow going to any completed step or the next uncompleted step
+            if (step <= currentStep || completedSteps.has(step) || step === Math.max(...completedSteps) + 1 || completedSteps.has(step - 1)) {
+                if (currentStep === 1 && step > 1 && !validateStep1()) return;
+                currentStep = step;
+                updateStepper();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
-    }
 
-    function goToStep(step) {
-        // Allow going to any completed step or the next uncompleted step
-        if (step <= currentStep || completedSteps.has(step) || step === Math.max(...completedSteps) + 1 || completedSteps.has(step - 1)) {
-            if (currentStep === 1 && step > 1 && !validateStep1()) return;
-            currentStep = step;
-            updateStepper();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        /* ══════════════════════════════════════════════════════════════
+           VALIDATION
+        ══════════════════════════════════════════════════════════════ */
+        function showError(inputId, errorId, message) {
+            const input = document.getElementById(inputId);
+            const errorEl = document.getElementById(errorId);
+            if (input) input.classList.add('error');
+            if (errorEl) errorEl.textContent = message;
         }
-    }
 
-    /* ══════════════════════════════════════════════════════════════
-       VALIDATION
-    ══════════════════════════════════════════════════════════════ */
-    function showError(inputId, errorId, message) {
-        const input = document.getElementById(inputId);
-        const errorEl = document.getElementById(errorId);
-        if (input) input.classList.add('error');
-        if (errorEl) errorEl.textContent = message;
-    }
-
-    function clearError(inputId, errorId) {
-        const input = document.getElementById(inputId);
-        const errorEl = document.getElementById(errorId);
-        if (input) input.classList.remove('error');
-        if (errorEl) errorEl.textContent = '';
-    }
-
-    function validateEmail(email) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-
-    function validateStep1() {
-        let valid = true;
-        ['firstName', 'lastName', 'regEmail', 'phone', 'regPassword'].forEach(id => clearError(id, id + 'Error'));
-
-        const firstName = document.getElementById('firstName').value.trim();
-        const lastName = document.getElementById('lastName').value.trim();
-        const email = document.getElementById('regEmail').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const password = document.getElementById('regPassword').value;
-
-        if (!firstName) { showError('firstName', 'firstNameError', 'First name is required.'); valid = false; }
-        if (!lastName) { showError('lastName', 'lastNameError', 'Last name is required.'); valid = false; }
-        if (!email) { showError('regEmail', 'regEmailError', 'Email is required.'); valid = false; }
-        else if (!validateEmail(email)) { showError('regEmail', 'regEmailError', 'Enter a valid email.'); valid = false; }
-        // Phone is optional for Google users but still validate format if provided
-        if (!isGoogleUser && (!phone || !/^\d{10}$/.test(phone))) { showError('phone', 'phoneError', 'Enter a valid 10-digit number.'); valid = false; }
-        if (phone && !/^\d{10}$/.test(phone)) { showError('phone', 'phoneError', 'Enter a valid 10-digit number.'); valid = false; }
-        // Password not required for Google OAuth users
-        if (!isGoogleUser && (!password || password.length < 8)) { showError('regPassword', 'regPasswordError', 'Password must be at least 8 characters.'); valid = false; }
-
-        return valid;
-    }
-
-    /* ══════════════════════════════════════════════════════════════
-       PASSWORD
-    ══════════════════════════════════════════════════════════════ */
-    function togglePassword(inputId, btn) {
-        const input = document.getElementById(inputId);
-        if (!input) return;
-        if (input.type === 'password') {
-            input.type = 'text'; btn.textContent = '🙈';
-        } else {
-            input.type = 'password'; btn.textContent = '👁';
+        function clearError(inputId, errorId) {
+            const input = document.getElementById(inputId);
+            const errorEl = document.getElementById(errorId);
+            if (input) input.classList.remove('error');
+            if (errorEl) errorEl.textContent = '';
         }
-    }
 
-    function initPasswordStrength() {
-        const input = document.getElementById('regPassword');
-        if (!input) return;
-        input.addEventListener('input', function () {
-            let score = 0;
-            if (this.value.length >= 8) score++;
-            if (/[A-Z]/.test(this.value)) score++;
-            if (/[0-9]/.test(this.value)) score++;
-            if (/[^A-Za-z0-9]/.test(this.value)) score++;
-            const levels = [
-                { width: '0%', color: '', text: '' },
-                { width: '25%', color: '#EF4444', text: 'Weak' },
-                { width: '50%', color: '#F59E0B', text: 'Fair' },
-                { width: '75%', color: '#3B82F6', text: 'Good' },
-                { width: '100%', color: '#22C55E', text: 'Strong ✓' },
-            ];
-            const bar = document.getElementById('pwStrengthBar');
-            const label = document.getElementById('pwStrengthLabel');
-            if (bar) { bar.style.width = levels[score].width; bar.style.background = levels[score].color; }
-            if (label) { label.textContent = levels[score].text; label.style.color = levels[score].color; }
-        });
-    }
-
-    /* ══════════════════════════════════════════════════════════════
-       TAG INPUT SYSTEM
-    ══════════════════════════════════════════════════════════════ */
-    const tagData = {
-        skills: [],
-        languages: [],
-        certifications: [],
-        companies: [],
-        roles: [],
-        locations: []
-    };
-
-    const tagDisplayMap = {
-        skills: 'skillTags',
-        languages: 'languageTags',
-        certifications: 'certTags',
-        companies: 'companyTags',
-        roles: 'roleTags',
-        locations: 'locationTags'
-    };
-
-    function addTag(value, key) {
-        if (!value || tagData[key].some(t => t.toLowerCase() === value.toLowerCase())) return;
-        tagData[key].push(value);
-        renderTags(key);
-        updateSuggestionStates(key);
-    }
-
-    function removeTag(value, key) {
-        tagData[key] = tagData[key].filter(t => t !== value);
-        renderTags(key);
-        updateSuggestionStates(key);
-    }
-
-    function renderTags(key) {
-        const container = document.getElementById(tagDisplayMap[key]);
-        if (!container) return;
-        container.innerHTML = tagData[key].map(value =>
-            `<span class="tag">${value}<button class="tag-remove" type="button" onclick="removeTag('${value.replace(/'/g, "\\'")}','${key}')">×</button></span>`
-        ).join('');
-    }
-
-    function addFromInput(inputId, key) {
-        const input = document.getElementById(inputId);
-        if (!input) return;
-        const value = input.value.trim();
-        if (value) {
-            addTag(value, key);
-            input.value = '';
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         }
-        input.focus();
-    }
 
-    function addSuggestion(btn, key) {
-        const value = btn.textContent.trim();
-        addTag(value, key);
-    }
+        function validateStep1() {
+            let valid = true;
+            ['firstName', 'lastName', 'regEmail', 'phone', 'regPassword'].forEach(id => clearError(id, id + 'Error'));
 
-    function updateSuggestionStates(key) {
-        const suggestionMap = {
-            skills: 'skillSuggestions',
-            languages: 'languageSuggestions',
-            certifications: 'certSuggestions',
-            companies: 'companySuggestions',
-            roles: 'roleSuggestions',
-            locations: 'locationSuggestions'
-        };
-        const container = document.getElementById(suggestionMap[key]);
-        if (!container) return;
-        container.querySelectorAll('.suggestion-chip').forEach(chip => {
-            const val = chip.textContent.trim();
-            chip.classList.toggle('added', tagData[key].some(t => t.toLowerCase() === val.toLowerCase()));
-        });
-    }
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('regPassword').value;
 
-    function initTagInputListeners() {
-        const inputMap = {
-            'skillInput': 'skills',
-            'languageInput': 'languages',
-            'certInput': 'certifications',
-            'companyInput': 'companies',
-            'roleInput': 'roles',
-            'locationInput': 'locations'
-        };
-        Object.entries(inputMap).forEach(([inputId, key]) => {
+            if (!firstName) { showError('firstName', 'firstNameError', 'First name is required.'); valid = false; }
+            if (!lastName) { showError('lastName', 'lastNameError', 'Last name is required.'); valid = false; }
+            if (!email) { showError('regEmail', 'regEmailError', 'Email is required.'); valid = false; }
+            else if (!validateEmail(email)) { showError('regEmail', 'regEmailError', 'Enter a valid email.'); valid = false; }
+            // Phone is optional for Google users but still validate format if provided
+            if (!isGoogleUser && (!phone || !/^\d{10}$/.test(phone))) { showError('phone', 'phoneError', 'Enter a valid 10-digit number.'); valid = false; }
+            if (phone && !/^\d{10}$/.test(phone)) { showError('phone', 'phoneError', 'Enter a valid 10-digit number.'); valid = false; }
+            // Password not required for Google OAuth users
+            if (!isGoogleUser && (!password || password.length < 8)) { showError('regPassword', 'regPasswordError', 'Password must be at least 8 characters.'); valid = false; }
+
+            return valid;
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           PASSWORD
+        ══════════════════════════════════════════════════════════════ */
+        function togglePassword(inputId, btn) {
             const input = document.getElementById(inputId);
             if (!input) return;
-            input.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter' || e.key === ',') {
-                    e.preventDefault();
-                    const value = this.value.replace(',', '').trim();
-                    if (value) addTag(value, key);
-                    this.value = '';
-                }
-            });
-        });
-    }
+            if (input.type === 'password') {
+                input.type = 'text'; btn.textContent = '🙈';
+            } else {
+                input.type = 'password'; btn.textContent = '👁';
+            }
+        }
 
-    /* ══════════════════════════════════════════════════════════════
-       BIO CHAR COUNT
-    ══════════════════════════════════════════════════════════════ */
-    function initBioCounter() {
-        const bio = document.getElementById('bio');
-        const count = document.getElementById('bioCount');
-        if (!bio || !count) return;
-        bio.addEventListener('input', () => {
-            count.textContent = bio.value.length;
-        });
-    }
-
-    /* ══════════════════════════════════════════════════════════════
-       CLEAR ERRORS ON TYPE
-    ══════════════════════════════════════════════════════════════ */
-    function initClearErrors() {
-        document.querySelectorAll('input, select, textarea').forEach(input => {
+        function initPasswordStrength() {
+            const input = document.getElementById('regPassword');
+            if (!input) return;
             input.addEventListener('input', function () {
-                this.classList.remove('error');
-                const group = this.closest('.form-group');
-                if (group) {
-                    const err = group.querySelector('.field-error');
-                    if (err) err.textContent = '';
-                }
+                let score = 0;
+                if (this.value.length >= 8) score++;
+                if (/[A-Z]/.test(this.value)) score++;
+                if (/[0-9]/.test(this.value)) score++;
+                if (/[^A-Za-z0-9]/.test(this.value)) score++;
+                const levels = [
+                    { width: '0%', color: '', text: '' },
+                    { width: '25%', color: '#EF4444', text: 'Weak' },
+                    { width: '50%', color: '#F59E0B', text: 'Fair' },
+                    { width: '75%', color: '#3B82F6', text: 'Good' },
+                    { width: '100%', color: '#22C55E', text: 'Strong ✓' },
+                ];
+                const bar = document.getElementById('pwStrengthBar');
+                const label = document.getElementById('pwStrengthLabel');
+                if (bar) { bar.style.width = levels[score].width; bar.style.background = levels[score].color; }
+                if (label) { label.textContent = levels[score].text; label.style.color = levels[score].color; }
             });
-        });
-    }
+        }
 
-    /* ══════════════════════════════════════════════════════════════
-       SAVE / REGISTER
-    ══════════════════════════════════════════════════════════════ */
-    async function handleSaveProfile() {
-        const btn = document.getElementById('saveProfileBtn');
-        btn.textContent = 'Saving...';
-        btn.disabled = true;
-
-        const payload = {
-            // Step 1 - Personal Info
-            firstName: document.getElementById('firstName').value.trim(),
-            lastName: document.getElementById('lastName').value.trim(),
-            phone: document.getElementById('phone').value.trim() || undefined,
-            gender: document.getElementById('gender').value || undefined,
-            dob: document.getElementById('dob').value || undefined,
-            city: document.getElementById('city').value.trim() || undefined,
-            state: document.getElementById('state').value || undefined,
-            country: document.getElementById('country').value || undefined,
-            bio: document.getElementById('bio').value.trim() || undefined,
-
-            // Step 2 - Education
-            college: document.getElementById('college').value.trim() || undefined,
-            branch: document.getElementById('branch').value || undefined,
-            year: document.getElementById('year').value || undefined,
-            cgpa: document.getElementById('cgpa').value ? parseFloat(document.getElementById('cgpa').value) : undefined,
-            graduationYear: document.getElementById('graduationYear').value ? parseInt(document.getElementById('graduationYear').value) : undefined,
-            tenthPercent: document.getElementById('tenthPercent').value ? parseFloat(document.getElementById('tenthPercent').value) : undefined,
-            twelfthPercent: document.getElementById('twelfthPercent').value ? parseFloat(document.getElementById('twelfthPercent').value) : undefined,
-            activeBacklogs: parseInt(document.getElementById('activeBacklogs').value) || 0,
-            internships: parseInt(document.getElementById('internships').value) || 0,
-            projects: parseInt(document.getElementById('projects').value) || 0,
-
-            // Step 3 - Skills & Languages
-            skills: tagData.skills.length ? tagData.skills : undefined,
-            languages: tagData.languages.length ? tagData.languages : undefined,
-            certifications: tagData.certifications.length ? tagData.certifications : undefined,
-
-            // Step 4 - Career Goals
-            targetCompanies: tagData.companies.length ? tagData.companies : undefined,
-            preferredRoles: tagData.roles.length ? tagData.roles : undefined,
-            preferredLocations: tagData.locations.length ? tagData.locations : undefined,
-            openToRelocate: document.getElementById('openToRelocate').checked,
-
-            // Step 5 - Online Presence
-            linkedin: document.getElementById('linkedin').value.trim() || undefined,
-            github: document.getElementById('github').value.trim() || undefined,
-            portfolio: document.getElementById('portfolio').value.trim() || undefined,
-            leetcode: document.getElementById('leetcode').value.trim() || undefined,
+        /* ══════════════════════════════════════════════════════════════
+           TAG INPUT SYSTEM
+        ══════════════════════════════════════════════════════════════ */
+        const tagData = {
+            skills: [],
+            languages: [],
+            certifications: [],
+            companies: [],
+            roles: [],
+            locations: []
         };
 
-        try {
-            let response;
+        const tagDisplayMap = {
+            skills: 'skillTags',
+            languages: 'languageTags',
+            certifications: 'certTags',
+            companies: 'companyTags',
+            roles: 'roleTags',
+            locations: 'locationTags'
+        };
 
-            if (isGoogleUser) {
-                // Google OAuth user — update existing profile via PUT
-                const token = localStorage.getItem('nextern_token');
-                response = await fetch(`${window.API_BASE || 'http://localhost:4000'}/api/user/me', {
+        function addTag(value, key) {
+            if (!value || tagData[key].some(t => t.toLowerCase() === value.toLowerCase())) return;
+            tagData[key].push(value);
+            renderTags(key);
+            updateSuggestionStates(key);
+        }
+
+        function removeTag(value, key) {
+            tagData[key] = tagData[key].filter(t => t !== value);
+            renderTags(key);
+            updateSuggestionStates(key);
+        }
+
+        function renderTags(key) {
+            const container = document.getElementById(tagDisplayMap[key]);
+            if (!container) return;
+            container.innerHTML = tagData[key].map(value =>
+                `<span class="tag">${value}<button class="tag-remove" type="button" onclick="removeTag('${value.replace(/'/g, "\\'")}','${key}')">×</button></span>`
+            ).join('');
+        }
+
+        function addFromInput(inputId, key) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            const value = input.value.trim();
+            if (value) {
+                addTag(value, key);
+                input.value = '';
+            }
+            input.focus();
+        }
+
+        function addSuggestion(btn, key) {
+            const value = btn.textContent.trim();
+            addTag(value, key);
+        }
+
+        function updateSuggestionStates(key) {
+            const suggestionMap = {
+                skills: 'skillSuggestions',
+                languages: 'languageSuggestions',
+                certifications: 'certSuggestions',
+                companies: 'companySuggestions',
+                roles: 'roleSuggestions',
+                locations: 'locationSuggestions'
+            };
+            const container = document.getElementById(suggestionMap[key]);
+            if (!container) return;
+            container.querySelectorAll('.suggestion-chip').forEach(chip => {
+                const val = chip.textContent.trim();
+                chip.classList.toggle('added', tagData[key].some(t => t.toLowerCase() === val.toLowerCase()));
+            });
+        }
+
+        function initTagInputListeners() {
+            const inputMap = {
+                'skillInput': 'skills',
+                'languageInput': 'languages',
+                'certInput': 'certifications',
+                'companyInput': 'companies',
+                'roleInput': 'roles',
+                'locationInput': 'locations'
+            };
+            Object.entries(inputMap).forEach(([inputId, key]) => {
+                const input = document.getElementById(inputId);
+                if (!input) return;
+                input.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ',') {
+                        e.preventDefault();
+                        const value = this.value.replace(',', '').trim();
+                        if (value) addTag(value, key);
+                        this.value = '';
+                    }
+                });
+            });
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           BIO CHAR COUNT
+        ══════════════════════════════════════════════════════════════ */
+        function initBioCounter() {
+            const bio = document.getElementById('bio');
+            const count = document.getElementById('bioCount');
+            if (!bio || !count) return;
+            bio.addEventListener('input', () => {
+                count.textContent = bio.value.length;
+            });
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           CLEAR ERRORS ON TYPE
+        ══════════════════════════════════════════════════════════════ */
+        function initClearErrors() {
+            document.querySelectorAll('input, select, textarea').forEach(input => {
+                input.addEventListener('input', function () {
+                    this.classList.remove('error');
+                    const group = this.closest('.form-group');
+                    if (group) {
+                        const err = group.querySelector('.field-error');
+                        if (err) err.textContent = '';
+                    }
+                });
+            });
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           SAVE / REGISTER
+        ══════════════════════════════════════════════════════════════ */
+        async function handleSaveProfile() {
+            const btn = document.getElementById('saveProfileBtn');
+            btn.textContent = 'Saving...';
+            btn.disabled = true;
+
+            const payload = {
+                // Step 1 - Personal Info
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                phone: document.getElementById('phone').value.trim() || undefined,
+                gender: document.getElementById('gender').value || undefined,
+                dob: document.getElementById('dob').value || undefined,
+                city: document.getElementById('city').value.trim() || undefined,
+                state: document.getElementById('state').value || undefined,
+                country: document.getElementById('country').value || undefined,
+                bio: document.getElementById('bio').value.trim() || undefined,
+
+                // Step 2 - Education
+                college: document.getElementById('college').value.trim() || undefined,
+                branch: document.getElementById('branch').value || undefined,
+                year: document.getElementById('year').value || undefined,
+                cgpa: document.getElementById('cgpa').value ? parseFloat(document.getElementById('cgpa').value) : undefined,
+                graduationYear: document.getElementById('graduationYear').value ? parseInt(document.getElementById('graduationYear').value) : undefined,
+                tenthPercent: document.getElementById('tenthPercent').value ? parseFloat(document.getElementById('tenthPercent').value) : undefined,
+                twelfthPercent: document.getElementById('twelfthPercent').value ? parseFloat(document.getElementById('twelfthPercent').value) : undefined,
+                activeBacklogs: parseInt(document.getElementById('activeBacklogs').value) || 0,
+                internships: parseInt(document.getElementById('internships').value) || 0,
+                projects: parseInt(document.getElementById('projects').value) || 0,
+
+                // Step 3 - Skills & Languages
+                skills: tagData.skills.length ? tagData.skills : undefined,
+                languages: tagData.languages.length ? tagData.languages : undefined,
+                certifications: tagData.certifications.length ? tagData.certifications : undefined,
+
+                // Step 4 - Career Goals
+                targetCompanies: tagData.companies.length ? tagData.companies : undefined,
+                preferredRoles: tagData.roles.length ? tagData.roles : undefined,
+                preferredLocations: tagData.locations.length ? tagData.locations : undefined,
+                openToRelocate: document.getElementById('openToRelocate').checked,
+
+                // Step 5 - Online Presence
+                linkedin: document.getElementById('linkedin').value.trim() || undefined,
+                github: document.getElementById('github').value.trim() || undefined,
+                portfolio: document.getElementById('portfolio').value.trim() || undefined,
+                leetcode: document.getElementById('leetcode').value.trim() || undefined,
+            };
+
+            try {
+                let response;
+
+                if (isGoogleUser) {
+                    // Google OAuth user — update existing profile via PUT
+                    const token = localStorage.getItem('nextern_token');
+                    response = await fetch(`${window.API_BASE || 'https://nextern-production.up.railway.app'}/api/user/me', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${ token }`
                     },
                     body: JSON.stringify(payload)
                 });
@@ -1451,10 +1724,10 @@
                 // New email/password user — register via POST
                 payload.email = document.getElementById('regEmail').value.trim();
                 payload.password = document.getElementById('regPassword').value;
-                response = await fetch(`${window.API_BASE || 'http://localhost:4000'}/api/auth/register', {
+                response = await fetch(`${ window.API_BASE || 'https://nextern-production.up.railway.app' } / api / auth / register', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
                 });
             }
 
@@ -1486,44 +1759,44 @@
         }
     }
 
-    /* ══════════════════════════════════════════════════════════════
-       GOOGLE OAUTH BOOTSTRAP
-       Detects token from URL (from Google OAuth redirect),
-       fetches user data, pre-fills the form, and hides password.
-    ══════════════════════════════════════════════════════════════ */
-    async function bootstrap() {
-        const url = new URL(window.location.href);
-        const tokenFromUrl = url.searchParams.get('token');
-        const nameFromUrl = url.searchParams.get('name');
+        /* ══════════════════════════════════════════════════════════════
+           GOOGLE OAUTH BOOTSTRAP
+           Detects token from URL (from Google OAuth redirect),
+           fetches user data, pre-fills the form, and hides password.
+        ══════════════════════════════════════════════════════════════ */
+        async function bootstrap() {
+            const url = new URL(window.location.href);
+            const tokenFromUrl = url.searchParams.get('token');
+            const nameFromUrl = url.searchParams.get('name');
 
-        if (!tokenFromUrl) return; // Normal registration — no bootstrap needed
+            if (!tokenFromUrl) return; // Normal registration — no bootstrap needed
 
-        // Store token and clean URL
-        localStorage.setItem('nextern_token', tokenFromUrl);
-        if (nameFromUrl) {
-            localStorage.setItem('nextern_name', decodeURIComponent(nameFromUrl));
-        }
-        window.history.replaceState({}, '', window.location.pathname);
+            // Store token and clean URL
+            localStorage.setItem('nextern_token', tokenFromUrl);
+            if (nameFromUrl) {
+                localStorage.setItem('nextern_name', decodeURIComponent(nameFromUrl));
+            }
+            window.history.replaceState({}, '', window.location.pathname);
 
-        // Mark as Google user
-        isGoogleUser = true;
+            // Mark as Google user
+            isGoogleUser = true;
 
-        // Hide password section (Google users don't need a password)
-        const pwSection = document.getElementById('passwordSection');
-        if (pwSection) pwSection.style.display = 'none';
+            // Hide password section (Google users don't need a password)
+            const pwSection = document.getElementById('passwordSection');
+            if (pwSection) pwSection.style.display = 'none';
 
-        // Make email field readonly (already set via Google)
-        const emailField = document.getElementById('regEmail');
-        if (emailField) {
-            emailField.style.background = '#f3f4f6';
-            emailField.style.color = '#6B7280';
-            emailField.readOnly = true;
-        }
+            // Make email field readonly (already set via Google)
+            const emailField = document.getElementById('regEmail');
+            if (emailField) {
+                emailField.style.background = '#f3f4f6';
+                emailField.style.color = '#6B7280';
+                emailField.readOnly = true;
+            }
 
-        // Fetch user data from server
-        try {
-            const response = await fetch(`${window.API_BASE || 'http://localhost:4000'}/api/user/me', {
-                headers: { 'Authorization': `Bearer ${tokenFromUrl}` }
+            // Fetch user data from server
+            try {
+                const response = await fetch(`${window.API_BASE || 'http://localhost:4000'}/api/user/me', {
+                headers: { 'Authorization': `Bearer ${ tokenFromUrl }` }
             });
             const data = await response.json();
 
