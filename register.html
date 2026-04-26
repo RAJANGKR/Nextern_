@@ -1712,7 +1712,7 @@
                 if (isGoogleUser) {
                     // Google OAuth user — update existing profile via PUT
                     const token = localStorage.getItem('nextern_token');
-                    response = await fetch(`${window.API_BASE || 'https://nextern-production.up.railway.app'}/api/user/me', {
+                    response = await fetch(`${window.API_BASE || 'https://nextern-production.up.railway.app'}/api/user/me`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1795,7 +1795,7 @@
 
             // Fetch user data from server
             try {
-                const response = await fetch(`${window.API_BASE || 'https://nextern-production.up.railway.app'}/api/user/me', {
+                const response = await fetch(`${window.API_BASE || 'https://nextern-production.up.railway.app'}/api/user/me`, {
                 headers: { 'Authorization': `Bearer ${ tokenFromUrl }` }
             });
             const data = await response.json();
