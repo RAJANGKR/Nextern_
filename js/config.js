@@ -2,6 +2,29 @@ const CONFIG = {
   API_BASE: 'https://nextern-production.up.railway.app'
 };
 
+// Global utilities for API communication
+window.API_BASE = CONFIG.API_BASE;
+
+window.getAuthHeaders = function() {
+    const token = localStorage.getItem('nextern_token');
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+};
+
+window.syncLocalStorage = function(user) {
+    if (!user) return;
+    localStorage.setItem('nextern_user', JSON.stringify(user));
+    localStorage.setItem('nextern_name', user.firstName + ' ' + (user.lastName || ''));
+    if (user.role) localStorage.setItem('nextern_role', user.role);
+};
+
+window.handleLogout = function() {
+    localStorage.clear();
+    window.location.href = window.location.pathname.includes('/pages/') ? '../login.html' : 'login.html';
+};
+
 function showToast(message, type = 'success', duration = 3000) {
   const existing = document.getElementById('nextern-toast');
   if (existing) existing.remove();
