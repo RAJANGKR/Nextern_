@@ -207,6 +207,7 @@
         .resource-link:hover { color: #6C63FF; }
         .resource-link:last-child { border-bottom: none; }
     </style>
+    <script src="../js/config.js"></script>
     <script src="../js/theme.js"></script>
     <link rel="stylesheet" href="../css/dark-mode.css">
 </head>
@@ -498,7 +499,7 @@
                 try {
                     const u = JSON.parse(localStorage.getItem('nextern_user'));
                     if (u && u._id) {
-                        const res = await fetch(`${window.API_BASE || "https://nextern-production.up.railway.app"}/api/progress/${u._id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+                        const res = await fetch(`${CONFIG.API_BASE}/api/progress/${u._id}`, { headers: { 'Authorization': `Bearer ${token}` } });
                         const data = await res.json();
                         if (data.success && data.completedTopics) {
                             data.completedTopics.forEach(t => {
@@ -632,7 +633,7 @@
             const token = localStorage.getItem('nextern_token');
             if (token) {
                 try {
-                    await fetch(`${window.API_BASE || 'https://nextern-production.up.railway.app'}/api/progress/toggle', {
+                    await fetch(`${CONFIG.API_BASE}/api/progress/toggle`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                         body: JSON.stringify({ topicCode: key })
@@ -658,7 +659,7 @@
                     if (token) {
                         try {
                             // Sync silently
-                            fetch(`${window.API_BASE || 'https://nextern-production.up.railway.app'}/api/progress/toggle', {
+                            fetch(`${CONFIG.API_BASE}/api/progress/toggle`, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                                 body: JSON.stringify({ topicCode: key })
@@ -707,8 +708,13 @@
             const subProgressList = Object.entries(SUBJECTS).map(([key, data]) => {
                 let total = 0;
                 let done = 0;
-                Object.values(data.topics).flat().forEach(t => { total++; if (localStorage.getItem(`nextern_prep_${key}_${t.name}`) === 'true') done++; });
-                const pct = Math.round((done / total) * 100);
+                Object.values(data.topics).flat().forEach(t => {
+                    t.subtopics.forEach(st => {
+                        total++;
+                        if (localStorage.getItem(`nextern_prep_${key}_${t.name}_${st}`) === 'true') done++;
+                    });
+                });
+                const pct = total ? Math.round((done / total) * 100) : 0;
                 return { key, pct };
             });
 
@@ -726,15 +732,22 @@
         function updateOverallProgress() {
             let totalTopics = 0;
             let doneTopics = 0;
+            let totalSubtopics = 0;
+            let doneSubtopics = 0;
 
             Object.entries(SUBJECTS).forEach(([key, data]) => {
                 Object.values(data.topics).flat().forEach(t => {
                     totalTopics++;
-                    if (localStorage.getItem(`nextern_prep_${key}_${t.name}`) === 'true') doneTopics++;
+                    if (isMainTopicDone(key, t)) doneTopics++;
+                    
+                    t.subtopics.forEach(st => {
+                        totalSubtopics++;
+                        if (localStorage.getItem(`nextern_prep_${key}_${t.name}_${st}`) === 'true') doneSubtopics++;
+                    });
                 });
             });
 
-            const pct = Math.round((doneTopics / totalTopics) * 100);
+            const pct = totalSubtopics ? Math.round((doneSubtopics / totalSubtopics) * 100) : 0;
             const offset = 251.2 - (251.2 * pct) / 100;
 
             document.getElementById('totalDone').textContent = doneTopics;
