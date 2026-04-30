@@ -4,30 +4,30 @@ Nextern is a professional, all-in-one platform designed to help students track t
 
 ![Nextern Preview](assets/preview.png)
 
-## 🚀 Key Features
+## <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Key Features
 
-### 📡 Prep Hub (Placement Prep Tracker)
+### <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg> Prep Hub (Placement Prep Tracker)
 - **Granular Progress**: Track your progress in DSA, DBMS, OS, Computer Networks, and OOPs.
 - **Sub-task Level Tracking**: See real-time readiness updates as you complete individual sub-topics.
 - **Subject Bars**: Visual progress bars for each subject to keep you motivated.
 
-### 📰 Activity Feed
+### <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Activity Feed
 - Stay updated with placement news, tips from peers, and system announcements.
 - Interactive posts with likes, comments, and role-based filtering.
 
-### 🏢 Placement Drives
+### <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Placement Drives
 - Discover and apply to active recruitment drives.
 - Filter by branch, year, and eligibility criteria.
 
-### 🗺️ AI-Powered Roadmap
+### <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg> AI-Powered Roadmap
 - Generate personalized, week-by-week study plans based on your target company and role.
 - Track your journey from beginner to interview-ready.
 
-### 📄 Resume Analyzer
+### <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Resume Analyzer
 - Intelligent feedback on your resume to help you stand out to recruiters.
 - Suggestions for improvement based on industry standards.
 
-## 🛠️ Technology Stack
+## <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20M7 7h10v10H7z"/></svg> Technology Stack
 
 - **Frontend**: HTML5, CSS3 (Modern UI with Glassmorphism), Vanilla JavaScript
 - **Backend**: Node.js, Express.js
@@ -35,81 +35,13 @@ Nextern is a professional, all-in-one platform designed to help students track t
 - **Authentication**: JWT, Google OAuth 2.0
 - **Styling**: Syne & DM Sans typography, Custom CSS variables for theme management
 
-## 📦 Recent Updates
+## <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg> Recent Updates
 
 - **Fixed Prep Hub Sync**: Resolved database synchronization issues and improved progress granularity.
 - **Global Auth Utilities**: Implemented centralized `getAuthHeaders`, `syncLocalStorage`, and `handleLogout` for robust session management.
 - **UI Polishing**: Enhanced the Profile and Dashboard layouts for a premium user experience.
 
-- ## 🏗️ Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        CLIENT (Vercel)                       │
-│                                                              │
-│  HTML5 + CSS3 + Vanilla JavaScript                          │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐       │
-│  │Dashboard │ │ Prep Hub │ │  Drives  │ │  Roadmap │  ...  │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────┘       │
-│                                                              │
-│  auth.js  │  config.js  │  sidebar.js  │  theme.js          │
-└─────────────────────────┬───────────────────────────────────┘
-                          │ HTTPS / REST API
-┌─────────────────────────▼───────────────────────────────────┐
-│                   BACKEND (Railway)                          │
-│                                                              │
-│  Node.js 18+ · Express.js · Helmet · Passport.js            │
-│                                                              │
-│  ┌──────────────────────────────────────────────────┐        │
-│  │               API Routes (/api/*)                │        │
-│  │  auth │ user │ prep │ drives │ roadmap │ posts   │        │
-│  │  analyze │ notifications │ progress │ analytics  │        │
-│  │  applications │ admin                            │        │
-│  └───────────────────┬──────────────────────────────┘        │
-│                      │                                       │
-│  ┌────────────┐  ┌───▼────────┐  ┌──────────────────────┐  │
-│  │ Middleware │  │  Services  │  │  Schedulers (cron)   │  │
-│  │ ─ protect  │  │ ─ Gemini   │  │  ─ Drive scraper     │  │
-│  │ ─ adminOnly│  │ ─ Claude   │  │  ─ Post seeder       │  │
-│  └────────────┘  └────────────┘  └──────────────────────┘  │
-└─────────────────────────┬───────────────────────────────────┘
-                          │ Mongoose ODM
-┌─────────────────────────▼───────────────────────────────────┐
-│                   DATABASE (MongoDB Atlas)                    │
-│                                                              │
-│  Users · Topics · TopicProgress · Posts · Drives            │
-│  Applications · Notifications · Analysis · AdminLogs        │
-└─────────────────────────────────────────────────────────────┘
-                          │
-           ┌──────────────┼──────────────┐
-           ▼              ▼              ▼
-     Google Gemini   Anthropic       OpenAI
-     (Roadmap &      Claude          (fallback)
-      Analysis)      (Analysis)
-```
-
----
-
-## 🛠️ Technology Stack
-
-| Layer | Technology |
-|---|---|
-| **Frontend** | HTML5, CSS3 (Glassmorphism, CSS Variables), Vanilla JavaScript |
-| **Typography** | Syne, DM Sans (Google Fonts) |
-| **Backend** | Node.js 18+, Express.js 4 |
-| **Database** | MongoDB, Mongoose ODM |
-| **Authentication** | JWT (jsonwebtoken), Google OAuth 2.0 (Passport.js) |
-| **AI / LLM** | Google Gemini, Anthropic Claude, OpenAI |
-| **Security** | Helmet, bcryptjs, CORS |
-| **File Processing** | Multer (upload), pdf-parse (resume parsing) |
-| **Web Scraping** | Axios, Cheerio |
-| **Scheduling** | node-cron |
-| **Frontend Deployment** | Vercel |
-| **Backend Deployment** | Railway |
-
----
-
-## 🚦 Getting Started
+## <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Getting Started
 
 ### Prerequisites
 - Node.js installed
@@ -139,8 +71,8 @@ Nextern is a professional, all-in-one platform designed to help students track t
    npm start
    ```
 
-## 🤝 Contributing
+## <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg> Contributing
 Contributions are welcome! Feel free to open issues or submit pull requests.
 
 ---
-Built with ❤️ for the student community.
+Built with dedication for the student community.
