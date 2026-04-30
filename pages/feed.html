@@ -645,7 +645,7 @@
             <div class="create-post shadow-md">
                 <div class="cp-top">
                     <div id="cpAvatar" class="cp-avatar">U</div>
-                    <input type="text" class="cp-input" placeholder="Share an update, tip, or experience...">
+                    <input type="text" id="postInput" class="cp-input" placeholder="Share an update, tip, or experience..." onkeypress="if(event.key === 'Enter') createPost()">
                 </div>
                 <div class="cp-bottom">
                     <div class="cp-actions">
@@ -674,7 +674,7 @@
                             Feeling
                         </button>
                     </div>
-                    <button class="btn-post">Post</button>
+                    <button class="btn-post" id="postBtn" onclick="createPost()">Post</button>
                 </div>
             </div>
 
@@ -931,6 +931,46 @@
                     countSpan.textContent = likeCount;
                 }
             } catch (err) { console.error('Like error:', err); }
+        }
+
+        async function createPost() {
+            const input = document.getElementById('postInput');
+            const content = input?.value?.trim();
+            if (!content) return;
+
+            const btn = document.getElementById('postBtn');
+            if (btn) { btn.textContent = 'Posting...'; btn.disabled = true; }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/posts`, {
+                    method: 'POST',
+                    headers: window.getAuthHeaders(),
+                    body: JSON.stringify({ content, type: 'general' })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    input.value = '';
+                    if (typeof showToast === 'function') showToast('Post created successfully!');
+                    
+                    // Add the new post and re-render
+                    if (data.post) {
+                        allPosts.unshift(data.post);
+                        renderPosts(allPosts);
+                    } else {
+                        loadFeed(); // Fallback to reload feed if data.post is somehow missing
+                    }
+                } else {
+                    if (typeof showToast === 'function') showToast(data.message || 'Failed to create post', 'error');
+                    else alert(data.message || 'Failed to create post');
+                }
+            } catch (error) {
+                console.error('Create post error:', error);
+                if (typeof showToast === 'function') showToast('Server error while posting.', 'error');
+            } finally {
+                if (btn) { btn.textContent = 'Post'; btn.disabled = false; }
+            }
         }
 
         /* ── SIDEBAR WIDGETS ── */
