@@ -41,6 +41,74 @@ Nextern is a professional, all-in-one platform designed to help students track t
 - **Global Auth Utilities**: Implemented centralized `getAuthHeaders`, `syncLocalStorage`, and `handleLogout` for robust session management.
 - **UI Polishing**: Enhanced the Profile and Dashboard layouts for a premium user experience.
 
+- ## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        CLIENT (Vercel)                       │
+│                                                              │
+│  HTML5 + CSS3 + Vanilla JavaScript                          │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐       │
+│  │Dashboard │ │ Prep Hub │ │  Drives  │ │  Roadmap │  ...  │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘       │
+│                                                              │
+│  auth.js  │  config.js  │  sidebar.js  │  theme.js          │
+└─────────────────────────┬───────────────────────────────────┘
+                          │ HTTPS / REST API
+┌─────────────────────────▼───────────────────────────────────┐
+│                   BACKEND (Railway)                          │
+│                                                              │
+│  Node.js 18+ · Express.js · Helmet · Passport.js            │
+│                                                              │
+│  ┌──────────────────────────────────────────────────┐        │
+│  │               API Routes (/api/*)                │        │
+│  │  auth │ user │ prep │ drives │ roadmap │ posts   │        │
+│  │  analyze │ notifications │ progress │ analytics  │        │
+│  │  applications │ admin                            │        │
+│  └───────────────────┬──────────────────────────────┘        │
+│                      │                                       │
+│  ┌────────────┐  ┌───▼────────┐  ┌──────────────────────┐  │
+│  │ Middleware │  │  Services  │  │  Schedulers (cron)   │  │
+│  │ ─ protect  │  │ ─ Gemini   │  │  ─ Drive scraper     │  │
+│  │ ─ adminOnly│  │ ─ Claude   │  │  ─ Post seeder       │  │
+│  └────────────┘  └────────────┘  └──────────────────────┘  │
+└─────────────────────────┬───────────────────────────────────┘
+                          │ Mongoose ODM
+┌─────────────────────────▼───────────────────────────────────┐
+│                   DATABASE (MongoDB Atlas)                    │
+│                                                              │
+│  Users · Topics · TopicProgress · Posts · Drives            │
+│  Applications · Notifications · Analysis · AdminLogs        │
+└─────────────────────────────────────────────────────────────┘
+                          │
+           ┌──────────────┼──────────────┐
+           ▼              ▼              ▼
+     Google Gemini   Anthropic       OpenAI
+     (Roadmap &      Claude          (fallback)
+      Analysis)      (Analysis)
+```
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | HTML5, CSS3 (Glassmorphism, CSS Variables), Vanilla JavaScript |
+| **Typography** | Syne, DM Sans (Google Fonts) |
+| **Backend** | Node.js 18+, Express.js 4 |
+| **Database** | MongoDB, Mongoose ODM |
+| **Authentication** | JWT (jsonwebtoken), Google OAuth 2.0 (Passport.js) |
+| **AI / LLM** | Google Gemini, Anthropic Claude, OpenAI |
+| **Security** | Helmet, bcryptjs, CORS |
+| **File Processing** | Multer (upload), pdf-parse (resume parsing) |
+| **Web Scraping** | Axios, Cheerio |
+| **Scheduling** | node-cron |
+| **Frontend Deployment** | Vercel |
+| **Backend Deployment** | Railway |
+
+---
+
 ## 🚦 Getting Started
 
 ### Prerequisites
